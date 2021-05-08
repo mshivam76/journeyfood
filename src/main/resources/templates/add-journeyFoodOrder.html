@@ -1,0 +1,27 @@
+<form action="#" th:action="@{/addJourneyFoodOrder}" th:object="${journeyFoodOrder}" method="post">
+    <label for="nameOfCenter">Name of Center</label>
+    <input type="text" th:field="*{nameOfCenter}" id="nameOfCenter" placeholder="Name of Center">
+    <span th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></span>
+    
+    <label for="nameOfGuide">Name of Guide</label>
+    <input type="text" th:field="*{nameOfGuide}" id="nameOfGuide" placeholder="Name of Guide">
+    <span th:if="${#fields.hasErrors('nameOfGuide')}" th:errors="*{nameOfGuide}"></span>
+    
+    <label for="headCount">Head count</label>
+    <input type="number" th:field="*{headCount}" id="headCount" placeholder="Head count">
+    <span th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></span>
+    
+    <label for="dateOfJourney">Mobile No Of Guide</label>
+    <input type="text" th:field="*{contactNoOfGuide}" id="contactNoOfGuide" placeholder="Mobile No Of Guide">
+    <span th:if="${#fields.hasErrors('contactNoOfGuide')}" th:errors="*{contactNoOfGuide}"></span>
+    
+    <label for="dateOfDeparture">Date of departure</label>
+   	<input type="text" th:field="*{dateOfDeparture}" id="dateOfDeparture" placeholder="Date Of departure">
+    <span th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></span>
+    
+    <label for="mealRetrievalTime">Meal retrieval time</label>
+    <input type="text" th:field="*{mealRetrievalTime}" id="mealRetrievalTime" placeholder="Mobile No Of Guide">
+    <span th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></span>
+    
+    <input type="submit" value="Add Order">   
+</form>

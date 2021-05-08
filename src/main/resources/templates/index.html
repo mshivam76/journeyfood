@@ -1,0 +1,31 @@
+<div th:switch="${journeyFoodOrders}">
+    <h2 th:case="null">No Orders yet!</h2>
+        <div th:case="*">
+            <h2>Journey Food Order</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name of Center</th>
+                        <th>Name of Guide</th>
+                        <th>Head count</th>
+                        <th>Mobile no of Guide</th>
+                        <th>Date of departure</th>
+                        <th>Journey meal retrieval time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="journeyFoodOrder : ${journeyFoodOrders}">
+                    <td th:text="${journeyFoodOrder.nameOfCenter}"></td>
+                    <td th:text="${journeyFoodOrder.nameOfGuide}"></td>
+                    <td th:text="${journeyFoodOrder.headCount}"></td>
+                    <td th:text="${journeyFoodOrder.contactNoOfGuide}"></td>
+                    <td th:text="${journeyFoodOrder.dateOfDeparture}"></td>
+                    <td th:text="${journeyFoodOrder.mealRetrievalTime}"></td>                                        
+                    <td><a th:href="@{/edit/{id}(id=${journeyFoodOrder.id})}">Edit</a></td>
+                    <td><a th:href="@{/delete/{id}(id=${journeyFoodOrder.id})}">Delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>      
+    <p><a href="/signup">Add a new Order</a></p>
+</div>
