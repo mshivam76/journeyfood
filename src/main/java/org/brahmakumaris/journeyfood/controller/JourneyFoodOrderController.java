@@ -11,18 +11,30 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
+/*
+ * https://www.baeldung.com/spring-boot-crud-thymeleaf -->reference link
+ */
 @Controller
 public class JourneyFoodOrderController {
-	@Autowired
-	JourneyFoodOrderRepository journeyFoodOrderRepository;
+	
+	private final JourneyFoodOrderRepository journeyFoodOrderRepository;
+
+    @Autowired
+    public JourneyFoodOrderController(JourneyFoodOrderRepository journeyFoodOrderRepository) {
+		// TODO Auto-generated constructor stub
+    	this.journeyFoodOrderRepository = journeyFoodOrderRepository;
+	}
+    
+    @GetMapping("/signup")
+    public String showSignUpForm(JourneyFoodOrderRepository journeyFoodOrderRepository) {
+        return "add-journeyFoodOrder";
+    }
 	
 	@PostMapping("/addJourneyFoodOrder")
     public String addUser(@Valid JourneyFoodOrder journeyFoodOrder, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "add-journeyFoodOrder";
         }
-        
         journeyFoodOrderRepository.save(journeyFoodOrder);
         return "redirect:/index";
     }
