@@ -10,36 +10,33 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 public class JourneyFoodOrder{
-	/*
-	 *
-	 * id	
-	Date of Journey-
-	Name of Bro/Sis
-	Name of Center
-	Guide/Teacher name
-	Mobileno of Bro/Sis
-	Contactno of  Guide/Teacher
-	 */
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-	@NotBlank(message = "name Of Center is mandatory")
+	@Override
+	public String toString() {
+		return "JourneyFoodOrder [id=" + id + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide=" + nameOfGuide
+				+ ", headCount=" + headCount + ", contactNoOfGuide=" + contactNoOfGuide + ", dateOfDeparture="
+				+ dateOfDeparture + ", mealRetrievalTime=" + mealRetrievalTime + "]";
+	}
+
+	@NotBlank(message="Name Of Center is mandatory")
     private String nameOfCenter;
 
-    @NotBlank(message = "Name Of Guide is mandatory")
+    @NotBlank(message="Name Of Guide is mandatory")
     private String nameOfGuide;
     
-    @NotBlank(message = "Head Count is mandatory")
+    @NotBlank(message="Head Count is mandatory")
     private int headCount;
     
-    @NotBlank(message = "Mobile No Of Guide is mandatory")
+    @NotBlank(message="Mobile No Of Guide is mandatory")
     private String contactNoOfGuide;
     
-    @NotBlank(message = "Date of Journey is mandatory")
+    @NotBlank(message="Date of Journey is mandatory")
     private Date dateOfDeparture;
     
-    @NotBlank(message = "Journey meal retrival date and time is mandatory")
+    @NotBlank(message="Journey meal retrival date and time is mandatory")
     private Date mealRetrievalTime;
 
     public long getId() {
