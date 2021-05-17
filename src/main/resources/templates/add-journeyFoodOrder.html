@@ -32,11 +32,11 @@
 					    <span th:if="${#fields.hasErrors('contactNoOfGuide')}" th:errors="*{contactNoOfGuide}"></span>
 					    
 					    <label for="dateOfDeparture">Date of departure</label>
-					   	<input type="text" th:field="*{dateOfDeparture}" placeholder="Date Of departure">
+					   	<input type="text" th:field="*{dateOfDeparture}" placeholder="Date formate dd/mm/yyyy">
 					    <span th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></span>
 					    
-					    <label for="mealRetrievalTime">Meal retrieval time</label>
-					    <input type="text" th:field="*{mealRetrievalTime}" placeholder="Mobile No Of Guide">
+					    <label for="mealRetrievalTime"></label>
+					    <input type="text" th:field="*{mealRetrievalTime}" placeholder="Meal retrival time dd/mm/yyyy hh:mm">
 					    <span th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></span>
 					    
 					    <input type="submit" value="Add Order">   

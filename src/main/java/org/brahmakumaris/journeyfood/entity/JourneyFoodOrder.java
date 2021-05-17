@@ -33,10 +33,8 @@ public class JourneyFoodOrder{
     @NotBlank(message="Mobile No Of Guide is mandatory")
     private String contactNoOfGuide;
     
-    @NotBlank(message="Date of Journey is mandatory")
     private Date dateOfDeparture;
     
-    @NotBlank(message="Journey meal retrival date and time is mandatory")
     private Date mealRetrievalTime;
 
     public long getId() {

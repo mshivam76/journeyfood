@@ -27,8 +27,7 @@ public class JourneyFoodOrderController {
 	}
     
     @GetMapping("/signup")
-    public String showSignUpForm(JourneyFoodOrderRepository journeyFoodOrderRepository, Model model) {
-    	model.addAttribute("journeyFoodOrders", journeyFoodOrderRepository.findAll());
+    public String showSignUpForm(JourneyFoodOrder journeyFoodOrder) {
         return "add-journeyFoodOrder";
     }
 	
