@@ -27,16 +27,16 @@ public class JourneyFoodOrderController {
 	}
     
     @GetMapping("/signup")
-    public String showSignUpForm(JourneyFoodOrder journeyFoodOrder) {
+    public String showSignUpForm(@Valid JourneyFoodOrder journeyFoodOrder) {
         return "add-journeyFoodOrder";
     }
 	
 	@PostMapping("/addJourneyFoodOrder")
-    public String addJourneyFoodOrder(@Valid JourneyFoodOrder journeyFoodOrder, BindingResult result, Model model) {
+    public String addJourneyFoodOrder(@Valid @ModelAttribute("journeyFoodOrder")JourneyFoodOrder journeyFoodOrder, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "add-journeyFoodOrder";
         }
-        model.addAttribute("journeyFoodOrder", journeyFoodOrder);
+        model.addAttribute("journeyFoorOrder", journeyFoodOrder);
         journeyFoodOrderRepository.save(journeyFoodOrder);
         return "redirect:/index";
     }
@@ -57,13 +57,11 @@ public class JourneyFoodOrderController {
 	}
 	
 	@PostMapping("/update/{id}")
-	public String updateUser(@PathVariable("id") long id, @Valid JourneyFoodOrder journeyFoodOrder, 
-	  BindingResult result, Model model) {
+	public String updateUser(@Valid @ModelAttribute("journeyFoodOrder")JourneyFoodOrder journeyFoodOrder, BindingResult result, @PathVariable("id") long id,  Model model) {
 	    if (result.hasErrors()) {
 	        journeyFoodOrder.setId(id);
 	        return "update-journeyFoodOrder";
 	    }
-	        
 	    journeyFoodOrderRepository.save(journeyFoodOrder);
 	    return "redirect:/index";
 	}

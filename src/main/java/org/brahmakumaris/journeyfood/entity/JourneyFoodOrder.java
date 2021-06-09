@@ -7,36 +7,54 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class JourneyFoodOrder{
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
 
 	@Override
 	public String toString() {
 		return "JourneyFoodOrder [id=" + id + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide=" + nameOfGuide
 				+ ", headCount=" + headCount + ", contactNoOfGuide=" + contactNoOfGuide + ", dateOfDeparture="
-				+ dateOfDeparture + ", mealRetrievalTime=" + mealRetrievalTime + "]";
+				+ dateOfDeparture + ", mealRetrievalTime=" + mealRetrievalTime + ", thepla=" + thepla + ", puri=" + puri
+				+ ", roti=" + roti + ", achar=" + achar + ", jam=" + jam + ", bread=" + bread + ", others=" + others
+				+ "]";
 	}
 
-	@NotBlank(message="Name Of Center is mandatory")
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+	
     private String nameOfCenter;
 
-    @NotBlank(message="Name Of Guide is mandatory")
     private String nameOfGuide;
     
-    @NotBlank(message="Head Count is mandatory")
     private int headCount;
     
-    @NotBlank(message="Mobile No Of Guide is mandatory")
     private String contactNoOfGuide;
     
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateOfDeparture;
     
+    @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
     private Date mealRetrievalTime;
 
+    private int thepla;
+    
+    private int puri;
+    
+    private int roti;
+
+    private int achar;
+    
+    private int jam;
+    
+    private int bread;
+    
+    private int others;
+    
     public long getId() {
 		return id;
 	}
@@ -91,5 +109,61 @@ public class JourneyFoodOrder{
 
 	public void setMealRetrievalTime(Date mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
+	}
+
+    public int getThepla() {
+		return thepla;
+	}
+
+	public void setThepla(int thepla) {
+		this.thepla = thepla;
+	}
+
+	public int getPuri() {
+		return puri;
+	}
+
+	public void setPuri(int puri) {
+		this.puri = puri;
+	}
+
+	public int getRoti() {
+		return roti;
+	}
+
+	public void setRoti(int roti) {
+		this.roti = roti;
+	}
+
+	public int getAchar() {
+		return achar;
+	}
+
+	public void setAchar(int achar) {
+		this.achar = achar;
+	}
+
+	public int getOthers() {
+		return others;
+	}
+
+	public void setOthers(int others) {
+		this.others = others;
+	}
+	
+    public int getJam() {
+		return jam;
+	}
+
+	public void setJam(int jam) {
+		this.jam = jam;
+	}
+
+	public int getBread() {
+		return bread;
+	}
+
+	public void setBread(int bread) {
+		this.bread = bread;
 	}
 }
