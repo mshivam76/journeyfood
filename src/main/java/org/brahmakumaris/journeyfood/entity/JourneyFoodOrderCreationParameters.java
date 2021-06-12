@@ -22,6 +22,18 @@ public class JourneyFoodOrderCreationParameters {
 
     private int thepla;
     
+	private int puri;
+    
+    private int roti;
+
+    private int achar;
+    
+    private int jam;
+    
+    private int bread;
+    
+    private int others;
+    
     public JourneyFoodOrderCreationParameters(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
 			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
 			int others) {
@@ -41,17 +53,55 @@ public class JourneyFoodOrderCreationParameters {
 		this.others = others;
 	}
 
-	private int puri;
-    
-    private int roti;
+	public String getNameOfCenter() {
+		return nameOfCenter;
+	}
 
-    private int achar;
-    
-    private int jam;
-    
-    private int bread;
-    
-    private int others;
-    
+	public String getNameOfGuide() {
+		return nameOfGuide;
+	}
 
+	public int getHeadCount() {
+		return headCount;
+	}
+
+	public String getContactNoOfGuide() {
+		return contactNoOfGuide;
+	}
+
+	public Date getDateOfDeparture() {
+		return dateOfDeparture;
+	}
+
+	public Date getMealRetrievalTime() {
+		return mealRetrievalTime;
+	}
+
+	public int getThepla() {
+		return thepla;
+	}
+
+	public int getPuri() {
+		return puri;
+	}
+
+	public int getRoti() {
+		return roti;
+	}
+
+	public int getAchar() {
+		return achar;
+	}
+
+	public int getJam() {
+		return jam;
+	}
+
+	public int getBread() {
+		return bread;
+	}
+
+	public int getOthers() {
+		return others;
+	}
 }

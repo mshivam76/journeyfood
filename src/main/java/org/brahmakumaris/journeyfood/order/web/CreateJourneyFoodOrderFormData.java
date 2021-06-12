@@ -51,7 +51,7 @@ public class CreateJourneyFoodOrderFormData {
     @NotNull(message="Other items count is mandatory")
     private int others;
     
-	public JourneyFoodOrderCreationParameters getParams() {
+	public JourneyFoodOrderCreationParameters toParams() {
 		return new JourneyFoodOrderCreationParameters(nameOfCenter, nameOfGuide, headCount, contactNoOfGuide, dateOfDeparture, mealRetrievalTime, thepla, puri, roti, achar, jam, bread, others);
     }
     

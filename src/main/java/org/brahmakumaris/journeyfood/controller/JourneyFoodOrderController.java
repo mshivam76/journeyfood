@@ -3,7 +3,9 @@ package org.brahmakumaris.journeyfood.controller;
 import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
+import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.repository.JourneyFoodOrderRepository;
+import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,25 +21,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class JourneyFoodOrderController {
 	
 	private final JourneyFoodOrderRepository journeyFoodOrderRepository;
+	
+	private final JourneyFoodService journeyFoodServiceImpl;
 
     @Autowired
-    public JourneyFoodOrderController(JourneyFoodOrderRepository journeyFoodOrderRepository) {
-		// TODO Auto-generated constructor stub
+    public JourneyFoodOrderController(JourneyFoodOrderRepository journeyFoodOrderRepository, JourneyFoodService journeyFoodServiceImpl) {
+		this.journeyFoodServiceImpl = journeyFoodServiceImpl;
     	this.journeyFoodOrderRepository = journeyFoodOrderRepository;
 	}
     
     @GetMapping("/signup")
-    public String showSignUpForm(@Valid JourneyFoodOrder journeyFoodOrder) {
+    public String showSignUpForm(CreateJourneyFoodOrderFormData formData) {
         return "add-journeyFoodOrder";
     }
 	
 	@PostMapping("/addJourneyFoodOrder")
-    public String addJourneyFoodOrder(@Valid @ModelAttribute("journeyFoodOrder")JourneyFoodOrder journeyFoodOrder, BindingResult result, Model model) {
+    public String addJourneyFoodOrder(@Valid @ModelAttribute("createJourneyFoodOrderFormData")CreateJourneyFoodOrderFormData formData, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "add-journeyFoodOrder";
         }
-        model.addAttribute("journeyFoorOrder", journeyFoodOrder);
-        journeyFoodOrderRepository.save(journeyFoodOrder);
+        model.addAttribute("journeyFoorOrder", formData);
+        journeyFoodServiceImpl.createJourneyFoodOrder(formData.toParams());
         return "redirect:/index";
     }
 	

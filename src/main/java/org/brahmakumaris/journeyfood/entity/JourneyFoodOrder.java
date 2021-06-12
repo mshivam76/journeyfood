@@ -23,6 +23,26 @@ public class JourneyFoodOrder{
 				+ "]";
 	}
 
+	public JourneyFoodOrder(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
+			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
+			int others) {
+		super();
+		this.nameOfCenter = nameOfCenter;
+		this.nameOfGuide = nameOfGuide;
+		this.headCount = headCount;
+		this.contactNoOfGuide = contactNoOfGuide;
+		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalTime = mealRetrievalTime;
+		this.thepla = thepla;
+		this.puri = puri;
+		this.roti = roti;
+		this.achar = achar;
+		this.jam = jam;
+		this.bread = bread;
+		this.others = others;
+	}
+
+
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

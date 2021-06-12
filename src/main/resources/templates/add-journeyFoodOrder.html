@@ -20,30 +20,29 @@
 					<div id="failureMessage" class="alert alert-danger" role="alert">
 					  Invalid data
 					</div>
-		            <form action="#" th:action="@{/addJourneyFoodOrder}" th:object="${journeyFoodOrder}"method="post">
+		            <form action="#" th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
 			            <h2 class="mb-5">New Order</h2>
 		                <div class="form-group">
 		                    <label for="nameOfCenter">Name of Center</label>
 						    <input type="text" th:field="*{nameOfCenter}" class="form-control" placeholder="Name of Center">
-						    <span th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></div>
 		                </div>
 		                <div class="form-group">
 		                	<label for="nameOfGuide">Name of Guide/Teacher</label>
 						    <input type="text" th:field="*{nameOfGuide}" class="form-control" placeholder="Name of Guide">
-						    <span th:if="${#fields.hasErrors('nameOfGuide')}" th:errors="*{nameOfGuide}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfGuide')}" th:errors="*{nameOfGuide}"></div>
 		                </div>
 		                
 		                <div class="form-group">
 			                <label for="headCount">Head count</label>
 						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
-						    <span th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></span>
-						    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
 		                </div> 
 
 		                <div class="form-group">
 						    <label for="dateOfJourney">Mobile No Of Guide</label>
 						    <input type="text" th:field="*{contactNoOfGuide}" class="form-control" placeholder="Mobile No Of Guide">
-						    <span th:if="${#fields.hasErrors('contactNoOfGuide')}" th:errors="*{contactNoOfGuide}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('contactNoOfGuide')}" th:errors="*{contactNoOfGuide}"></div>
 		                </div>
 
 
@@ -51,67 +50,68 @@
 						    <label for="dateOfDeparture">Date of departure</label>
 						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" th:field="*{dateOfDeparture}" id="date" placeholder="Choose departure date"/>
-		                        <span th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></span>
 		                        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
 		                        </div>
 		                    </div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></div>
 		                </div>
 		
 		                <div class="form-group">
 		                    <label for="date">Meal retrieval time:</label>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalTime}" id="date" placeholder="Choose meal retrieval date and time"/>
-		                        <span th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></span>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
 		                        </div>
 		                    </div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>
 		                </div>
 
 		                <div class="form-group">
 			                <label for="thepla">Thepla count</label>
 						    <input type="number" th:field="*{thepla}" class="form-control" placeholder="Thepla count">
-						    <span th:if="${#fields.hasErrors('thepla')}" th:errors="*{thepla}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('thepla')}" th:errors="*{thepla}"></div>
 		                </div> 
 
 		                <div class="form-group">
 			                <label for="puri">Puri count</label>
 						    <input type="number" th:field="*{puri}" class="form-control" placeholder="Puri count">
-						    <span th:if="${#fields.hasErrors('puri')}" th:errors="*{headCount}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('puri')}" th:errors="*{headCount}"></div>
 		                </div> 
 
 		                <div class="form-group">
 			                <label for="roti">Roti quantity</label>
 						    <input type="number" th:field="*{roti}" class="form-control" placeholder="Roti count">
-						    <span th:if="${#fields.hasErrors('roti')}" th:errors="*{roti}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('roti')}" th:errors="*{roti}"></div>
 		                </div> 
 		                
 		                <div class="form-group">
 			                <label for="achar">Achar(Pickle) quantity</label>
 						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Koki count">
-						    <span th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></div>
 		                </div> 
 		                
 		                <div class="form-group">
 			                <label for="bread">Bread quantity</label>
 						    <input type="number" th:field="*{bread}" class="form-control" placeholder="bread count">
-						    <span th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
 		                </div> 
 		                
 		                <div class="form-group">
 			                <label for="jam">Jam quantity</label>
 						    <input type="number" th:field="*{jam}" class="form-control" placeholder="jam count">
-						    <span th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></div>
 		                </div> 
 		                
 		                <div class="form-group">
 			                <label for="others">Other items quantity</label>
 						    <input type="number" th:field="*{others}" class="form-control" placeholder="Other count">
-						    <span th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></span>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
 		                </div> 
 		                		                		                		                		                		
 		                <button class="btn btn-primary" type="submit">Add Order</button>
+		                <button class="btn btn-danger" type="reset">Reset Order</button>
 		            </form>
 		        </div>
 		    </div>
