@@ -14,13 +14,14 @@
 	   	<div class="container">
 		    <div class="row">
 		        <div class="col-md-4 mt-5">
-		        	<div id="successMessage"class="alert alert-success" role="alert">
-					  Order saved successfully
-					</div>
-					<div id="failureMessage" class="alert alert-danger" role="alert">
-					  Invalid data
-					</div>
 		            <form action="#" th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
+		            	<div>
+		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
+							    <ul>
+							        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+							    </ul>
+							</div>
+		            	</div>
 			            <h2 class="mb-5">New Order</h2>
 		                <div class="form-group">
 		                    <label for="nameOfCenter">Name of Center</label>
