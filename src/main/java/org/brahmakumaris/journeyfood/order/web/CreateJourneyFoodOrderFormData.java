@@ -1,92 +1,67 @@
-package org.brahmakumaris.journeyfood.entity;
+package org.brahmakumaris.journeyfood.order.web;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.brahmakumaris.journeyfood.entity.JourneyFoodOrderCreationParameters;
+import org.brahmakumaris.journeyfood.validation.ContactNumberConstraint;
+import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity
-public class JourneyFoodOrder{
-
-	@Override
-	public String toString() {
-		return "JourneyFoodOrder [id=" + id + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide=" + nameOfGuide
-				+ ", headCount=" + headCount + ", contactNoOfGuide=" + contactNoOfGuide + ", dateOfDeparture="
-				+ dateOfDeparture + ", mealRetrievalTime=" + mealRetrievalTime + ", thepla=" + thepla + ", puri=" + puri
-				+ ", roti=" + roti + ", achar=" + achar + ", jam=" + jam + ", bread=" + bread + ", others=" + others
-				+ "]";
-	}
-
-	public JourneyFoodOrder() {
-		super();
-	}
-
-	public JourneyFoodOrder(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
-			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
-			int others) {
-		super();
-		this.nameOfCenter = nameOfCenter;
-		this.nameOfGuide = nameOfGuide;
-		this.headCount = headCount;
-		this.contactNoOfGuide = contactNoOfGuide;
-		this.dateOfDeparture = dateOfDeparture;
-		this.mealRetrievalTime = mealRetrievalTime;
-		this.thepla = thepla;
-		this.puri = puri;
-		this.roti = roti;
-		this.achar = achar;
-		this.jam = jam;
-		this.bread = bread;
-		this.others = others;
-	}
-
-
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class CreateJourneyFoodOrderFormData {
 	
+	@NotBlank(message="Name Of Center is mandatory")
     private String nameOfCenter;
 
+    @NotBlank(message="Name Of Guide is mandatory")
     private String nameOfGuide;
     
+    @IntegerCountMustBeGreaterThanZeroConstraint(message="Head count must be greater than 0")
     private int headCount;
     
+    @NotEmpty(message="Mobile No Of Guide is mandatory")
+    @ContactNumberConstraint(message = "Invalid Mobile number length")
     private String contactNoOfGuide;
     
+    @NotNull(message="Departure date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Future(message = "Entered date must be after today's date")
     private Date dateOfDeparture;
     
+	@NotNull(message="Meal retrieval time is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
+	@Future(message = "Entered date must be after today's date")
     private Date mealRetrievalTime;
 
+    @NotNull(message="Thepla Count is mandatory")
     private int thepla;
     
+    @NotNull(message="Puri Count is mandatory")
     private int puri;
     
+    @NotNull(message="Roti Count is mandatory")
     private int roti;
 
+    @NotNull(message="Achar count is mandatory")
     private int achar;
     
+    @NotNull(message="Jam count is mandatory")
     private int jam;
     
+	@NotNull(message="Bread count is mandatory")
     private int bread;
     
+    @NotNull(message="Other items count is mandatory")
     private int others;
     
-    public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
+	public JourneyFoodOrderCreationParameters toParams() {
+		return new JourneyFoodOrderCreationParameters(nameOfCenter, nameOfGuide, headCount, contactNoOfGuide, dateOfDeparture, mealRetrievalTime, thepla, puri, roti, achar, jam, bread, others);
+    }
+    
 	public String getNameOfCenter() {
 		return nameOfCenter;
 	}
@@ -95,20 +70,20 @@ public class JourneyFoodOrder{
 		this.nameOfCenter = nameOfCenter;
 	}
 
-	public int getHeadCount() {
-		return headCount;
-	}
-
-	public void setHeadCount(int headCount) {
-		this.headCount = headCount;
-	}
-
 	public String getNameOfGuide() {
 		return nameOfGuide;
 	}
 
 	public void setNameOfGuide(String nameOfGuide) {
 		this.nameOfGuide = nameOfGuide;
+	}
+
+	public int getHeadCount() {
+		return headCount;
+	}
+
+	public void setHeadCount(int headCount) {
+		this.headCount = headCount;
 	}
 
 	public String getContactNoOfGuide() {
@@ -135,7 +110,7 @@ public class JourneyFoodOrder{
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 
-    public int getThepla() {
+	public int getThepla() {
 		return thepla;
 	}
 
@@ -167,15 +142,7 @@ public class JourneyFoodOrder{
 		this.achar = achar;
 	}
 
-	public int getOthers() {
-		return others;
-	}
-
-	public void setOthers(int others) {
-		this.others = others;
-	}
-	
-    public int getJam() {
+	public int getJam() {
 		return jam;
 	}
 
@@ -190,4 +157,15 @@ public class JourneyFoodOrder{
 	public void setBread(int bread) {
 		this.bread = bread;
 	}
+
+	public int getOthers() {
+		return others;
+	}
+
+	public void setOthers(int others) {
+		this.others = others;
+	}
+    
+    
+
 }

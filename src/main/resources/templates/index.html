@@ -1,31 +1,61 @@
-<div th:switch="${journeyFoodOrders}">
-    <h2 th:case="null">No Orders yet!</h2>
-        <div th:case="*">
-            <h2>Journey Food Order</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name of Center</th>
-                        <th>Name of Guide</th>
-                        <th>Head count</th>
-                        <th>Mobile no of Guide</th>
-                        <th>Date of departure</th>
-                        <th>Journey meal retrieval time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr th:each="journeyFoodOrder : ${journeyFoodOrders}">
-                    <td th:text="${journeyFoodOrder.nameOfCenter}"></td>
-                    <td th:text="${journeyFoodOrder.nameOfGuide}"></td>
-                    <td th:text="${journeyFoodOrder.headCount}"></td>
-                    <td th:text="${journeyFoodOrder.contactNoOfGuide}"></td>
-                    <td th:text="${journeyFoodOrder.dateOfDeparture}"></td>
-                    <td th:text="${journeyFoodOrder.mealRetrievalTime}"></td>                                        
-                    <td><a th:href="@{/edit/{id}(id=${journeyFoodOrder.id})}">Edit</a></td>
-                    <td><a th:href="@{/delete/{id}(id=${journeyFoodOrder.id})}">Delete</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>      
-    <p><a href="/signup">Add a new Order</a></p>
-</div>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Brahma Kumaris Journey Food</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
+    </head>
+	<body>
+		<div th:switch="${journeyFoodOrders}" >
+				    <h2 th:case="null">No Orders yet!</h2>
+			        <div th:case="*" class="table-responsive-sm">
+						<h2>Journey Food Order</h2>
+			            <table class="table table-hover">
+			                <thead  class="thead">
+			                    <tr>
+			                    	<th scope="col">Order Id</th>
+			                        <th scope="col">Name of Center</th>
+			                        <th scope="col">Name of Guide</th>
+			                        <th scope="col">Head count</th>
+			                        <th scope="col">Mobile no of Guide</th>
+			                        <th scope="col">Date of departure</th>
+			                        <th scope="col">Journey meal retrieval time</th>
+                			        <th scope="col">Thepla quantity</th>
+			                        <th scope="col">Puri quantity</th>
+			                        <th scope="col">Roti quantity</th>
+			                        <th scope="col">Achar(Pickle) quantity</th>
+			                        <th scope="col">Jam quantity</th>
+			                        <th scope="col">Bread quantity</th>
+			                        <th scope="col">Other items quantity</th>
+			                    </tr>
+			                </thead>
+			                <tbody>
+				                <tr th:each="journeyFoodOrder : ${journeyFoodOrders}">
+				                	<th scope="row" th:text="${journeyFoodOrder.id}"></th>
+				                    <td th:text="${journeyFoodOrder.nameOfCenter}"></td>
+				                    <td th:text="${journeyFoodOrder.nameOfGuide}"></td>
+				                    <td th:text="${journeyFoodOrder.headCount}"></td>
+				                    <td th:text="${journeyFoodOrder.contactNoOfGuide}"></td>
+				                    <td th:text="${journeyFoodOrder.dateOfDeparture}"></td>
+				                    <td th:text="${journeyFoodOrder.mealRetrievalTime}"></td>
+				                    <td th:text="${journeyFoodOrder.thepla}"></td>
+				                    <td th:text="${journeyFoodOrder.puri}"></td>
+				                    <td th:text="${journeyFoodOrder.roti}"></td>
+				                    <td th:text="${journeyFoodOrder.achar}"></td>
+				                    <td th:text="${journeyFoodOrder.jam}"></td>
+				                    <td th:text="${journeyFoodOrder.bread}"></td>
+				                    <td th:text="${journeyFoodOrder.others}"></td>                                        
+				                    <td><a th:href="@{/edit/{id}(id=${journeyFoodOrder.id})}">Edit</a></td>
+				                    <td><a th:href="@{/delete/{id}(id=${journeyFoodOrder.id})}">Delete</a></td>
+				                </tr>
+				            </tbody>
+				        </table>
+			   		 </div>      
+			   		<p><a href="/signup">Add a new Order</a></p>
+		</div>
+	</body>
+</html>	
+	
