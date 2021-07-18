@@ -7,7 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.brahmakumaris.journeyfood.entity.JourneyFoodOrderCreationParameters;
 import org.brahmakumaris.journeyfood.validation.ContactNumberConstraint;
 import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,17 +23,17 @@ public class CreateJourneyFoodOrderFormData {
     private int headCount;
     
     @NotEmpty(message="Mobile No Of Guide is mandatory")
-    @ContactNumberConstraint(message = "Invalid Mobile number length")
+    @ContactNumberConstraint(message = "Invalid Contact number")
     private String contactNoOfGuide;
     
     @NotNull(message="Departure date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Future(message = "Entered date must be after today's date")
+    @Future(message = "Entered date must be after today\'s date")
     private Date dateOfDeparture;
     
 	@NotNull(message="Meal retrieval time is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
-	@Future(message = "Entered date must be after today's date")
+	@Future(message = "Entered date must be after today\'s date")
     private Date mealRetrievalTime;
 
     @NotNull(message="Thepla Count is mandatory")

@@ -1,4 +1,4 @@
-package org.brahmakumaris.journeyfood.entity;
+package org.brahmakumaris.journeyfood.order.web;
 
 import java.util.Date;
 
@@ -33,6 +33,8 @@ public class JourneyFoodOrderCreationParameters {
     private int bread;
     
     private int others;
+
+	private long id;
     
     public JourneyFoodOrderCreationParameters(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
 			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
@@ -51,6 +53,11 @@ public class JourneyFoodOrderCreationParameters {
 		this.jam = jam;
 		this.bread = bread;
 		this.others = others;
+	}
+
+	public JourneyFoodOrderCreationParameters(long id) {
+		// TODO Auto-generated constructor stub
+		this.id = id;
 	}
 
 	public String getNameOfCenter() {

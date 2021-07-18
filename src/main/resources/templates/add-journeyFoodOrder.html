@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Add Order</title>
-	    <script type="text/javascript" src="webjars/jquery/2.2.3/jquery.min.js"></script>
+	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
 	    <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
 	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
 	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
@@ -14,7 +14,7 @@
 	   	<div class="container">
 		    <div class="row">
 		        <div class="col-md-4 mt-5">
-		            <form action="#" th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
+		            <form th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
 		            	<div>
 		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 							    <ul>
@@ -22,6 +22,11 @@
 							    </ul>
 							</div>
 		            	</div>
+      			        <div class="alert alert-success" role="alert">
+						    <ul>
+						        <li>Order submitted successfully. Please note order id to fetch/edit order details in future.</li>
+						    </ul>
+						</div>
 			            <h2 class="mb-5">New Order</h2>
 		                <div class="form-group">
 		                    <label for="nameOfCenter">Name of Center</label>

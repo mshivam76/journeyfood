@@ -26,6 +26,10 @@ public class JourneyFoodOrder{
 	public JourneyFoodOrder() {
 		super();
 	}
+	
+	public JourneyFoodOrder(long id) {
+		this.id = id;
+	}
 
 	public JourneyFoodOrder(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
 			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
