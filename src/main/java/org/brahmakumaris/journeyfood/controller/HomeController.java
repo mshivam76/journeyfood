@@ -1,31 +1,22 @@
 package org.brahmakumaris.journeyfood.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
-import org.brahmakumaris.journeyfood.order.web.UserSignInForm;
 import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
-import org.brahmakumaris.journeyfood.repository.JourneyFoodOrderRepository;
-import org.brahmakumaris.journeyfood.repository.UserRepository;
 import org.brahmakumaris.journeyfood.security.UserService;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 /*

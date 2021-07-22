@@ -67,7 +67,8 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return user.isEnabled();
+//		return user.isEnabled();
+		return true;
 	}
 	
 	public String getNameOfGuide() {
