@@ -7,7 +7,7 @@ import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistExcepti
 public interface UserService {
 	UserEntity register(final UserSignUpFormData user) throws UserAlreadyExistException;
     boolean checkIfUserExist(final String email);
-//    void sendRegistrationConfirmationEmail(final UserEntity user);
+    void sendRegistrationConfirmationEmail(final UserEntity user);
 //    boolean verifyUser(final String token) throws InvalidTokenException;
 //    UserEntity getUserById(final String id) throws UnkownIdentifierException;
 }
