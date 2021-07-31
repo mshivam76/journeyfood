@@ -3,7 +3,7 @@ package org.brahmakumaris.journeyfood.security;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbstractEmailContext {
+public abstract class AbstractEmailContext {
     private String from;
     private String to;
     private String subject;

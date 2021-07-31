@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.brahmakumaris.journeyfood.entity.Privilege;
 import org.brahmakumaris.journeyfood.entity.Role;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
@@ -14,12 +16,14 @@ import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
 import org.brahmakumaris.journeyfood.repository.PrivilegeRepository;
 import org.brahmakumaris.journeyfood.repository.RoleRepository;
 import org.brahmakumaris.journeyfood.repository.UserRepository;
+import org.brahmakumaris.journeyfood.security.exceptions.InvalidTokenException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 @Service("UserService")
 @Transactional
 public class DefaultUserService implements UserService {
@@ -119,13 +123,24 @@ public class DefaultUserService implements UserService {
         }
 
 	}
-//
-//	@Override
-//	public boolean verifyUser(String token) throws InvalidTokenException {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
+
+	@Override
+	public boolean verifyUser(String token) throws InvalidTokenException {
+		SecureToken secureToken = secureTokenService.findByToken(token);
+		if(java.util.Objects.isNull(secureToken)||!StringUtils.equals(token, secureToken.getToken()) || secureToken.isExpired()) {
+			throw new InvalidTokenException("Token is not valid");
+		}
+		UserEntity user = userRepository.getOne(secureToken.getUser().getId());
+		if(Objects.isNull(user)) {
+			return false;
+		}
+		user.setEnabled(true);
+		userRepository.save(user);
+		//Removing invalid Password-as it's not required
+		secureTokenService.removeToken(secureToken);
+		return true;
+	}
+
 //	@Override
 //	public User getUserById(String id) throws UnkownIdentifierException {
 //		// TODO Auto-generated method stub
