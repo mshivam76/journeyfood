@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,8 +35,8 @@ public class SecureToken{
     @Basic(optional = false)
     private LocalDateTime expireAt;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName ="id")
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName ="id")
     private UserEntity user;
 
     @Transient

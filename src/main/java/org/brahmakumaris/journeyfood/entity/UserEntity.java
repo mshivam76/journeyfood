@@ -44,13 +44,10 @@ public class UserEntity {
 	@Column(nullable = false, length = 150)
     private String password;
 	
-	@Column(nullable = false, columnDefinition = "TINYINT DEFAULT false")
+	@Column(nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean enabled;//whether account is verified using email or not
 	
-	@OneToMany(mappedBy="user")
-    private Set tokens;
-	 
     public  UserEntity(UserEntity user) {
         super();
         this.id = user.getId();
@@ -60,7 +57,12 @@ public class UserEntity {
         this.enabled = isEnabled();
         this.password = user.getPassword();
     }
-    	
+    
+	public UserEntity(String email) {
+		super();
+		this.email = email;
+	}
+    
 	public UserEntity() {
 		super();
 	}

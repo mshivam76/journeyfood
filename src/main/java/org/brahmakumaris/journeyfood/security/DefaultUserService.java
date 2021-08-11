@@ -1,5 +1,6 @@
 package org.brahmakumaris.journeyfood.security;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
 import org.brahmakumaris.journeyfood.entity.Privilege;
@@ -20,9 +22,12 @@ import org.brahmakumaris.journeyfood.security.exceptions.InvalidTokenException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service("UserService")
 @Transactional
@@ -35,6 +40,9 @@ public class DefaultUserService implements UserService {
     
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 
 	@Autowired
 	private PrivilegeRepository privilegeRepository;
@@ -45,15 +53,11 @@ public class DefaultUserService implements UserService {
     @Autowired
     SecureTokenRepository secureTokenRepository;
     
-    @Autowired
-    EmailService emailService;
-    
-
     @Value("${site.base.url.https}")
     private String baseURL;
     
 	@Override
-	public UserEntity register(UserSignUpFormData user) throws UserAlreadyExistException {
+	public UserEntity register(UserSignUpFormData user) throws UserAlreadyExistException, MessagingException, UnsupportedEncodingException{
 		if(checkIfUserExist(user.getEmail())) {
 			System.out.println("-------------------------------------------------------------------User already exists");
 			throw new  UserAlreadyExistException("User already exists for this email :"+user.getEmail());
@@ -61,7 +65,6 @@ public class DefaultUserService implements UserService {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setContactNoOfGuide(user.getContactNoOfGuide());
 		userEntity.setEmail(user.getEmail());
-		userEntity.setEnabled(true);
 		userEntity.setNameOfCenter(user.getNameOfCenter());
 		userEntity.setNameOfGuide(user.getNameOfGuide());
 		final Role userRole =  createRoleIfNotFound("ROLE_USER", assignPrivilege(userEntity));
@@ -69,7 +72,6 @@ public class DefaultUserService implements UserService {
 		userEntity.setRoles(Arrays.asList(userRole));
 		sendRegistrationConfirmationEmail(userEntity);
 		return userRepository.save(userEntity);
-		
 	}
 	
 	@Override
@@ -107,21 +109,30 @@ public class DefaultUserService implements UserService {
         return role;
     }
 
-	@Override
-	public void sendRegistrationConfirmationEmail(UserEntity user) {
+	private void sendRegistrationConfirmationEmail(UserEntity user)	throws MessagingException, UnsupportedEncodingException {
+		String toAddress = user.getEmail();
+		String fromAddress = "noreply.bkjourneyfood@gmail.com";
+		String senderName = user.getNameOfGuide();
+		String subject = "Please verify your registration";
+		String content = "Dear [[name]],<br>"
+				+ "Please click the link below to verify your registration:<br>"
+				+ "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+				+ "Thank you,<br>"
+				+ "Your company name.";
 		SecureToken secureToken= secureTokenService.createSecureToken();
-        secureToken.setUser(user);
-        secureTokenRepository.save(secureToken);
-        AccountVerificationEmailContext emailContext = new AccountVerificationEmailContext();
-        emailContext.init(user);
-        emailContext.setToken(secureToken.getToken());
-        emailContext.buildVerificationUrl(baseURL, secureToken.getToken());
-        try {
-            emailService.sendMail(emailContext);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
+		secureToken.setUser(user);
+      	secureTokenRepository.save(secureToken);
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		helper.setFrom(fromAddress, senderName);
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+		content = content.replace("[[name]]", user.getNameOfGuide());
+		String verifyURL = UriComponentsBuilder.fromHttpUrl(baseURL).path("/verify").queryParam("token", secureToken.getToken()).toUriString();
+		content = content.replace("[[URL]]", verifyURL);
+		helper.setText(content, true);
+		mailSender.send(message);
+		System.out.println("Email has been sent");
 	}
 
 	@Override
@@ -136,17 +147,10 @@ public class DefaultUserService implements UserService {
 		}
 		user.setEnabled(true);
 		userRepository.save(user);
-		//Removing invalid Password-as it's not required
 		secureTokenService.removeToken(secureToken);
 		return true;
 	}
 
-//	@Override
-//	public User getUserById(String id) throws UnkownIdentifierException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-	
     private void encodePassword( UserEntity userEntity, UserSignUpFormData user){
         userEntity.setPassword(bcryptEncoder.encode(user.getPassword()));
     }

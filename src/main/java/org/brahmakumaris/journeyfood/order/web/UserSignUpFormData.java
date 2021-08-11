@@ -1,11 +1,7 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.validation.constraints.NotBlank;
 
-import org.brahmakumaris.journeyfood.entity.Role;
 import org.brahmakumaris.journeyfood.validation.ContactNumberConstraint;
 
 public class UserSignUpFormData {
@@ -21,6 +17,15 @@ public class UserSignUpFormData {
     @NotBlank(message="Password is mandatory")
     private String password;
 	
+	public UserSignUpFormData() {
+		super();
+	}
+
+	public UserSignUpFormData(@NotBlank(message = "Email is mandatory") String email) {
+		super();
+		this.email = email;
+	}
+
 	public UserCreationParameters toParamsSignUp() {
 		return new UserCreationParameters(nameOfCenter, nameOfGuide, contactNoOfGuide, email, password);
 	}
