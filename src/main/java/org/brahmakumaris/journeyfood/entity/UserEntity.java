@@ -1,7 +1,6 @@
 package org.brahmakumaris.journeyfood.entity;
 
 import java.util.Collection;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -41,6 +39,15 @@ public class UserEntity {
 	@Column(nullable = false, unique = true, length = 70)
     private String email;
     
+	@Column(nullable = false, length = 70)
+    private String zone;
+	
+	@Column(nullable = false, length = 70)
+    private String subZone;
+	
+	@Column(length = 10)
+    private Integer pincode;
+	
 	@Column(nullable = false, length = 150)
     private String password;
 	
@@ -48,16 +55,21 @@ public class UserEntity {
     @Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean enabled;//whether account is verified using email or not
 	
-    public  UserEntity(UserEntity user) {
-        super();
-        this.id = user.getId();
-        this.nameOfGuide = user.getNameOfGuide();
-        this.email = user.getEmail();
-        this.contactNoOfGuide = user.getContactNoOfGuide();
-        this.enabled = isEnabled();
-        this.password = user.getPassword();
-    }
-    
+	public UserEntity(long id, Collection<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide, String email, String zone, String subZone, Integer pincode, String password, boolean enabled) {
+		super();
+		this.id = id;
+		this.roles = roles;
+		this.nameOfCenter = nameOfCenter;
+		this.nameOfGuide = nameOfGuide;
+		this.contactNoOfGuide = contactNoOfGuide;
+		this.email = email;
+		this.zone = zone;
+		this.subZone = subZone;
+		this.pincode = pincode;
+		this.password = password;
+		this.enabled = enabled;
+	}
+
 	public UserEntity(String email) {
 		super();
 		this.email = email;
@@ -99,6 +111,30 @@ public class UserEntity {
 		this.contactNoOfGuide = contactNoOfGuide;
 	}
 
+	public String getZone() {
+		return zone;
+	}
+
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
+
+	public String getSubZone() {
+		return subZone;
+	}
+
+	public void setSubZone(String subZone) {
+		this.subZone = subZone;
+	}
+
+	public Integer getPincode() {
+		return pincode;
+	}
+
+	public void setPincode(Integer pincode) {
+		this.pincode = pincode;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -131,14 +167,15 @@ public class UserEntity {
 		this.enabled = true;
 	}
 
-	@Override
+    @Override
 	public String toString() {
 		return "UserEntity [id=" + id + ", roles=" + roles + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide="
-				+ nameOfGuide + ", contactNoOfGuide=" + contactNoOfGuide + ", email=" + email + ", password=" + password
-				+ ", enabled=" + enabled + "]";
+				+ nameOfGuide + ", contactNoOfGuide=" + contactNoOfGuide + ", email=" + email + ", zone=" + zone
+				+ ", subZone=" + subZone + ", pincode=" + pincode + ", password=" + password + ", enabled=" + enabled
+				+ "]";
 	}
 
-    @Override
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

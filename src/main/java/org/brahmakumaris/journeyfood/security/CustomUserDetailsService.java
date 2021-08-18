@@ -21,16 +21,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
 		UserEntity user = userRepo.findByEmail(email); 
 		System.out.println("Email: "+email);
 		System.out.println("Email: "+user);
 		if(user==null) {
 			throw new UsernameNotFoundException(email+" is not registered, please register before logging in.");
 		}
-//		return new CustomUserDetails(user);
 		return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
-
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {

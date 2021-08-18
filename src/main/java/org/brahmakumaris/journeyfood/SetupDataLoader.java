@@ -92,6 +92,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setPassword(passwordEncoder.encode(password));
             user.setEmail(email);
             user.setEnabled(true);
+            user.setZone("Indore");
+    		user.setSubZone("Jabalpur");
+    		user.setPincode(482003);
         }
         user.setRoles(roles);
         user = userRepository.save(user);

@@ -59,9 +59,9 @@ public class JourneyFoodOrder{
 
     private String nameOfGuide;
     
-    private int headCount;
-    
     private String contactNoOfGuide;
+    
+    private int headCount;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateOfDeparture;

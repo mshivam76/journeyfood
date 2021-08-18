@@ -10,10 +10,11 @@ import org.brahmakumaris.journeyfood.security.exceptions.InvalidTokenException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
 
 public interface UserService {
-	UserEntity register(final UserSignUpFormData user) throws UserAlreadyExistException, MessagingException, UnsupportedEncodingException;
     boolean checkIfUserExist(final String email);
 //    void sendRegistrationConfirmationEmail(final UserEntity user);
     boolean verifyUser(final String token) throws InvalidTokenException;
 //    UserEntity getUserByToken(final String token) throws InvalidTokenException;
 //    UserEntity getUserById(final String id) throws UnkownIdentifierException;
+	boolean verifyUserResetPassword(String token) throws InvalidTokenException;
+	UserEntity register(UserSignUpFormData user, String link)throws UserAlreadyExistException, MessagingException, UnsupportedEncodingException;
 }
