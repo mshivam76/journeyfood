@@ -1,9 +1,11 @@
 package org.brahmakumaris.journeyfood.security;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.Privilege;
 import org.brahmakumaris.journeyfood.entity.Role;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
@@ -61,6 +64,8 @@ public class DefaultUserService implements UserService {
     @Value("${site.base.url.https}")
     private String baseURL;
     
+    
+    
 	@Override
 	public UserEntity register(UserSignUpFormData user, String link) throws UserAlreadyExistException, MessagingException, UnsupportedEncodingException{
 		LOGGER.info("DefaultUserService - register() Entered -User=> "+user);
@@ -68,7 +73,13 @@ public class DefaultUserService implements UserService {
 			LOGGER.error("-------------------------------------------------------------------User already exists");
 			throw new  UserAlreadyExistException("User already exists for this email :"+user.getEmail());
 		}
-		UserEntity userEntity = new UserEntity();
+		UserEntity userEntity=null;
+		try {
+			userEntity = new UserEntity();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		userEntity.setContactNoOfGuide(user.getContactNoOfGuide());
 		userEntity.setEmail(user.getEmail());
 		userEntity.setNameOfCenter(user.getNameOfCenter());
@@ -78,7 +89,7 @@ public class DefaultUserService implements UserService {
 		userEntity.setPincode(user.getPincode());
 		final Role userRole =  createRoleIfNotFound("ROLE_USER", assignPrivilege(userEntity));
 		encodePassword(userEntity, user);//Encoding and setting password
-		userEntity.setRoles(Arrays.asList(userRole));
+		userEntity.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		sendEmailVerificationMail(userEntity, link);
 		LOGGER.info("DefaultUserService - register User Exit => "+user);
 		return userRepository.save(userEntity);
@@ -194,7 +205,10 @@ public class DefaultUserService implements UserService {
 		return true;
 	}
 
-	
+	@Override
+	public UserEntity getUser(String email) {
+		return userRepository.findByEmail(email);
+	}
 	
     private void encodePassword( UserEntity userEntity, UserSignUpFormData user){
         userEntity.setPassword(bcryptEncoder.encode(user.getPassword()));
@@ -252,4 +266,6 @@ public class DefaultUserService implements UserService {
         userRepository.save(user);//After resetting password token deletion is not required as token is already deleted after returning UserEntity POJO in getByResetPasswordToken();
         LOGGER.info("DefaultUserService - updatePassword() saved succesfully -Exit");
     }
+
+	
 }

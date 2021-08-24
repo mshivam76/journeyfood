@@ -2,6 +2,8 @@ package org.brahmakumaris.journeyfood.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.text.ParseException;
+
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,13 @@ public class UserRepositoryTests {
     // test methods go below
     @Test
     public void testCreateuser() {
-    	UserEntity user =  new UserEntity();
+    	UserEntity user=null;
+    	try {
+			user =  new UserEntity();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	user.setContactNoOfGuide("contactNoOfGuide");
     	user.setEmail("email@email.com");
     	user.setNameOfCenter("nameOfCenter");

@@ -1,6 +1,11 @@
 package org.brahmakumaris.journeyfood.entity;
 
-import java.util.Collection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +16,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name="users")
@@ -25,7 +35,7 @@ public class UserEntity {
 	
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    private Set<Role> roles;
 	
 	@Column(nullable = false, length = 100)
     private String nameOfCenter;
@@ -48,6 +58,8 @@ public class UserEntity {
 	@Column(length = 10)
     private Integer pincode;
 	
+	private Date dateCreated;
+	
 	@Column(nullable = false, length = 150)
     private String password;
 	
@@ -55,7 +67,31 @@ public class UserEntity {
     @Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean enabled;//whether account is verified using email or not
 	
-	public UserEntity(long id, Collection<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide, String email, String zone, String subZone, Integer pincode, String password, boolean enabled) {
+	@OneToMany(mappedBy = "user")
+	@Fetch(FetchMode.JOIN)
+	private List<JourneyFoodOrder> order;
+	
+	public UserEntity( Set<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
+			String email, String zone, String subZone, Integer pincode, Date dateCreated, String password,
+			boolean enabled, List<JourneyFoodOrder> order) {
+		super();
+		this.roles = roles;
+		this.nameOfCenter = nameOfCenter;
+		this.nameOfGuide = nameOfGuide;
+		this.contactNoOfGuide = contactNoOfGuide;
+		this.email = email;
+		this.zone = zone;
+		this.subZone = subZone;
+		this.pincode = pincode;
+		this.dateCreated = dateCreated;
+		this.password = password;
+		this.enabled = enabled;
+		this.order = order;
+	}
+
+	public UserEntity(long id, Set<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
+			String email, String zone, String subZone, Integer pincode, Date dateCreated, String password,
+			boolean enabled, List<JourneyFoodOrder> order) {
 		super();
 		this.id = id;
 		this.roles = roles;
@@ -66,8 +102,10 @@ public class UserEntity {
 		this.zone = zone;
 		this.subZone = subZone;
 		this.pincode = pincode;
+		this.dateCreated = dateCreated;
 		this.password = password;
 		this.enabled = enabled;
+		this.order = order;
 	}
 
 	public UserEntity(String email) {
@@ -75,8 +113,11 @@ public class UserEntity {
 		this.email = email;
 	}
     
-	public UserEntity() {
+	public UserEntity() throws ParseException{
 		super();
+		String pattern = "EEEEE dd MMM*MM yyyy HH:mm:ss.SSSZ";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("en", "IN"));
+		this.dateCreated = simpleDateFormat.parse( simpleDateFormat.format(new Date()));
 	}
 
 	public long getId() {
@@ -151,11 +192,11 @@ public class UserEntity {
 		this.password = password;
 	}
 	
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(final Collection<Role> roles) {
+    public void setRoles(final Set<Role> roles) {
         this.roles = roles;
     }
 	
@@ -167,12 +208,12 @@ public class UserEntity {
 		this.enabled = true;
 	}
 
-    @Override
+	@Override
 	public String toString() {
 		return "UserEntity [id=" + id + ", roles=" + roles + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide="
 				+ nameOfGuide + ", contactNoOfGuide=" + contactNoOfGuide + ", email=" + email + ", zone=" + zone
-				+ ", subZone=" + subZone + ", pincode=" + pincode + ", password=" + password + ", enabled=" + enabled
-				+ "]";
+				+ ", subZone=" + subZone + ", pincode=" + pincode + ", dateCreated=" + dateCreated + ", password="
+				+ password + ", enabled=" + enabled + ", order=" + order + "]";
 	}
 
 	@Override

@@ -2,17 +2,15 @@ package org.brahmakumaris.journeyfood.order.web;
 
 import java.util.Date;
 
+import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class JourneyFoodOrderCreationParameters {
 	
-    private String nameOfCenter;
-
-    private String nameOfGuide;
-    
     private int headCount;
     
-    private String contactNoOfGuide;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateOfOrderPlaced;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateOfDeparture;
@@ -20,8 +18,18 @@ public class JourneyFoodOrderCreationParameters {
     @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
     private Date mealRetrievalTime;
 
+    private UserEntity user; 
+    
     private int thepla;
     
+    public Date getDateOfOrderPlaced() {
+		return dateOfOrderPlaced;
+	}
+
+	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+	}
+
 	private int puri;
     
     private int roti;
@@ -34,18 +42,15 @@ public class JourneyFoodOrderCreationParameters {
     
     private int others;
 
-	private long id;
     
-    public JourneyFoodOrderCreationParameters(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
-			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
-			int others) {
+	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, Date dateOfDeparture, Date mealRetrievalTime,
+			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, int others) {
 		super();
-		this.nameOfCenter = nameOfCenter;
-		this.nameOfGuide = nameOfGuide;
 		this.headCount = headCount;
-		this.contactNoOfGuide = contactNoOfGuide;
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
 		this.dateOfDeparture = dateOfDeparture;
 		this.mealRetrievalTime = mealRetrievalTime;
+		this.user = user;
 		this.thepla = thepla;
 		this.puri = puri;
 		this.roti = roti;
@@ -55,60 +60,98 @@ public class JourneyFoodOrderCreationParameters {
 		this.others = others;
 	}
 
-	public JourneyFoodOrderCreationParameters(long id) {
-		// TODO Auto-generated constructor stub
-		this.id = id;
+	public JourneyFoodOrderCreationParameters() {
+		super();
 	}
 
-	public String getNameOfCenter() {
-		return nameOfCenter;
-	}
-
-	public String getNameOfGuide() {
-		return nameOfGuide;
-	}
 
 	public int getHeadCount() {
 		return headCount;
 	}
 
-	public String getContactNoOfGuide() {
-		return contactNoOfGuide;
+	public void setHeadCount(int headCount) {
+		this.headCount = headCount;
 	}
 
 	public Date getDateOfDeparture() {
 		return dateOfDeparture;
 	}
 
+	public void setDateOfDeparture(Date dateOfDeparture) {
+		this.dateOfDeparture = dateOfDeparture;
+	}
+
 	public Date getMealRetrievalTime() {
 		return mealRetrievalTime;
+	}
+
+	public void setMealRetrievalTime(Date mealRetrievalTime) {
+		this.mealRetrievalTime = mealRetrievalTime;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 	public int getThepla() {
 		return thepla;
 	}
 
+	public void setThepla(int thepla) {
+		this.thepla = thepla;
+	}
+
 	public int getPuri() {
 		return puri;
+	}
+
+	public void setPuri(int puri) {
+		this.puri = puri;
 	}
 
 	public int getRoti() {
 		return roti;
 	}
 
+	public void setRoti(int roti) {
+		this.roti = roti;
+	}
+
 	public int getAchar() {
 		return achar;
+	}
+
+	public void setAchar(int achar) {
+		this.achar = achar;
 	}
 
 	public int getJam() {
 		return jam;
 	}
 
+	public void setJam(int jam) {
+		this.jam = jam;
+	}
+
 	public int getBread() {
 		return bread;
+	}
+
+	public void setBread(int bread) {
+		this.bread = bread;
 	}
 
 	public int getOthers() {
 		return others;
 	}
+
+	public void setOthers(int others) {
+		this.others = others;
+	}
+    
+    
 }

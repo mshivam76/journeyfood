@@ -1,9 +1,12 @@
 package org.brahmakumaris.journeyfood;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.brahmakumaris.journeyfood.entity.Privilege;
 import org.brahmakumaris.journeyfood.entity.Role;
@@ -56,7 +59,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 //      final Role userRole =  createRoleIfNotFound("ROLE_USER", userPrivileges);
 
         // == create initial user
-        createUserIfNotFound("admin@bkjourneyfood.org", "Admin", "ContactNoOfGuide", "nameOfCenter", "ShivBabakaBhandarahaiBharpoor", new ArrayList<Role>(Arrays.asList(adminRole)));
+        createUserIfNotFound("admin@bkjourneyfood.org", "Admin", "ContactNoOfGuide", "nameOfCenter", "ShivBabakaBhandarahaiBharpoor", new HashSet<Role>(Arrays.asList(adminRole)));
         alreadySetup = true;
     }
 
@@ -82,10 +85,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    UserEntity createUserIfNotFound(final String email, final String nameOfGuide, final String contactNoOfGuide, final String nameOfCenter, final String password, final Collection<Role> roles) {
+    UserEntity createUserIfNotFound(final String email, final String nameOfGuide, final String contactNoOfGuide, final String nameOfCenter, final String password, final Set<Role> roles) {
         UserEntity user = userRepository.findByEmail(email);
         if (user == null) {
-            user = new UserEntity();
+            try {
+				user = new UserEntity();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             user.setNameOfGuide(nameOfGuide);
             user.setNameOfCenter(nameOfCenter);
             user.setContactNoOfGuide(contactNoOfGuide);

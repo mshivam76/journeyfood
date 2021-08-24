@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Update Order</title>
-	    <script type="text/javascript" src="webjars/jquery/2.2.3/jquery.min.js"></script>
+        <title>Add Order</title>
+	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
 	    <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
 	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
 	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
 	    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
-    <head>
+    </head>
     <body>
 	   	<div class="container">
+	   		<div class="row">
+    			<div class="col-md-12">
+		    		<p><a th:href="@{/logout}">Logout</a></p>
+		    		<p><a th:href="@{/fetchAllJourneyFoodOrder}">View Orders</a></p>
+		        </div>
+		    </div>
 		    <div class="row">
-		        <div class="col-md-4 mt-5">
-		        	<h2 class="mb-5">Update Order</h2>
-		        	<form action="#" th:action="@{/update/{id}(id=${journeyFoodOrder.id})}" th:object="${journeyFoodOrder}" method="put">
-		            <form action="#" th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
+		        <div class="col-md-12"> <h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
+		            <form action="#" th:action="@{/update/{id}(id=${order.id})}" th:object="${order}" method="post">
 		            	<div>
 		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 							    <ul>
@@ -29,30 +33,16 @@
 						        <li>Order submitted successfully. Please note order id to fetch/edit order details in future.</li>
 						    </ul>
 						</div>
-			            <h2 class="mb-5">New Order</h2>
-		                <div class="form-group">
-		                    <label for="nameOfCenter">Name of Center</label>
-						    <input type="text" th:field="*{nameOfCenter}" class="form-control" placeholder="Name of Center">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></div>
-		                </div>
-		                <div class="form-group">
-		                	<label for="nameOfGuide">Name of Guide/Teacher</label>
-						    <input type="text" th:field="*{nameOfGuide}" class="form-control" placeholder="Name of Guide">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfGuide')}" th:errors="*{nameOfGuide}"></div>
-		                </div>
-		                
+			            <h2 class="mb-5">Edit Order</h2>
+			            <div class="form-group">
+			                <label for="OrderId">OrderId</label>
+						    <input type="number" th:field="*{id}" class="form-control" disabled placeholder="Head count">
+		                </div> 
 		                <div class="form-group">
 			                <label for="headCount">Head count</label>
 						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
 		                </div> 
-
-		                <div class="form-group">
-						    <label for="dateOfJourney">Mobile No Of Guide</label>
-						    <input type="text" th:field="*{contactNoOfGuide}" class="form-control" placeholder="Mobile No Of Guide">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('contactNoOfGuide')}" th:errors="*{contactNoOfGuide}"></div>
-		                </div>
-
 
 		                <div class="form-group">
 						    <label for="dateOfDeparture">Date of departure</label>
@@ -118,7 +108,7 @@
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
 		                </div> 
 		                		                		                		                		                		
-		                <button class="btn btn-primary" type="submit">Add Order</button>
+		                <button class="btn btn-primary" type="submit">Update Order</button>
 		                <button class="btn btn-danger" type="reset">Reset Order</button>
 		            </form>
 		        </div>
@@ -144,6 +134,8 @@
 		            clear: 'far fa-trash',
 		            close: 'far fa-times'
 		        } });
+		    
+		    
 		
 		    $('#datetimepicker1').datetimepicker({
 		        format: 'DD/MM/YYYY h:mm A'

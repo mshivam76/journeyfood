@@ -1,7 +1,11 @@
 package org.brahmakumaris.journeyfood.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
+import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
@@ -12,7 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.servlet.ModelAndView;
 /*
  * https://www.baeldung.com/spring-boot-crud-thymeleaf -->reference link
  * https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
@@ -38,7 +45,53 @@ public class HomeController {
         model.addAttribute("journeyFoorOrder", formData);
         journeyFoodServiceImpl.createJourneyFoodOrder(formData.toParams());
         LOGGER.info("HomeController addJourneyFoodOrder method - Exit");
-        return "redirect:/index";
+        return "redirect:/fetchAllJourneyFoodOrder";
     }
    
+	@GetMapping("/fetchAllJourneyFoodOrder")
+    public ModelAndView fetchAllJourneyFoodOrder() {
+		UserEntity user = journeyFoodServiceImpl.getCurrentLoggedInUserData();
+		LOGGER.info("HomeController fetchAllJourneyFoodOrder method - Enter =>user :"+user);
+	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser(user);
+	 	LOGGER.info("HomeController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
+        return new ModelAndView("fethAllJourneyOrdersByLoggedInUser", "orders", orders);
+    }
+	
+	@GetMapping("/delete/{id}")
+	public String deleteOrder(@PathVariable("id") long id, Model model) {
+		LOGGER.info("HomeController deleteOrder method - Enter =>id :"+id);
+		try {
+			journeyFoodServiceImpl.delete(id);
+		    LOGGER.info("HomeController deleteOrder method - Exit successful");
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.error("HomeController deleteOrder method - Exit"+ e.getMessage());
+		}
+	    return "redirect:/fetchAllJourneyFoodOrder";
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String updateOrder(@PathVariable("id") long id, Model model) {
+		LOGGER.info("HomeController updateOrder method - Enter =>id :"+id);
+	    try {
+	    	JourneyFoodOrder order = journeyFoodServiceImpl.findByOrderId(id);
+	    	model.addAttribute("order", order);
+		    LOGGER.info("HomeController updateOrder method - Exit =>order(object/null): "+ id);
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.info("HomeController updateOrder method - Exit =>orders: "+id);
+		}
+	    return "update-journeyFoodOrder";
+	}
+	
+	@PostMapping("/update/{id}")
+	public String updateOrder( @Valid @ModelAttribute("order") CreateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) {
+	    if (result.hasErrors()) {
+	    	LOGGER.error("HomeController updateOrder method - Error occured");
+            return "update-journeyFoodOrder";
+	    }
+	    journeyFoodServiceImpl.updateOrder(order);
+	    LOGGER.error("HomeController updateOrder method - Exit");
+	    return "redirect:/fetchAllJourneyFoodOrder";
+	}
 }

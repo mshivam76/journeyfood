@@ -1,30 +1,24 @@
 package org.brahmakumaris.journeyfood.order.web;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.brahmakumaris.journeyfood.validation.ContactNumberConstraint;
 import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class CreateJourneyFoodOrderFormData {
+	private long id;
 	
-	@NotBlank(message="Name Of Center is mandatory")
-    private String nameOfCenter;
-
-    @NotBlank(message="Name Of Guide is mandatory")
-    private String nameOfGuide;
-    
-    @IntegerCountMustBeGreaterThanZeroConstraint(message="Head count must be greater than 0")
+	@IntegerCountMustBeGreaterThanZeroConstraint(message="Head count must be greater than 0")
     private int headCount;
     
-    @NotEmpty(message="Mobile No Of Guide is mandatory")
-    @ContactNumberConstraint(message = "Invalid Contact number")
-    private String contactNoOfGuide;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateOfOrderPlaced;
     
     @NotNull(message="Departure date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -58,23 +52,37 @@ public class CreateJourneyFoodOrderFormData {
     private int others;
     
 	public JourneyFoodOrderCreationParameters toParams() {
-		return new JourneyFoodOrderCreationParameters(nameOfCenter, nameOfGuide, headCount, contactNoOfGuide, dateOfDeparture, mealRetrievalTime, thepla, puri, roti, achar, jam, bread, others);
+		return new JourneyFoodOrderCreationParameters(headCount, dateOfOrderPlaced, dateOfDeparture, mealRetrievalTime, null, thepla, puri, roti, achar, jam, bread, others);
     }
     
-	public String getNameOfCenter() {
-		return nameOfCenter;
+	
+	public CreateJourneyFoodOrderFormData() {
+		super();
+//		String pattern = "EEEEE dd MM yyyy HH:mm:ss.SSSZ";
+//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("en", "IN"));
+//			try {
+//				this.dateOfOrderPlaced = simpleDateFormat.parse( simpleDateFormat.format(new Date()));
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		this.dateOfOrderPlaced = new Date();
 	}
 
-	public void setNameOfCenter(String nameOfCenter) {
-		this.nameOfCenter = nameOfCenter;
+	 public long getId() {
+		return id;
 	}
 
-	public String getNameOfGuide() {
-		return nameOfGuide;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public void setNameOfGuide(String nameOfGuide) {
-		this.nameOfGuide = nameOfGuide;
+	public Date getDateOfOrderPlaced() {
+		return dateOfOrderPlaced;
+	}
+
+	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
 	}
 
 	public int getHeadCount() {
@@ -83,14 +91,6 @@ public class CreateJourneyFoodOrderFormData {
 
 	public void setHeadCount(int headCount) {
 		this.headCount = headCount;
-	}
-
-	public String getContactNoOfGuide() {
-		return contactNoOfGuide;
-	}
-
-	public void setContactNoOfGuide(String contactNoOfGuide) {
-		this.contactNoOfGuide = contactNoOfGuide;
 	}
 
 	public Date getDateOfDeparture() {
@@ -164,7 +164,4 @@ public class CreateJourneyFoodOrderFormData {
 	public void setOthers(int others) {
 		this.others = others;
 	}
-    
-    
-
 }

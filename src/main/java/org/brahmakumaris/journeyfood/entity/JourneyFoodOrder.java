@@ -1,67 +1,31 @@
 package org.brahmakumaris.journeyfood.entity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.persistence.ManyToOne;
 
+import org.brahmakumaris.journeyfood.controller.HomeController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class JourneyFoodOrder{
-
-	@Override
-	public String toString() {
-		return "JourneyFoodOrder [id=" + id + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide=" + nameOfGuide
-				+ ", headCount=" + headCount + ", contactNoOfGuide=" + contactNoOfGuide + ", dateOfDeparture="
-				+ dateOfDeparture + ", mealRetrievalTime=" + mealRetrievalTime + ", thepla=" + thepla + ", puri=" + puri
-				+ ", roti=" + roti + ", achar=" + achar + ", jam=" + jam + ", bread=" + bread + ", others=" + others
-				+ "]";
-	}
-
-	public JourneyFoodOrder() {
-		super();
-	}
-	
-	public JourneyFoodOrder(long id) {
-		this.id = id;
-	}
-
-	public JourneyFoodOrder(String nameOfCenter, String nameOfGuide, int headCount, String contactNoOfGuide,
-			Date dateOfDeparture, Date mealRetrievalTime, int thepla, int puri, int roti, int achar, int jam, int bread,
-			int others) {
-		super();
-		this.nameOfCenter = nameOfCenter;
-		this.nameOfGuide = nameOfGuide;
-		this.headCount = headCount;
-		this.contactNoOfGuide = contactNoOfGuide;
-		this.dateOfDeparture = dateOfDeparture;
-		this.mealRetrievalTime = mealRetrievalTime;
-		this.thepla = thepla;
-		this.puri = puri;
-		this.roti = roti;
-		this.achar = achar;
-		this.jam = jam;
-		this.bread = bread;
-		this.others = others;
-	}
-
-
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 	
-    private String nameOfCenter;
-
-    private String nameOfGuide;
-    
-    private String contactNoOfGuide;
-    
     private int headCount;
+    
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date dateOfOrderPlaced;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateOfDeparture;
@@ -69,6 +33,9 @@ public class JourneyFoodOrder{
     @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
     private Date mealRetrievalTime;
 
+    @ManyToOne
+    private UserEntity user; 
+    
     private int thepla;
     
     private int puri;
@@ -82,21 +49,53 @@ public class JourneyFoodOrder{
     private int bread;
     
     private int others;
+
+    public JourneyFoodOrder() {
+		super();
+	}
     
-    public long getId() {
+	public JourneyFoodOrder(long id, int headCount, Date dateOfOrderPlaced, Date dateOfDeparture,
+			Date mealRetrievalTime, UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread,
+			int others) {
+		super();
+		this.id = id;
+		this.headCount = headCount;
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalTime = mealRetrievalTime;
+		this.user = user;
+		this.thepla = thepla;
+		this.puri = puri;
+		this.roti = roti;
+		this.achar = achar;
+		this.jam = jam;
+		this.bread = bread;
+		this.others = others;
+	}
+
+	public JourneyFoodOrder( int headCount, Date dateOfOrderPlaced, Date dateOfDeparture,
+			Date mealRetrievalTime, UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread,
+			int others) {
+		super();
+		this.headCount = headCount;
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalTime = mealRetrievalTime;
+		this.user = user;
+		this.thepla = thepla;
+		this.puri = puri;
+		this.roti = roti;
+		this.achar = achar;
+		this.jam = jam;
+		this.bread = bread;
+		this.others = others;
+	}
+	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getNameOfCenter() {
-		return nameOfCenter;
-	}
-
-	public void setNameOfCenter(String nameOfCenter) {
-		this.nameOfCenter = nameOfCenter;
 	}
 
 	public int getHeadCount() {
@@ -107,20 +106,12 @@ public class JourneyFoodOrder{
 		this.headCount = headCount;
 	}
 
-	public String getNameOfGuide() {
-		return nameOfGuide;
+	public Date getDateOfOrderPlaced() {
+		return dateOfOrderPlaced;
 	}
 
-	public void setNameOfGuide(String nameOfGuide) {
-		this.nameOfGuide = nameOfGuide;
-	}
-
-	public String getContactNoOfGuide() {
-		return contactNoOfGuide;
-	}
-
-	public void setContactNoOfGuide(String contactNoOfGuide) {
-		this.contactNoOfGuide = contactNoOfGuide;
+	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
 	}
 
 	public Date getDateOfDeparture() {
@@ -139,7 +130,15 @@ public class JourneyFoodOrder{
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 
-    public int getThepla() {
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
+
+	public int getThepla() {
 		return thepla;
 	}
 
@@ -171,15 +170,7 @@ public class JourneyFoodOrder{
 		this.achar = achar;
 	}
 
-	public int getOthers() {
-		return others;
-	}
-
-	public void setOthers(int others) {
-		this.others = others;
-	}
-	
-    public int getJam() {
+	public int getJam() {
 		return jam;
 	}
 
@@ -194,4 +185,40 @@ public class JourneyFoodOrder{
 	public void setBread(int bread) {
 		this.bread = bread;
 	}
+
+	public int getOthers() {
+		return others;
+	}
+
+	public void setOthers(int others) {
+		this.others = others;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		JourneyFoodOrder other = (JourneyFoodOrder) obj;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+
+	
+
 }
