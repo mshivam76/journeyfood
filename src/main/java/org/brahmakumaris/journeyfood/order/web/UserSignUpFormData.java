@@ -1,11 +1,16 @@
 package org.brahmakumaris.journeyfood.order.web;
 
+import java.util.Date;
+import java.util.Set;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.brahmakumaris.journeyfood.entity.Role;
 import org.brahmakumaris.journeyfood.validation.ContactNumberConstraint;
 
 public class UserSignUpFormData {
+	private long id;
 	@NotBlank(message="Name Of Center is mandatory")
     private String nameOfCenter;
 	@NotBlank(message="Name Of Guide/Teacher is mandatory")
@@ -13,8 +18,9 @@ public class UserSignUpFormData {
 	@NotBlank(message="Contact No is is mandatory")
 	@ContactNumberConstraint(message = "Invalid Contact number")
     private String contactNoOfGuide;
-    @NotBlank(message="Zone name is mandatory")
-    private String zoneName;
+	Date dateCreated;
+	@NotBlank(message="Zone name is mandatory")
+    private String zone;
     @NotBlank(message="Subzone/City name is mandatory")
     private String subZone;
     @NotNull(message="Pincode/Zipcode is mandatory")
@@ -23,7 +29,8 @@ public class UserSignUpFormData {
     private String email;
     @NotBlank(message="Password is mandatory")
     private String password;
-	
+    private Set<Role> roles;
+    
 	public UserSignUpFormData() {
 		super();
 	}
@@ -57,6 +64,14 @@ public class UserSignUpFormData {
 		this.contactNoOfGuide = contactNoOfGuide;
 	}
 
+    public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -65,12 +80,12 @@ public class UserSignUpFormData {
 		this.email = email;
 	}
 
-	public String getZoneName() {
-		return zoneName;
+	public String getZone() {
+		return zone;
 	}
 
-	public void setZoneName(String zoneName) {
-		this.zoneName = zoneName;
+	public void setZone(String zone) {
+		this.zone = zone;
 	}
 
 	public String getSubZone() {
@@ -95,5 +110,21 @@ public class UserSignUpFormData {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 }

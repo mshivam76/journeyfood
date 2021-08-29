@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Update User Information</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+    	<div class="container">
+	   		<div class="row">
+    			<div class="col-md-12">
+		    		<p><a th:href="@{/logout}">Logout</a></p>
+		    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}">View Orders</a></p>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="col-md-12"> <h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
+			        <form th:action="@{/admin/user/update/{id}(id=${user.id})}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
+				        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+					        <ul>
+						        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+						    </ul>
+				        </div>
+				        <div class="alert alert-danger" th:text="${message}" th:unless="${message==null}" role="alert"></div>
+					        <div class="m-3">
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">User Id: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{id}" disabled class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+					                </div>
+					            </div>
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Name of Center: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{nameOfCenter}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></div>
+					                </div>
+					            </div>
+					             
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Name of Guide: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{nameOfGuide}" class="form-control" required minlength="2" maxlength="20"/>
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfGuide')}" th:errors="*{nameOfGuide}"></div>
+					                </div>
+					            </div>
+				
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Zone Name : </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{zone}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('zone')}" th:errors="*{zone}"></div>
+					                </div>
+					            </div>
+				
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">City/Sub-Zone name: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{subZone}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('subZone')}" th:errors="*{subZone}"></div>
+					                </div>
+					            </div>
+				
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Pincode/Zipcode : </label>
+					                <div class="col-8">
+					                    <input type="number" th:field="*{pincode}" class="form-control" value="0" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('pincode')}" th:errors="*{pincode}"></div>
+					                </div>
+					            </div>	            
+				
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">E-mail : </label>
+					                <div class="col-8">
+					                    <input type="email" th:field="*{email}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+					                </div>
+					            </div>
+					            
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Password: </label>
+					                <div class="col-8">
+					                    <input type="password" th:field="*{password}" class="form-control" required minlength="6" maxlength="10"/>
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+					                </div>
+					            </div>
+					            
+					             <div class="form-group row">
+					                <label class="col-4 col-form-label">Mobile no of Guide: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{contactNoOfGuide}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('contactNoOfGuide')}" th:errors="*{contactNoOfGuide}"></div>
+					                </div>
+					            </div>
+					
+					            <div>
+					                <button type="submit" class="btn btn-primary">Sign Up</button>
+					            </div>
+					        </div>
+			        </form>
+		    </div>
+    </div>
+    </div>
+</body>
+</html>

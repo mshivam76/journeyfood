@@ -3,7 +3,6 @@ package org.brahmakumaris.journeyfood.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.brahmakumaris.journeyfood.controller.HomeController;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
@@ -11,7 +10,6 @@ import org.brahmakumaris.journeyfood.order.web.JourneyFoodOrderCreationParameter
 import org.brahmakumaris.journeyfood.repository.JourneyFoodOrderRepository;
 import org.brahmakumaris.journeyfood.security.CustomUserDetails;
 import org.brahmakumaris.journeyfood.security.UserService;
-import org.brahmakumaris.journeyfood.security.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +76,8 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		Optional<JourneyFoodOrder> order = repository.findById(id);
 		if(order.isPresent())
 			repository.deleteById(id);
+		else 
+			throw new IllegalArgumentException("Unable to find order with id - "+id);
 	}
 
 	@Override
@@ -85,6 +85,8 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		Optional<JourneyFoodOrder> order = repository.findById(id);
 		if(order.isPresent())
 			repository.save(order.get());
+		else 
+			throw new IllegalArgumentException("Unable to find order with id - "+id);
 	}
 
 	@Override
@@ -95,4 +97,5 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 				order.getRoti(), order.getAchar(), order.getJam(), order.getBread(), order.getOthers());
 		 LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(object/null): "+ repository.save(journeyFoodOrder));
 	}
+
 }

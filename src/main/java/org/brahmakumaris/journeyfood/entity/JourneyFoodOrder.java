@@ -49,9 +49,12 @@ public class JourneyFoodOrder{
     private int bread;
     
     private int others;
+    
+    private boolean isRemoved;
 
-    public JourneyFoodOrder() {
+	public JourneyFoodOrder() {
 		super();
+		this.isRemoved = false;
 	}
     
 	public JourneyFoodOrder(long id, int headCount, Date dateOfOrderPlaced, Date dateOfDeparture,
@@ -71,6 +74,7 @@ public class JourneyFoodOrder{
 		this.jam = jam;
 		this.bread = bread;
 		this.others = others;
+		this.isRemoved = false;
 	}
 
 	public JourneyFoodOrder( int headCount, Date dateOfOrderPlaced, Date dateOfDeparture,
@@ -89,6 +93,7 @@ public class JourneyFoodOrder{
 		this.jam = jam;
 		this.bread = bread;
 		this.others = others;
+		this.isRemoved = false;
 	}
 	public long getId() {
 		return id;
@@ -194,6 +199,14 @@ public class JourneyFoodOrder{
 		this.others = others;
 	}
 
+    public boolean isRemoved() {
+		return isRemoved;
+	}
+
+	public void setRemoved(boolean isRemoved) {
+		this.isRemoved = isRemoved;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -218,7 +231,4 @@ public class JourneyFoodOrder{
 			return false;
 		return true;
 	}
-
-	
-
 }

@@ -8,16 +8,19 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.Privilege;
 import org.brahmakumaris.journeyfood.entity.Role;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
+import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
 import org.brahmakumaris.journeyfood.repository.PrivilegeRepository;
 import org.brahmakumaris.journeyfood.repository.RoleRepository;
@@ -84,7 +87,7 @@ public class DefaultUserService implements UserService {
 		userEntity.setEmail(user.getEmail());
 		userEntity.setNameOfCenter(user.getNameOfCenter());
 		userEntity.setNameOfGuide(user.getNameOfGuide());
-		userEntity.setZone(user.getZoneName());
+		userEntity.setZone(user.getZone());
 		userEntity.setSubZone(user.getSubZone());
 		userEntity.setPincode(user.getPincode());
 		final Role userRole =  createRoleIfNotFound("ROLE_USER", assignPrivilege(userEntity));
@@ -267,5 +270,37 @@ public class DefaultUserService implements UserService {
         LOGGER.info("DefaultUserService - updatePassword() saved succesfully -Exit");
     }
 
+	@Override
+	public List<UserEntity> getUsers() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public UserEntity getUser(long id) {
+		return userRepository.getOne(id);
+	}
 	
+	@Override
+	public void deleteUser(long id) {
+		Optional<UserEntity> order = userRepository.findById(id);
+		if(order.isPresent())
+			userRepository.deleteById(id);
+		else 
+			throw new IllegalArgumentException("Unable to find user with id - "+id);
+	}
+
+	@Override
+	public void updateUser(UserSignUpFormData user) throws IllegalArgumentException{
+		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Enter ");
+		UserEntity userPOJO = getUser(user.getId());
+		userPOJO.setNameOfCenter(user.getNameOfCenter());
+		userPOJO.setNameOfGuide(user.getNameOfGuide());
+		userPOJO.setContactNoOfGuide(user.getContactNoOfGuide()); 
+		userPOJO.setEmail(user.getEmail()); 
+		userPOJO.setZone(user.getZone());
+		userPOJO.setSubZone(user.getSubZone());
+		userPOJO.setPincode(user.getPincode());
+		userPOJO.setPassword(user.getPassword());
+		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(user/null): "+ userRepository.save(userPOJO));
+	}
 }

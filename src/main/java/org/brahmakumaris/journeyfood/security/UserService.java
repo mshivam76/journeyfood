@@ -4,9 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
+import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
 import org.brahmakumaris.journeyfood.security.exceptions.InvalidTokenException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
@@ -20,4 +22,9 @@ public interface UserService {
 	boolean verifyUserResetPassword(String token) throws InvalidTokenException;
 	UserEntity register(UserSignUpFormData user, String link)throws UserAlreadyExistException, MessagingException, UnsupportedEncodingException;
 	UserEntity getUser(String email);
+	public List<UserEntity> getUsers();
+	UserEntity getUser(long id);
+	void deleteUser(long id);
+	void updateUser(UserSignUpFormData user) throws IllegalArgumentException;
+//	void update(long id) throws IllegalArgumentException;
 }

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 /*
  * https://www.baeldung.com/spring-boot-crud-thymeleaf -->reference link
@@ -45,16 +44,16 @@ public class HomeController {
         model.addAttribute("journeyFoorOrder", formData);
         journeyFoodServiceImpl.createJourneyFoodOrder(formData.toParams());
         LOGGER.info("HomeController addJourneyFoodOrder method - Exit");
-        return "redirect:/fetchAllJourneyFoodOrder";
+        return "redirect:/fetchJourneyFoodOrder";
     }
    
-	@GetMapping("/fetchAllJourneyFoodOrder")
-    public ModelAndView fetchAllJourneyFoodOrder() {
+	@GetMapping("/fetchJourneyFoodOrder")
+    public ModelAndView fetchJourneyFoodOrder() {
 		UserEntity user = journeyFoodServiceImpl.getCurrentLoggedInUserData();
-		LOGGER.info("HomeController fetchAllJourneyFoodOrder method - Enter =>user :"+user);
+		LOGGER.info("HomeController fetchJourneyFoodOrder method - Enter =>user :"+user);
 	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser(user);
-	 	LOGGER.info("HomeController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fethAllJourneyOrdersByLoggedInUser", "orders", orders);
+	 	LOGGER.info("HomeController fetchJourneyFoodOrder method - Exit =>orders: "+orders);
+        return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders);
     }
 	
 	@GetMapping("/delete/{id}")
@@ -67,7 +66,7 @@ public class HomeController {
 		catch(IllegalArgumentException e) {
 			LOGGER.error("HomeController deleteOrder method - Exit"+ e.getMessage());
 		}
-	    return "redirect:/fetchAllJourneyFoodOrder";
+	    return "redirect:/fetchJourneyFoodOrder";
 	}
 	
 	@GetMapping("/edit/{id}")
@@ -92,6 +91,6 @@ public class HomeController {
 	    }
 	    journeyFoodServiceImpl.updateOrder(order);
 	    LOGGER.error("HomeController updateOrder method - Exit");
-	    return "redirect:/fetchAllJourneyFoodOrder";
+	    return "redirect:/fetchJourneyFoodOrder";
 	}
 }

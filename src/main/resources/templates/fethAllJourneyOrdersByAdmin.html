@@ -57,8 +57,8 @@
 		                    <td th:text="${order.dateOfDeparture}">Departure date</td>
 		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
 		                    <td>
-		                    	<a th:href="@{/edit/{id}(id=${order.id})}">Edit</a>&nbsp;&nbsp;&nbsp;
-		                    	<a th:href="@{/delete/{id}(id=${order.id})}">delete</a>
+		                    	<a th:href="@{/admin/order/edit/{id}(id=${order.id})}">Edit</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:href="@{/admin/order/delete/{id}(id=${order.id})}">delete</a>
 		                    </td>		                    		                    
 		                </tr>
 		            </tbody>

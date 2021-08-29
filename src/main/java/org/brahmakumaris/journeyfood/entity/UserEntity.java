@@ -22,8 +22,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(name="users")
@@ -70,6 +68,20 @@ public class UserEntity {
 	@OneToMany(mappedBy = "user")
 	@Fetch(FetchMode.JOIN)
 	private List<JourneyFoodOrder> order;
+	
+	public UserEntity(Long id , String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
+			String email, String zone, String subZone, Integer pincode,  String password) {
+		super();
+		this.id = id;
+		this.nameOfCenter = nameOfCenter;
+		this.nameOfGuide = nameOfGuide;
+		this.contactNoOfGuide = contactNoOfGuide;
+		this.email = email;
+		this.zone = zone;
+		this.subZone = subZone;
+		this.pincode = pincode;
+		this.password = password;
+	}
 	
 	public UserEntity( Set<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
 			String email, String zone, String subZone, Integer pincode, Date dateCreated, String password,
@@ -208,6 +220,22 @@ public class UserEntity {
 		this.enabled = true;
 	}
 
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public List<JourneyFoodOrder> getOrder() {
+		return order;
+	}
+
+	public void setOrder(List<JourneyFoodOrder> order) {
+		this.order = order;
+	}
+	
 	@Override
 	public String toString() {
 		return "UserEntity [id=" + id + ", roles=" + roles + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide="
