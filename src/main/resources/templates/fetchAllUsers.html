@@ -50,7 +50,7 @@
                     <td th:text="${user.email}">E-mail</td>
                     <td th:text="${user.zone}">Zone</td>
                     <td th:text="${user.subZone}">Subzone</td>
-                    <td th:text="${user.roles}">Roles</td>
+                    <td th:each="role: ${user.roles}"><span th:text="${role.name}"></span></td>
                     <td th:text="${user.pincode}">Pincode</td>
                     <td th:text="${user.enabled}">Active or not</td>
                     <td th:text="${user.dateCreated}">User creation date</td>

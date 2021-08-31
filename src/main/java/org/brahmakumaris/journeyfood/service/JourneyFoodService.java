@@ -25,4 +25,6 @@ public interface JourneyFoodService {
 	void update(long id);
 
 	void updateOrder(CreateJourneyFoodOrderFormData order);
+
+	List<JourneyFoodOrder> getOrdersNotDisabledData();
 }

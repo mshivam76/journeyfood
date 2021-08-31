@@ -42,6 +42,14 @@ public class AdminController {
         return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders);
     }
 	
+	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
+    public ModelAndView fetchAllJourneyFoodOrdersNotDisabled() {
+		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
+	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersNotDisabledData();
+	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
+        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders);
+    }
+	
 	@GetMapping("/fetchAllUsers")
     public ModelAndView fetchAllUsers() {
 		LOGGER.info("AdminController fetchAllUsers method - Enter");
@@ -60,7 +68,7 @@ public class AdminController {
 		catch(IllegalArgumentException e) {
 			LOGGER.error("AdminController deleteOrder method - Exit"+ e.getMessage());
 		}
-	    return "redirect:/admin/fethAllJourneyOrdersByAdmin";
+	    return "redirect:/admin/fetchAllJourneyFoodOrder";
 	}
 	
 	@GetMapping("/order/edit/{id}")
@@ -86,7 +94,7 @@ public class AdminController {
 	    }
 	    journeyFoodServiceImpl.updateOrder(order);
 	    LOGGER.error("AdminController updateOrder method - Exit");
-	    return "redirect:/admin/fethAllJourneyOrdersByAdmin";
+	    return "redirect:/admin/fetchAllJourneyFoodOrder";
 	}
 	
 	@GetMapping("/user/delete/{id}")

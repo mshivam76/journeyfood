@@ -303,4 +303,14 @@ public class DefaultUserService implements UserService {
 		userPOJO.setPassword(user.getPassword());
 		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(user/null): "+ userRepository.save(userPOJO));
 	}
+	
+	public boolean disableUser(long id) {
+		UserEntity user = getUser(id);
+		if(user==null)return false;
+		else {
+			user.setDisabled(true);
+			userRepository.save(user);
+			return true;
+		}
+	}
 }

@@ -58,6 +58,8 @@ public class UserEntity {
 	
 	private Date dateCreated;
 	
+	private boolean isDisabled;
+	
 	@Column(nullable = false, length = 150)
     private String password;
 	
@@ -234,6 +236,14 @@ public class UserEntity {
 
 	public void setOrder(List<JourneyFoodOrder> order) {
 		this.order = order;
+	}
+	
+	public boolean isDisabled() {
+		return isDisabled;
+	}
+
+	public void setDisabled(boolean isDisabled) {
+		this.isDisabled = isDisabled;
 	}
 	
 	@Override

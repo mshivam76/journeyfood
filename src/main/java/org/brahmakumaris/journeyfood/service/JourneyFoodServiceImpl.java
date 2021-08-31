@@ -15,8 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
+@Transactional
 @Service
 public class JourneyFoodServiceImpl implements JourneyFoodService {
 	private final JourneyFoodOrderRepository repository;
@@ -70,12 +71,12 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
     public List<JourneyFoodOrder> getOrdersByUser(UserEntity user) {
         return (List<JourneyFoodOrder>) repository.findByUser(user);
     }
-
+	
 	@Override
 	public void delete(long id) throws IllegalArgumentException{
 		Optional<JourneyFoodOrder> order = repository.findById(id);
 		if(order.isPresent())
-			repository.deleteById(id);
+			repository.updateIsRemoved(id);
 		else 
 			throw new IllegalArgumentException("Unable to find order with id - "+id);
 	}
@@ -96,6 +97,11 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 				order.getMealRetrievalTime(),	getCurrentLoggedInUserData(), order.getThepla(), order.getPuri(), 
 				order.getRoti(), order.getAchar(), order.getJam(), order.getBread(), order.getOthers());
 		 LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(object/null): "+ repository.save(journeyFoodOrder));
+	}
+
+	@Override
+	public List<JourneyFoodOrder> getOrdersNotDisabledData() {
+		return (List<JourneyFoodOrder>) repository.findByIsRemoved(false);
 	}
 
 }

@@ -21,6 +21,13 @@
 		            <input type="submit" value="Sign Out" />
 		        </form>
 		    </div>
+		    <div class="col-md-12">
+	    		<p><a th:href="@{/logout}">Logout</a></p>
+	    		<p><a th:href="@{/fetchJourneyFoodOrder}">View User Specific Orders</a></p>
+	    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}">View all placed Orders</a>&nbsp;&nbsp;&nbsp;</p>
+               	<p><a th:href="@{/admin/fetchAllUsers}">View all Users</a></p>
+               	<p><a th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">Fetch records not disabled/deleted</a></p>
+	        </div>
 		    <div th:switch="${orders}">
 		    	<h2 th:case="null">No orders yet!</h2>
 		    	<h2>Orders</h2>
@@ -36,6 +43,7 @@
 		                    <th>Thepla Quantity</th>
 		                    <th>Roti Quantity</th>
 		                    <th>Other items</th>
+		                    <th>Order Deleted/Disabled</th>
 		                    <th>Order date</th>
 		                    <th>Date of departure</th>
 		                    <th>Meal retrieval time</th>
@@ -53,6 +61,7 @@
 		                    <td th:text="${order.puri}">Thepla Quantity</td>
 		                    <td th:text="${order.roti}">Roti Quantity</td>
 		                    <td th:text="${order.others}">Other Items</td>
+		                     <td th:text="${order.isRemoved}">Items is removed</td>
 		                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
 		                    <td th:text="${order.dateOfDeparture}">Departure date</td>
 		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
