@@ -29,10 +29,10 @@ public class UserEntity {
 	@Id
 	@Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private long userId;
 	
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
     private Set<Role> roles;
 	
 	@Column(nullable = false, length = 100)
@@ -71,10 +71,10 @@ public class UserEntity {
 	@Fetch(FetchMode.JOIN)
 	private List<JourneyFoodOrder> order;
 	
-	public UserEntity(Long id , String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
+	public UserEntity(Long userId , String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
 			String email, String zone, String subZone, Integer pincode,  String password) {
 		super();
-		this.id = id;
+		this.userId = userId;
 		this.nameOfCenter = nameOfCenter;
 		this.nameOfGuide = nameOfGuide;
 		this.contactNoOfGuide = contactNoOfGuide;
@@ -103,11 +103,11 @@ public class UserEntity {
 		this.order = order;
 	}
 
-	public UserEntity(long id, Set<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
+	public UserEntity(long userId, Set<Role> roles, String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
 			String email, String zone, String subZone, Integer pincode, Date dateCreated, String password,
 			boolean enabled, List<JourneyFoodOrder> order) {
 		super();
-		this.id = id;
+		this.userId = userId;
 		this.roles = roles;
 		this.nameOfCenter = nameOfCenter;
 		this.nameOfGuide = nameOfGuide;
@@ -134,12 +134,12 @@ public class UserEntity {
 		this.dateCreated = simpleDateFormat.parse( simpleDateFormat.format(new Date()));
 	}
 
-	public long getId() {
-		return id;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setId(final long id) {
-		this.id = id;
+	public void setUserId(final long userId) {
+		this.userId = userId;
 	}
 
 	public String getNameOfCenter() {
@@ -248,7 +248,7 @@ public class UserEntity {
 	
 	@Override
 	public String toString() {
-		return "UserEntity [id=" + id + ", roles=" + roles + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide="
+		return "UserEntity [userId=" + userId + ", roles=" + roles + ", nameOfCenter=" + nameOfCenter + ", nameOfGuide="
 				+ nameOfGuide + ", contactNoOfGuide=" + contactNoOfGuide + ", email=" + email + ", zone=" + zone
 				+ ", subZone=" + subZone + ", pincode=" + pincode + ", dateCreated=" + dateCreated + ", password="
 				+ password + ", enabled=" + enabled + ", order=" + order + "]";

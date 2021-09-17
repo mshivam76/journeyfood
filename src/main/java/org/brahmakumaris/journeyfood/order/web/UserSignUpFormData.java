@@ -10,7 +10,7 @@ import org.brahmakumaris.journeyfood.entity.Role;
 import org.brahmakumaris.journeyfood.validation.ContactNumberConstraint;
 
 public class UserSignUpFormData {
-	private long id;
+	private long userId;
 	@NotBlank(message="Name Of Center is mandatory")
     private String nameOfCenter;
 	@NotBlank(message="Name Of Guide/Teacher is mandatory")
@@ -33,6 +33,14 @@ public class UserSignUpFormData {
     
 	public UserSignUpFormData() {
 		super();
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 	public UserSignUpFormData(@NotBlank(message = "Email is mandatory") String email) {
@@ -112,13 +120,6 @@ public class UserSignUpFormData {
 		this.password = password;
 	}
 
-	public long getId() {
-		return id;
-	}
-	
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public Set<Role> getRoles() {
 		return roles;

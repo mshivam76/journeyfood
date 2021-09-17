@@ -1,9 +1,8 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -18,17 +17,21 @@ public class CreateJourneyFoodOrderFormData {
     private int headCount;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dateOfOrderPlaced;
+    private java.util.Date dateOfOrderPlaced;
     
     @NotNull(message="Departure date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Future(message = "Entered date must be after today\'s date")
-    private Date dateOfDeparture;
+    @Future(message = "Entered date must be after today's date")
+    private LocalDate dateOfDeparture;
     
+	@NotNull(message="Meal retrieval Date is mandatory")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Future(message = "Entered date must be after today's date")
+    private LocalDate mealRetrievalDate;
+	
 	@NotNull(message="Meal retrieval time is mandatory")
-    @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
-	@Future(message = "Entered date must be after today\'s date")
-    private Date mealRetrievalTime;
+    @DateTimeFormat(pattern = "h:mm a")
+    private LocalTime mealRetrievalTime;
 
     @NotNull(message="Thepla Count is mandatory")
     private int thepla;
@@ -51,22 +54,17 @@ public class CreateJourneyFoodOrderFormData {
     @NotNull(message="Other items count is mandatory")
     private int others;
     
+    private String orderStatus;
+    
 	public JourneyFoodOrderCreationParameters toParams() {
-		return new JourneyFoodOrderCreationParameters(headCount, dateOfOrderPlaced, dateOfDeparture, mealRetrievalTime, null, thepla, puri, roti, achar, jam, bread, others);
+		return new JourneyFoodOrderCreationParameters(
+				headCount, dateOfOrderPlaced, dateOfDeparture, mealRetrievalDate, mealRetrievalTime, 
+				null, thepla, puri, roti, achar, jam, bread, others);
     }
     
-	
 	public CreateJourneyFoodOrderFormData() {
 		super();
-//		String pattern = "EEEEE dd MM yyyy HH:mm:ss.SSSZ";
-//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("en", "IN"));
-//			try {
-//				this.dateOfOrderPlaced = simpleDateFormat.parse( simpleDateFormat.format(new Date()));
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		this.dateOfOrderPlaced = new Date();
+		this.dateOfOrderPlaced =  new java.util.Date();
 	}
 
 	 public long getId() {
@@ -77,11 +75,11 @@ public class CreateJourneyFoodOrderFormData {
 		this.id = id;
 	}
 
-	public Date getDateOfOrderPlaced() {
+	public java.util.Date getDateOfOrderPlaced() {
 		return dateOfOrderPlaced;
 	}
 
-	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
+	public void setDateOfOrderPlaced(java.util.Date dateOfOrderPlaced) {
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
 	}
 
@@ -93,19 +91,19 @@ public class CreateJourneyFoodOrderFormData {
 		this.headCount = headCount;
 	}
 
-	public Date getDateOfDeparture() {
+	public LocalDate getDateOfDeparture() {
 		return dateOfDeparture;
 	}
 
-	public void setDateOfDeparture(Date dateOfDeparture) {
+	public void setDateOfDeparture(LocalDate dateOfDeparture) {
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public Date getMealRetrievalTime() {
+	public LocalTime getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(Date mealRetrievalTime) {
+	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 
@@ -163,5 +161,21 @@ public class CreateJourneyFoodOrderFormData {
 
 	public void setOthers(int others) {
 		this.others = others;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public LocalDate getMealRetrievalDate() {
+		return mealRetrievalDate;
+	}
+
+	public void setMealRetrievalDate(LocalDate mealRetrievalDate) {
+		this.mealRetrievalDate = mealRetrievalDate;
 	}
 }

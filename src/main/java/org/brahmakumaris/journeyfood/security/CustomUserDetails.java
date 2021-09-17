@@ -47,7 +47,7 @@ public class CustomUserDetails implements UserDetails {
 	}
 
     public long getId() {
-        return user.getId();
+        return user.getUserId();
     }
 
 	@Override

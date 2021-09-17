@@ -15,13 +15,13 @@ import javax.persistence.ManyToMany;
 public class Role{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long roleId;
 
     @ManyToMany(mappedBy = "roles")
     private Collection<UserEntity> users;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+    @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "privilegeId"))
     private Collection<Privilege> privileges;
 
     private String name;
@@ -37,12 +37,12 @@ public class Role{
 
     //
 
-    public Long getId() {
-        return id;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    public void setId(final Long roleId) {
+        this.roleId = roleId;
     }
 
     public String getName() {
@@ -98,7 +98,7 @@ public class Role{
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Role [name=").append(name).append("]").append("[id=").append(id).append("]");
+        builder.append("Role [name=").append(name).append("]").append("[roleId=").append(roleId).append("]");
         return builder.toString();
     }
 }

@@ -43,6 +43,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Transactional
 public class DefaultUserService implements UserService {
 	private static Logger LOGGER = LoggerFactory.getLogger(DefaultUserService.class);
+	private static String fromAddress = "noreply.bkjourneyfood@gmail.com";
     @Autowired
     private UserRepository userRepository;
     
@@ -143,7 +144,7 @@ public class DefaultUserService implements UserService {
 	private void sendEmailVerificationMail(UserEntity user, String link) throws MessagingException, UnsupportedEncodingException {
 		LOGGER.info("DefaultUserService- sendEmailVerificationMail()  : starts");
 		String toAddress = user.getEmail();
-		String fromAddress = "noreply.bkjourneyfood@gmail.com";
+//		String fromAddress = "shivamm2603@gmail.com";
 		String senderName = user.getNameOfGuide();
 		String subject = "Brahmakumaris Journeyfood - Email verification";
 		String content = "Dear [[name]],<br>"
@@ -180,7 +181,7 @@ public class DefaultUserService implements UserService {
 		if(java.util.Objects.isNull(secureToken)||!StringUtils.equals(token, secureToken.getToken()) || secureToken.isExpired()) {
 			throw new InvalidTokenException("Token is not valid");
 		}
-		UserEntity user = userRepository.getOne(secureToken.getUser().getId());
+		UserEntity user = userRepository.getOne(secureToken.getUser().getUserId());
 		if(Objects.isNull(user)) {
 			return false;
 		}
@@ -199,7 +200,7 @@ public class DefaultUserService implements UserService {
 			LOGGER.info("DefaultUserService- verifyUserResetPassword()- Verification failed : ends");
 			throw new InvalidTokenException("Token is not valid");
 		}
-		UserEntity user = userRepository.getOne(secureToken.getUser().getId());
+		UserEntity user = userRepository.getOne(secureToken.getUser().getUserId());
 		if(Objects.isNull(user)) {
 			LOGGER.info("DefaultUserService- verifyUserResetPassword()- Verification failed : ends");
 			return false;
@@ -229,7 +230,7 @@ public class DefaultUserService implements UserService {
 	private void sendPasswordResetEmail(UserEntity user, String link)throws MessagingException, UnsupportedEncodingException {
 		LOGGER.info("DefaultUserService- sendPasswordResetEmail() : starts");
 		String toAddress = user.getEmail();
-		String fromAddress = "noreply.bkjourneyfood@gmail.com";
+		
 		String senderName = user.getNameOfGuide();
 		String subject = "Brahmakumaris Journeyfood - Reset password";
 		String content = "Dear [[name]],<br>"
@@ -292,7 +293,7 @@ public class DefaultUserService implements UserService {
 	@Override
 	public void updateUser(UserSignUpFormData user) throws IllegalArgumentException{
 		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Enter ");
-		UserEntity userPOJO = getUser(user.getId());
+		UserEntity userPOJO = getUser(user.getUserId());
 		userPOJO.setNameOfCenter(user.getNameOfCenter());
 		userPOJO.setNameOfGuide(user.getNameOfGuide());
 		userPOJO.setContactNoOfGuide(user.getContactNoOfGuide()); 

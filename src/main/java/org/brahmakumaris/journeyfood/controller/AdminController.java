@@ -1,10 +1,15 @@
 package org.brahmakumaris.journeyfood.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 
+import org.brahmakumaris.journeyfood.entity.AggregateJourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
+import org.brahmakumaris.journeyfood.entity.SubmitFetchTotalQuantityModelByDate;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
@@ -13,6 +18,7 @@ import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,7 +46,7 @@ public class AdminController {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
 	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrders();
 	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders);
+        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
@@ -47,7 +54,26 @@ public class AdminController {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
 	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersNotDisabledData();
 	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders);
+        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
+    }
+	
+	@GetMapping("/fetchTotalQuantityForADate")
+	public String fetchTotalQuantityForADate(SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate) {
+		return "getTotalQuantityForADate";
+	}
+	
+	@PostMapping("/fetchTotalQuantityForADate")
+    public String fetchSumOfJourneyFoodOrdersNotDisabled( @Valid @ModelAttribute("submitFetchTotalQuantityModelByDate") SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate
+    		, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateOrder method - Error occured");
+            return "getTotalQuantityForADate";
+	    }
+		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
+	 	AggregateJourneyFoodOrder order=journeyFoodServiceImpl.getOrdersByDateAndNotDisabled(submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
+	 	 model.addAttribute("order", order==null?null:order);
+	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+order);
+        return "showAggregateQuantityOrdersByDate";
     }
 	
 	@GetMapping("/fetchAllUsers")
@@ -55,7 +81,7 @@ public class AdminController {
 		LOGGER.info("AdminController fetchAllUsers method - Enter");
 	 	List<UserEntity> users=userService.getUsers();
 	 	LOGGER.info("AdminController fetchAllUsers method - Exit =>users: "+users);
-        return new ModelAndView("fetchAllUsers", "users", users);
+        return new ModelAndView("fetchAllUsers", "users", users.isEmpty()?null:users);
     }
 	
 	@GetMapping("/order/delete/{id}")
@@ -108,6 +134,21 @@ public class AdminController {
 			LOGGER.error("AdminController deleteUser method - Exit"+ e.getMessage());
 		}
 	    return "redirect:/admin/fetchAllUsers";
+	}
+	
+	@GetMapping("/user/view/{id}")
+	public String viewUser(@PathVariable("id") long id, Model model) {
+		LOGGER.info("AdminController viewUser method - Enter =>id :"+id);
+		UserEntity user =null;
+	    try {
+	    	user = userService.getUser(id);
+	    	model.addAttribute("user", user);
+		    LOGGER.info("AdminController viewUser method - Exit =>user(object/null): "+ user);
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.info("AdminController viewUser method - Exit =>user: "+id);
+		}
+	    return "fetchUser";
 	}
 	
 	@GetMapping("/user/edit/{id}")

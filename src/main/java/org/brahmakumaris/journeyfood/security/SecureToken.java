@@ -22,7 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 public class SecureToken{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long tokenId;
 
     @Column(unique = true)
     private String token;
@@ -36,7 +36,7 @@ public class SecureToken{
     private LocalDateTime expireAt;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName ="id")
+    @JoinColumn(name = "user_id", referencedColumnName ="userId")
     private UserEntity user;
 
     @Transient
@@ -50,8 +50,8 @@ public class SecureToken{
         this.token = token;
     }
 
-    public Long getId() {
-        return id;
+    public Long getTokenId() {
+        return tokenId;
     }
 
     public LocalDateTime getExpireAt() {

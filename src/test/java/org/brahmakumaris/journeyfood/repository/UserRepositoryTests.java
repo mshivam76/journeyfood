@@ -40,7 +40,7 @@ public class UserRepositoryTests {
     	user.setNameOfGuide("nameOfGuide");
     	user.setPassword("password");
     	UserEntity savedUser = repo.save(user);
-    	UserEntity existingUser = entityManager.find(UserEntity.class, savedUser.getId());
+    	UserEntity existingUser = entityManager.find(UserEntity.class, savedUser.getUserId());
     	assertThat(user.getEmail()).isEqualTo(existingUser.getEmail());
     }
 }

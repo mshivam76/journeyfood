@@ -14,12 +14,12 @@
             <h2 class="mb-5">Enter Order Id to edit Order</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <form action="#" th:action="@{/update/{id}(id=${journeyFoodOrder.id})}" th:object="${journeyFoodOrder}" method="post">
+                    <form action="#" th:action="@{/update/{id}(id=${journeyFoodOrder.orderId})}" th:object="${journeyFoodOrder}" method="post">
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="id" class="col-form-label">Order Id</label>
-                                <input type="text" th:field="*{id}" class="form-control" id="id" placeholder="Enter Order Id: ">
-                                <span th:if="${#fields.hasErrors('id')}" th:errors="*{error}" class="text-danger"></span>
+                                <input type="text" th:field="*{orderId}" class="form-control" id="orderId" placeholder="Enter Order Id: ">
+                                <span th:if="${#fields.hasErrors('orderId')}" th:errors="*{error}" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">

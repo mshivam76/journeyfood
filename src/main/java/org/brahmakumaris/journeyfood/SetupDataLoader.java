@@ -108,4 +108,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         user = userRepository.save(user);
         return user;
     }
+    
+    @Transactional
+    private void insertZeroQuantityforOrders() {
+//    	if()
+    }
 }

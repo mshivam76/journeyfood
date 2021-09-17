@@ -1,9 +1,8 @@
 package org.brahmakumaris.journeyfood.entity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,60 +10,80 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.brahmakumaris.journeyfood.controller.HomeController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class JourneyFoodOrder{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long orderId;
 	
-    private int headCount;
+    private Integer headCount;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateOfOrderPlaced;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dateOfDeparture;
+    private LocalDate dateOfDeparture;
     
-    @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
-    private Date mealRetrievalTime;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate mealRetrievalDate;
+    
+    @DateTimeFormat(pattern = "hh:mm:ss a")
+    private LocalTime mealRetrievalTime;
 
     @ManyToOne
     private UserEntity user; 
     
-    private int thepla;
+    private Integer thepla;
     
-    private int puri;
+    private Integer puri;
     
-    private int roti;
+    private Integer roti;
 
-    private int achar;
+    private Integer achar;
     
-    private int jam;
+    private Integer jam;
     
-    private int bread;
+    private Integer bread;
     
-    private int others;
+    private Integer others;
     
-    private boolean isRemoved;
+    private String orderStatus;
 
 	public JourneyFoodOrder() {
 		super();
-		this.isRemoved = false;
 	}
-    
-	public JourneyFoodOrder(long id, int headCount, Date dateOfOrderPlaced, Date dateOfDeparture,
-			Date mealRetrievalTime, UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread,
-			int others) {
+ 
+	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
+			LocalTime mealRetrievalTime, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
+			Integer others) {
 		super();
-		this.id = id;
+		this.orderId = orderId;
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
 		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalDate = mealRetrievalDate;
+		this.mealRetrievalTime = mealRetrievalTime;
+		this.thepla = thepla;
+		this.puri = puri;
+		this.roti = roti;
+		this.achar = achar;
+		this.jam = jam;
+		this.bread = bread;
+		this.others = others;
+		this.orderStatus = orderStatus;
+	}
+	
+	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, 
+			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, Integer others, Integer thepla, Integer puri, Integer roti, Integer achar, 
+			Integer jam, Integer bread) {
+		super();
+		this.orderId = orderId;
+		this.headCount = headCount;
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalDate = mealRetrievalDate;
 		this.mealRetrievalTime = mealRetrievalTime;
 		this.user = user;
 		this.thepla = thepla;
@@ -74,18 +93,20 @@ public class JourneyFoodOrder{
 		this.jam = jam;
 		this.bread = bread;
 		this.others = others;
-		this.isRemoved = false;
+		this.orderStatus = orderStatus;
 	}
 
-	public JourneyFoodOrder( int headCount, Date dateOfOrderPlaced, Date dateOfDeparture,
-			Date mealRetrievalTime, UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread,
-			int others) {
+	public JourneyFoodOrder( Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
+			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
+			Integer others) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
 		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalDate = mealRetrievalDate;
 		this.mealRetrievalTime = mealRetrievalTime;
 		this.user = user;
+		this.orderStatus =orderStatus;
 		this.thepla = thepla;
 		this.puri = puri;
 		this.roti = roti;
@@ -93,21 +114,21 @@ public class JourneyFoodOrder{
 		this.jam = jam;
 		this.bread = bread;
 		this.others = others;
-		this.isRemoved = false;
-	}
-	public long getId() {
-		return id;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public Long getOrderId() {
+		return orderId;
 	}
 
-	public int getHeadCount() {
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
+	public Integer getHeadCount() {
 		return headCount;
 	}
 
-	public void setHeadCount(int headCount) {
+	public void setHeadCount(Integer headCount) {
 		this.headCount = headCount;
 	}
 
@@ -119,20 +140,28 @@ public class JourneyFoodOrder{
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
 	}
 
-	public Date getDateOfDeparture() {
+	public LocalDate getDateOfDeparture() {
 		return dateOfDeparture;
 	}
 
-	public void setDateOfDeparture(Date dateOfDeparture) {
+	public void setDateOfDeparture(LocalDate dateOfDeparture) {
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public Date getMealRetrievalTime() {
+	public LocalTime getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(Date mealRetrievalTime) {
+	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
+	}
+	
+	public LocalDate getMealRetrievalDate() {
+		return mealRetrievalDate;
+	}
+
+	public void setMealRetrievalDate(LocalDate mealRetrievalDate) {
+		this.mealRetrievalDate = mealRetrievalDate;
 	}
 
 	public UserEntity getUser() {
@@ -143,70 +172,71 @@ public class JourneyFoodOrder{
 		this.user = user;
 	}
 
-	public int getThepla() {
+	public Integer getThepla() {
 		return thepla;
 	}
 
-	public void setThepla(int thepla) {
+	public void setThepla(Integer thepla) {
 		this.thepla = thepla;
 	}
 
-	public int getPuri() {
+	public Integer getPuri() {
 		return puri;
 	}
 
-	public void setPuri(int puri) {
+	public void setPuri(Integer puri) {
 		this.puri = puri;
 	}
 
-	public int getRoti() {
+	public Integer getRoti() {
 		return roti;
 	}
 
-	public void setRoti(int roti) {
+	public void setRoti(Integer roti) {
 		this.roti = roti;
 	}
 
-	public int getAchar() {
+	public Integer getAchar() {
 		return achar;
 	}
 
-	public void setAchar(int achar) {
+	public void setAchar(Integer achar) {
 		this.achar = achar;
 	}
 
-	public int getJam() {
+	public Integer getJam() {
 		return jam;
 	}
 
-	public void setJam(int jam) {
+	public void setJam(Integer jam) {
 		this.jam = jam;
 	}
 
-	public int getBread() {
+	public Integer getBread() {
 		return bread;
 	}
 
-	public void setBread(int bread) {
+	public void setBread(Integer bread) {
 		this.bread = bread;
 	}
 
-	public int getOthers() {
+	public Integer getOthers() {
 		return others;
 	}
 
-	public void setOthers(int others) {
+	public void setOthers(Integer others) {
 		this.others = others;
 	}
-
-    public boolean isRemoved() {
-		return isRemoved;
-	}
-
-	public void setRemoved(boolean isRemoved) {
-		this.isRemoved = isRemoved;
-	}
 	
+	
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -17,19 +17,18 @@
 		    </div>
 		    <div class="row">
 		        <div class="col-md-12"> <h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
-			        <form th:action="@{/admin/user/update/{id}(id=${user.id})}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
-				        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+			        <form th:action="@{/admin/user/update/{id}(id=${user.userId})}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
+				        <!-- <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
 					        <ul>
 						        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
 						    </ul>
-				        </div>
+				        </div> -->
 				        <div class="alert alert-danger" th:text="${message}" th:unless="${message==null}" role="alert"></div>
 					        <div class="m-3">
 					            <div class="form-group row">
 					                <label class="col-4 col-form-label">User Id: </label>
 					                <div class="col-8">
-					                    <input type="text" th:field="*{id}" disabled class="form-control" required />
-										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+					                    <input type="text" th:field="*{userId}" hide class="form-control" required />
 					                </div>
 					            </div>
 					            <div class="form-group row">
@@ -39,7 +38,13 @@
 										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></div>
 					                </div>
 					            </div>
-					             
+					            <div class="form-group row" sec:authorize="hasRole('ADMIN')">
+					                <label class="col-4 col-form-label">Roles for user: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{roles}" disabled class="form-control" required />
+										<!-- <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}"></div> -->
+					                </div>
+					            </div>
 					            <div class="form-group row">
 					                <label class="col-4 col-form-label">Name of Guide: </label>
 					                <div class="col-8">
@@ -75,16 +80,7 @@
 					            <div class="form-group row">
 					                <label class="col-4 col-form-label">E-mail : </label>
 					                <div class="col-8">
-					                    <input type="email" th:field="*{email}" class="form-control" required />
-										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-					                </div>
-					            </div>
-					            
-					            <div class="form-group row">
-					                <label class="col-4 col-form-label">Password: </label>
-					                <div class="col-8">
-					                    <input type="password" th:field="*{password}" class="form-control" required minlength="6" maxlength="10"/>
-										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+					                    <input type="email" th:field="*{email}" disabled class="form-control" required />
 					                </div>
 					            </div>
 					            
@@ -97,7 +93,7 @@
 					            </div>
 					
 					            <div>
-					                <button type="submit" class="btn btn-primary">Sign Up</button>
+					                <button type="submit" class="btn btn-primary">Update User</button>
 					            </div>
 					        </div>
 			        </form>

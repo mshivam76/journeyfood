@@ -23,10 +23,11 @@
 		    </div>
 		    <div class="col-md-12">
 	    		<p><a th:href="@{/logout}">Logout</a></p>
-	    		<p><a th:href="@{/fetchJourneyFoodOrder}">View User Specific Orders</a></p>
-	    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}">View all placed Orders</a>&nbsp;&nbsp;&nbsp;</p>
-               	<p><a th:href="@{/admin/fetchAllUsers}">View all Users</a></p>
-               	<p><a th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">Fetch records not disabled/deleted</a></p>
+	    		<p><a th:href="@{/fetchAllJourneyFoodOrdersNotDisabled}" sec:authorize="hasRole('ADMIN')">My Orders</a></p>
+	    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}"  sec:authorize="hasRole('ADMIN')">All placed Orders</a>&nbsp;&nbsp;&nbsp;</p>
+               	<p><a th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}" sec:authorize="hasRole('ADMIN')">Orders to be  delivered</a></p>
+               	<p><a th:href="@{/admin/fetchAllUsers}" sec:authorize="hasRole('ADMIN')">All Users</a></p>
+               	
 	        </div>
 		    <div th:switch="${orders}">
 		    	<h2 th:case="null">No orders yet!</h2>
@@ -35,6 +36,10 @@
 		            <thead class="thead-dark">
 		                <tr>
 		                    <th>Order ID</th>
+		                    <th>User ID</th>
+		                    <th>Name of Guide</th>
+		                    <th>Name of Center</th>
+		                    <th>Email of User</th>
 		                    <th>Head Count</th>
 		                    <th>Bread Quantity</th>
 		                    <th>Achar Quantity</th>
@@ -43,31 +48,38 @@
 		                    <th>Thepla Quantity</th>
 		                    <th>Roti Quantity</th>
 		                    <th>Other items</th>
-		                    <th>Order Deleted/Disabled</th>
+		                    <th>Order Status</th>
 		                    <th>Order date</th>
 		                    <th>Date of departure</th>
+		                    <th>Meal retrieval Date</th>
 		                    <th>Meal retrieval time</th>
 		                    <th>Operations</th>
 		                </tr>
 		            </thead>
 		            <tbody>
 		                <tr th:each="order: ${orders}">
-		                    <td th:text="${order.id}">Order ID</td>
+		                    <td th:text="${order.orderId}">Order ID</td>
+		                    <td th:text="${order.user.userId}">User ID</td>
+		                    <td th:text="${order.user.nameOfGuide}">Name of Guide</td>
+		                    <td th:text="${order.user.nameOfCenter}">Name of Center</td>
+		                    <td th:text="${order.user.email}">Email</td>
 		                    <td th:text="${order.headCount}">Head Count</td>
 		                    <td th:text="${order.bread}">Bread Count</td>
 		                    <td th:text="${order.achar}">Achar Quantity</td>
 		                    <td th:text="${order.jam}">Jam Quantity</td>
 		                    <td th:text="${order.puri}">Puri Quantity</td>
-		                    <td th:text="${order.puri}">Thepla Quantity</td>
+		                    <td th:text="${order.thepla}">Thepla Quantity</td>
 		                    <td th:text="${order.roti}">Roti Quantity</td>
 		                    <td th:text="${order.others}">Other Items</td>
-		                     <td th:text="${order.isRemoved}">Items is removed</td>
+		                     <td th:text="${order.orderStatus}">Items is removed</td>
 		                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
 		                    <td th:text="${order.dateOfDeparture}">Departure date</td>
+		                    <td th:text="${order.mealRetrievalDate}">Meal retrieval date</td>
 		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
 		                    <td>
-		                    	<a th:href="@{/admin/order/edit/{id}(id=${order.id})}">Edit</a>&nbsp;&nbsp;&nbsp;
-		                    	<a th:href="@{/admin/order/delete/{id}(id=${order.id})}">delete</a>
+		                    	<a th:href="@{/admin/order/edit/{orderId}(orderId=${order.orderId})}">Edit</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">delete</a>
+		                    	<a th:href="@{/admin/user/view/{userId}(userId=${order.user.userId})}">View User Details</a>&nbsp;&nbsp;&nbsp;
 		                    </td>		                    		                    
 		                </tr>
 		            </tbody>

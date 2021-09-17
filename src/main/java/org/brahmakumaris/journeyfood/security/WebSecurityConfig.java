@@ -44,15 +44,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http)throws Exception{
 		http.authorizeRequests()
-//		.antMatchers("/users").authenticated()
-//		.antMatchers("/addJourneyFoodOrder/**").hasAnyAuthority("ADMIN", "EDITOR")
-//		.antMatchers("/edit/**").hasAnyAuthority("ADMIN", "EDITOR")
-//		.antMatchers("/delete/**").hasAuthority("ADMIN")
+		.antMatchers("/admin/**").hasRole("ADMIN")
 		.antMatchers("/addJourneyFoodOrder").authenticated()
 		.antMatchers("/edit/**").authenticated()
 		.antMatchers("/delete/**").authenticated()
 		.antMatchers("/h2-console/**","/login","/register").permitAll()
-//		.antMatchers("/users","/orders","/addJourneyFoodOrder").access("hasRole('ROLE_ADMIN')")
 		.and()
 		.formLogin()
 			.loginPage("/login")

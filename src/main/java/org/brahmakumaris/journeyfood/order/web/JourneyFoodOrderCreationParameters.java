@@ -1,6 +1,12 @@
 package org.brahmakumaris.journeyfood.order.web;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
+
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,10 +19,10 @@ public class JourneyFoodOrderCreationParameters {
     private Date dateOfOrderPlaced;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date dateOfDeparture;
+    private LocalDate dateOfDeparture;
     
-    @DateTimeFormat(pattern = "dd/MM/yyyy h:mm a")
-    private Date mealRetrievalTime;
+    @DateTimeFormat(pattern = "h:mm a")
+    private LocalTime mealRetrievalTime;
 
     private UserEntity user; 
     
@@ -42,13 +48,16 @@ public class JourneyFoodOrderCreationParameters {
     
     private int others;
 
+	private LocalDate mealRetrievalDate;
+
     
-	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, Date dateOfDeparture, Date mealRetrievalTime,
+	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, LocalTime mealRetrievalTime,
 			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, int others) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
 		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalDate = mealRetrievalDate;
 		this.mealRetrievalTime = mealRetrievalTime;
 		this.user = user;
 		this.thepla = thepla;
@@ -64,7 +73,6 @@ public class JourneyFoodOrderCreationParameters {
 		super();
 	}
 
-
 	public int getHeadCount() {
 		return headCount;
 	}
@@ -73,19 +81,19 @@ public class JourneyFoodOrderCreationParameters {
 		this.headCount = headCount;
 	}
 
-	public Date getDateOfDeparture() {
+	public LocalDate getDateOfDeparture() {
 		return dateOfDeparture;
 	}
 
-	public void setDateOfDeparture(Date dateOfDeparture) {
+	public void setDateOfDeparture(LocalDate dateOfDeparture) {
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public Date getMealRetrievalTime() {
+	public LocalTime getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(Date mealRetrievalTime) {
+	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 
@@ -152,6 +160,12 @@ public class JourneyFoodOrderCreationParameters {
 	public void setOthers(int others) {
 		this.others = others;
 	}
-    
-    
+
+	public LocalDate getMealRetrievalDate() {
+		return mealRetrievalDate;
+	}
+
+	public void setMealRetrievalDate(LocalDate mealRetrievalDate) {
+		this.mealRetrievalDate = mealRetrievalDate;
+	}
 }

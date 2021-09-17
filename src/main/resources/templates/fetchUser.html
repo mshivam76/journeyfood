@@ -42,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="user: ${users}">
+                <tr th="${user}">
                     <td th:text="${user.userId}">User ID</td>
                     <td th:text="${user.nameOfCenter}">Name of Center</td>
                     <td th:text="${user.nameOfGuide}">Name of Guide</td>

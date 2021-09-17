@@ -15,10 +15,11 @@
 	   		<div class="row">
     			<div class="col-md-12">
 		    		<p><a th:href="@{/logout}">Logout</a></p>
-		    		<p><a th:href="@{/fetchJourneyFoodOrder}">View User Specific Orders</a></p>
-		    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}">View all placed Orders</a>&nbsp;&nbsp;&nbsp;</p>
-                   	<p><a th:href="@{/admin/fetchAllUsers}">View all Users</a></p>
-                   	<p><a th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">Fetch records not disabled/deleted</a></p>
+		    		<p><a th:href="@{/fetchAllJourneyFoodOrdersNotDisabled}">View User Specific Orders</a></p>
+		    		<p><a th:href="@{/admin/fetchTotalQuantityForADate}" sec:authorize="hasRole('ADMIN')">Total quantity for a Date</a>&nbsp;&nbsp;&nbsp;</p>
+		    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}" sec:authorize="hasRole('ADMIN')">View all placed Orders</a>&nbsp;&nbsp;&nbsp;</p>
+                   	<p><a th:href="@{/admin/fetchAllUsers}" sec:authorize="hasRole('ADMIN')">View all Users</a></p>
+                   	<p><a th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}" sec:authorize="hasRole('ADMIN')">Fetch all records not disabled/deleted</a></p>
 		        </div>
 		    </div>
 		    <div class="row">
@@ -37,13 +38,13 @@
 						    </ul>
 						</div>
 			            <h2 class="mb-5">New Order</h2>
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="headCount">Head count</label>
 						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
 		                </div> 
 
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 						    <label for="dateOfDeparture">Date of departure</label>
 						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" th:field="*{dateOfDeparture}" id="date" placeholder="Choose departure date"/>
@@ -54,61 +55,75 @@
 		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></div>
 		                </div>
 		
-		                <div class="form-group">
-		                    <label for="date">Meal retrieval time:</label>
+		                <div class="col-sm-6 form-group">
+		                    <label for="date">Meal retrieval Date:</label>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalTime}" id="date" placeholder="Choose meal retrieval date and time"/>
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="Choose meal retrieval date"/>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
 		                        </div>
 		                    </div>
-		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalDate')}" th:errors="*{mealRetrievalDate}"></div>
 		                </div>
-
-		                <div class="form-group">
+						
+			            <div class="col-sm-6 form-group">
+			            	<label for="date">Meal retrieval Time:</label>
+			                <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+			                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" th:field="*{mealRetrievalTime}" id="time" placeholder="Choose meal retrieval time"/>
+			                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+			                        <div class="input-group-text"><i class="far fa-clock"></i></div>
+			                    </div>
+			                </div>
+			                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>
+			            </div>
+						        
+						
+						<div class="col-sm-6 form-group">
 			                <label for="thepla">Thepla count</label>
 						    <input type="number" th:field="*{thepla}" class="form-control" placeholder="Thepla count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('thepla')}" th:errors="*{thepla}"></div>
 		                </div> 
 
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="puri">Puri count</label>
 						    <input type="number" th:field="*{puri}" class="form-control" placeholder="Puri count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('puri')}" th:errors="*{headCount}"></div>
 		                </div> 
 
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="roti">Roti quantity</label>
 						    <input type="number" th:field="*{roti}" class="form-control" placeholder="Roti count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('roti')}" th:errors="*{roti}"></div>
 		                </div> 
 		                
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="achar">Achar(Pickle) quantity</label>
 						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Koki count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></div>
 		                </div> 
 		                
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="bread">Bread quantity</label>
 						    <input type="number" th:field="*{bread}" class="form-control" placeholder="bread count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
 		                </div> 
 		                
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="jam">Jam quantity</label>
 						    <input type="number" th:field="*{jam}" class="form-control" placeholder="jam count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></div>
 		                </div> 
 		                
-		                <div class="form-group">
+		                <div class="col-sm-6 form-group">
 			                <label for="others">Other items quantity</label>
 						    <input type="number" th:field="*{others}" class="form-control" placeholder="Other count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
 		                </div> 
-		                		                		                		                		                		
-		                <button class="btn btn-primary" type="submit">Add Order</button>
-		                <button class="btn btn-danger" type="reset">Reset Order</button>
+		                
+						<div class="col-sm-6 form-group">
+							<button class="btn btn-primary" type="submit">Add Order</button>
+		                	<button class="btn btn-danger" type="reset">Reset Order</button>
+		                </div>
 		            </form>
 		        </div>
 		    </div>
@@ -134,15 +149,19 @@
 		            close: 'far fa-times'
 		        } });
 		    
-		    
-		
 		    $('#datetimepicker1').datetimepicker({
-		        format: 'DD/MM/YYYY h:mm A'
+		        format: 'DD/MM/YYYY'//mealRetrievalDate
 		    });
 		    
 		    $('#datetimepicker2').datetimepicker({
-		        format: 'DD/MM/YYYY'
+		        format: 'DD/MM/YYYY'//DateOfDeparture
 		    });
+		    
+            $(function () {
+                $('#datetimepicker3').datetimepicker({
+                    format: 'LT'
+                });
+            });
 		</script>
 		
     </body>

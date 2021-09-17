@@ -29,6 +29,11 @@ public class HomeController {
 	@Autowired
 	private JourneyFoodService journeyFoodServiceImpl;
 	
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
+	
     @GetMapping("/addJourneyFoodOrder")
     public String addJourneyFoodOrder(CreateJourneyFoodOrderFormData formData) {
         return "add-journeyFoodOrder";
@@ -44,16 +49,15 @@ public class HomeController {
         model.addAttribute("journeyFoorOrder", formData);
         journeyFoodServiceImpl.createJourneyFoodOrder(formData.toParams());
         LOGGER.info("HomeController addJourneyFoodOrder method - Exit");
-        return "redirect:/fetchJourneyFoodOrder";
+        return "redirect:/fetchAllJourneyFoodOrdersNotDisabled";
     }
    
-	@GetMapping("/fetchJourneyFoodOrder")
-    public ModelAndView fetchJourneyFoodOrder() {
-		UserEntity user = journeyFoodServiceImpl.getCurrentLoggedInUserData();
-		LOGGER.info("HomeController fetchJourneyFoodOrder method - Enter =>user :"+user);
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser(user);
-	 	LOGGER.info("HomeController fetchJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders);
+	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
+    public ModelAndView fetchAllJourneyFoodOrdersNotDisabled() {
+		LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Enter");
+	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
+	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
+        return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
     }
 	
 	@GetMapping("/delete/{id}")
@@ -65,8 +69,9 @@ public class HomeController {
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.error("HomeController deleteOrder method - Exit"+ e.getMessage());
+			return "redirect:/error";
 		}
-	    return "redirect:/fetchJourneyFoodOrder";
+	    return "redirect:/fetchAllJourneyFoodOrdersNotDisabled";
 	}
 	
 	@GetMapping("/edit/{id}")
@@ -79,6 +84,7 @@ public class HomeController {
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.info("HomeController updateOrder method - Exit =>orders: "+id);
+			return "redirect:/error";
 		}
 	    return "update-journeyFoodOrder";
 	}
@@ -91,6 +97,6 @@ public class HomeController {
 	    }
 	    journeyFoodServiceImpl.updateOrder(order);
 	    LOGGER.error("HomeController updateOrder method - Exit");
-	    return "redirect:/fetchJourneyFoodOrder";
+	    return "redirect:/fetchAllJourneyFoodOrdersNotDisabled";
 	}
 }
