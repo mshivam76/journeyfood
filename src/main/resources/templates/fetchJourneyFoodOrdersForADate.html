@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Fetch Journey food Order</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>List Order</title>
+	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
+	    <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
+	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
+	    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+    </head>
+	<body>
+		<div class="container text-center">
+		    <div>
+		        <form th:action="@{/logout}" method="post">
+		            <h3>
+		                <b sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></b>
+		            </h3>
+		            <input type="submit" value="Sign Out" />
+		        </form>
+		    </div>
+		    <div th:switch="${orders}">
+		    <p><a th:href="@{/addJourneyFoodOrder}">Add Order</a></p>
+		    	<h2 th:case="null">No orders yet!</h2>
+		    	<h2>Orders</h2>
+		        <table  th:case="*" class="table table-striped table-bordered">
+		            <thead class="thead-dark">
+		                <tr>
+		                    <th>Order ID</th>
+		                    <th>Head Count</th>
+		                    <th>Bread Quantity</th>
+		                    <th>Achar Quantity</th>
+		                    <th>Jam Quantity</th>
+		                    <th>Puri Quantity</th>
+		                    <th>Thepla Quantity</th>
+		                    <th>Roti Quantity</th>
+		                    <th>Other items</th>
+		                    <th>Order date</th>
+		                    <th>Date of departure</th>
+		                    <th>Meal retrieval time</th>
+		                    <th>Operations</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="order: ${orders}">
+		                    <td th:text="${order.headCount}">Total Head Count</td>
+		                    <td th:text="${order.bread}">Total Bread Count</td>
+		                    <td th:text="${order.achar}">Total Achar Quantity</td>
+		                    <td th:text="${order.jam}">Total Jam Quantity</td>
+		                    <td th:text="${order.puri}">Total Puri Quantity</td>
+		                    <td th:text="${order.puri}">Total Thepla Quantity</td>
+		                    <td th:text="${order.roti}">Total Roti Quantity</td>
+		                    <td th:text="${order.others}">Total Other Items</td>
+		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval Date</td>
+		                </tr>
+		            </tbody>
+		        </table>
+		    </div>
+		</div>
+	</body>
+</html>

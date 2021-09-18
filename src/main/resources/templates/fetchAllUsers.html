@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>List Users</title>
+    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
+    <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
+    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+</head>
+<body>
+<div class="container text-center">
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <p>
+                Welcome <b sec:authorize="isAuthenticated()" th:text="${#authentication?.principal?.nameOfGuide}"></b>
+            </p>
+            <input type="submit" value="Sign Out" />
+        </form>
+    </div>
+    <div>
+        <h1>List of Users</h1>
+    </div>
+     
+    <div>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>User ID</th>
+                    <th>Name of Center</th>
+                    <th>Name of Guide</th>
+                    <th>Contact no of Guide</th>
+                    <th>E-mail</th>
+                    <th>Zone</th>
+                    <th>Sub Zone</th>
+                    <th>Role</th>
+                    <th>Pincode</th>
+                    <th>User verified</th>
+                    <th>Registration Date</th>
+                    <!-- <th>Orders</th> -->
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user: ${users}">
+                    <td th:text="${user.userId}">User ID</td>
+                    <td th:text="${user.nameOfCenter}">Name of Center</td>
+                    <td th:text="${user.nameOfGuide}">Name of Guide</td>
+                    <td th:text="${user.contactNoOfGuide}">Contact no of guide</td>
+                    <td th:text="${user.email}">E-mail</td>
+                    <td th:text="${user.zone}">Zone</td>
+                    <td th:text="${user.subZone}">Subzone</td>
+                    <td th:each="role: ${user.roles}"><span th:text="${role.name}"></span></td>
+                    <td th:text="${user.pincode}">Pincode</td>
+                    <td th:text="${user.enabled}">Active or not</td>
+                    <td th:text="${user.dateCreated}">User creation date</td>
+                    <!-- <td th:text="${user.order}">Orders</td> -->
+                    <td>
+                    	<a th:href="@{/admin/user/edit/{userId}(userId=${user.userId})}">Edit</a>&nbsp;&nbsp;&nbsp;
+                    	<a th:href="@{/admin/user/delete/{userId}(userId=${user.userId})}">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
