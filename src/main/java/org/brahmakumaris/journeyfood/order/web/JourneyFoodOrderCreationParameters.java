@@ -1,86 +1,76 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
-import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
+import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class CreateJourneyFoodOrderFormData {
-	private long id;
+public class JourneyFoodOrderCreationParameters {
 	
-	@IntegerCountMustBeGreaterThanZeroConstraint(message="Head count must be greater than 0")
     private int headCount;
     
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private java.util.Date dateOfOrderPlaced;
+    private Date dateOfOrderPlaced;
     
-    @NotNull(message="Departure date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Future(message = "Entered date must be after today's date")
     private LocalDate dateOfDeparture;
     
-	@NotNull(message="Meal retrieval Date is mandatory")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Future(message = "Entered date must be after today's date")
-    private LocalDate mealRetrievalDate;
-	
-	@NotNull(message="Meal retrieval time is mandatory")
     @DateTimeFormat(pattern = "h:mm a")
     private LocalTime mealRetrievalTime;
 
-    @NotNull(message="Thepla Count is mandatory")
+    private UserEntity user; 
+    
     private int thepla;
     
-    @NotNull(message="Puri Count is mandatory")
-    private int puri;
-    
-    @NotNull(message="Roti Count is mandatory")
-    private int roti;
-
-    @NotNull(message="Achar count is mandatory")
-    private int achar;
-    
-    @NotNull(message="Jam count is mandatory")
-    private int jam;
-    
-	@NotNull(message="Bread count is mandatory")
-    private int bread;
-    
-    @NotNull(message="Other items count is mandatory")
-    private int others;
-    
-    private String orderStatus;
-    
-	public JourneyFoodOrderCreationParameters toParams() {
-		return new JourneyFoodOrderCreationParameters(
-				headCount, dateOfOrderPlaced, dateOfDeparture, mealRetrievalDate, mealRetrievalTime, 
-				null, thepla, puri, roti, achar, jam, bread, others);
-    }
-    
-	public CreateJourneyFoodOrderFormData() {
-		super();
-		this.dateOfOrderPlaced =  new java.util.Date();
-	}
-
-	 public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public java.util.Date getDateOfOrderPlaced() {
+    public Date getDateOfOrderPlaced() {
 		return dateOfOrderPlaced;
 	}
 
-	public void setDateOfOrderPlaced(java.util.Date dateOfOrderPlaced) {
+	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
+	}
+
+	private int puri;
+    
+    private int roti;
+
+    private int achar;
+    
+    private int jam;
+    
+    private int bread;
+    
+    private int others;
+
+	private LocalDate mealRetrievalDate;
+
+    
+	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, LocalTime mealRetrievalTime,
+			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, int others) {
+		super();
+		this.headCount = headCount;
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+		this.dateOfDeparture = dateOfDeparture;
+		this.mealRetrievalDate = mealRetrievalDate;
+		this.mealRetrievalTime = mealRetrievalTime;
+		this.user = user;
+		this.thepla = thepla;
+		this.puri = puri;
+		this.roti = roti;
+		this.achar = achar;
+		this.jam = jam;
+		this.bread = bread;
+		this.others = others;
+	}
+
+	public JourneyFoodOrderCreationParameters() {
+		super();
 	}
 
 	public int getHeadCount() {
@@ -105,6 +95,14 @@ public class CreateJourneyFoodOrderFormData {
 
 	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 	public int getThepla() {
@@ -161,14 +159,6 @@ public class CreateJourneyFoodOrderFormData {
 
 	public void setOthers(int others) {
 		this.others = others;
-	}
-
-	public String getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
 	}
 
 	public LocalDate getMealRetrievalDate() {

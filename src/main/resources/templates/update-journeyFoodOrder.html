@@ -1,60 +1,173 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Update User</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-        <link rel="stylesheet" href="../css/shards.min.css">
+        <title>Add Order</title>
+	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
+	    <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
+	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
+	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
+	    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
     </head>
     <body>
-        <div class="container my-5">
-            <h2 class="mb-5">Update User</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <form action="#" th:action="@{/update/{id}(id=${journeyFoodOrder.id})}" th:object="${journeyFoodOrder}" method="post">
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label for="nameOfCenter" class="col-form-label">Name</label>
-                                <input type="text" th:field="*{nameOfCenter}" class="form-control" id="nameOfCenter" placeholder="Name of Center">
-                                <span th:if="${#fields.hasErrors('nameOfCenter')}" th:errors="*{nameOfCenter}" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="nameOfGuide" class="col-form-label">Email</label>
-                                <input type="text" th:field="*{nameOfGuide}" class="form-control" id="email" placeholder="Name of Guide">
-                                <span th:if="${#fields.hasErrors('nameOfGuide')}" th:errors="*{nameOfGuide}" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="headCount" class="col-form-label">Name</label>
-                                <input type="number" th:field="*{headCount}" class="form-control" id="headCount" placeholder="No of head counts">
-                                <span th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="dateOfJourney" class="col-form-label">Email</label>
-                                <input type="text" th:field="*{dateOfJourney}" class="form-control" id="dateOfJourney" placeholder="Date of Journey">
-                                <span th:if="${#fields.hasErrors('dateOfJourney')}" th:errors="*{dateOfJourney}" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="dateOfDeparture" class="col-form-label">Name</label>
-                                <input type="text" th:field="*{dateOfDeparture}" class="form-control" id="dateOfDeparture" placeholder="Date Of Departure">
-                                <span th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="mealRetrievalTime" class="col-form-label">Email</label>
-                                <input type="text" th:field="*{mealRetrievalTime}" class="form-control" id="mealRetrievalTime" placeholder="Meal retrieval Time">
-                                <span th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mt-5">
-                                <input type="submit" class="btn btn-primary" value="Update Order">
-                            </div>
-                        </div>    
-                    </form>
-                </div>
-            </div>
-        </div>
+	   	<div class="container">
+	   		<div class="row">
+    			<div class="col-md-12">
+		    		<p><a th:href="@{/logout}">Logout</a></p>
+		    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}" sec:authorize="hasRole('ADMIN')">View Orders</a></p>
+		    		<p><a th:href="@{/addJourneyFoodOrder}">Add Order</a></p>
+		        </div>
+		    </div>
+		    <div class="row">
+		        <div class="col-md-12"> <h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
+		            <form action="#" th:action="@{/update/{id}(id=${order.orderId})}" th:object="${order}" method="post">
+		            	<div>
+		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
+							    <ul>
+							        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+							    </ul>
+							</div>
+		            	</div>
+      			        <div class="alert alert-success" role="alert">
+						    <ul>
+						        <li>Order edited successfully.</li>
+						    </ul>
+						</div>
+			            <h2 class="mb-5">Edit Order</h2>
+			            <div class="col-sm-6 form-group">
+			                <label for="OrderId">OrderId</label>
+						    <input type="number" th:field="*{orderId}" class="form-control" disabled placeholder="Head count">
+		                </div> 
+		                <div class="col-sm-6 form-group">
+			                <label for="headCount">Head count</label>
+						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
+		                </div> 
+
+		                <div class="col-sm-6 form-group">
+						    <label for="dateOfDeparture">Date of departure</label>
+						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" th:field="*{dateOfDeparture}" id="date" placeholder="Choose departure date"/>
+		                        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+		                        </div>
+		                    </div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></div>
+		                </div>
+		
+		                 <div class="col-sm-6">
+		                    <label for="date">Meal retrieval Date:</label>
+		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="Choose meal retrieval date"/>
+		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+		                        </div>
+		                    </div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalDate')}" th:errors="*{mealRetrievalDate}"></div>
+		                </div>
+						
+			            <div class="col-sm-6">
+			            	<label for="date">Meal retrieval Time:</label>
+			                <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
+			                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" th:field="*{mealRetrievalTime}" id="time" placeholder="Choose meal retrieval time"/>
+			                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
+			                        <div class="input-group-text"><i class="far fa-clock"></i></div>
+			                    </div>
+			                </div>
+			                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>
+			            </div>
+						
+						 <div class="col-sm-6 form-group" sec:authorize="hasRole('ADMIN')">
+			                <label for="orderStatus">Order Status</label>
+						    <input type="text" th:field="*{orderStatus}" class="form-control" placeholder="Order Status" required>
+		                </div> 
+						
+		                <div class="col-sm-6 form-group">
+			                <label for="thepla">Thepla count</label>
+						    <input type="number" th:field="*{thepla}" class="form-control" placeholder="Thepla count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('thepla')}" th:errors="*{thepla}"></div>
+		                </div> 
+
+		                <div class="col-sm-6 form-group">
+			                <label for="puri">Puri count</label>
+						    <input type="number" th:field="*{puri}" class="form-control" placeholder="Puri count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('puri')}" th:errors="*{headCount}"></div>
+		                </div> 
+
+		                <div class="col-sm-6 form-group">
+			                <label for="roti">Roti quantity</label>
+						    <input type="number" th:field="*{roti}" class="form-control" placeholder="Roti count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('roti')}" th:errors="*{roti}"></div>
+		                </div> 
+		                
+		                <div class="col-sm-6 form-group">
+			                <label for="achar">Achar(Pickle) quantity</label>
+						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Koki count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></div>
+		                </div> 
+		                
+		                <div class="col-sm-6 form-group">
+			                <label for="bread">Bread quantity</label>
+						    <input type="number" th:field="*{bread}" class="form-control" placeholder="bread count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
+		                </div> 
+		                
+		                <div class="col-sm-6 form-group">
+			                <label for="jam">Jam quantity</label>
+						    <input type="number" th:field="*{jam}" class="form-control" placeholder="jam count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></div>
+		                </div> 
+		                
+		                <div class="col-sm-6 form-group">
+			                <label for="others">Other items quantity</label>
+						    <input type="number" th:field="*{others}" class="form-control" placeholder="Other count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
+		                </div> 
+		                
+		                <div class="col-sm-6 form-group">		                		                		                		                		
+			                <button class="btn btn-primary" type="submit">Update Order</button>
+			                <button class="btn btn-danger" type="reset">Reset Order</button>
+			            </div>
+		            </form>
+		        </div>
+		    </div>
+
+		</div>
+		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{/assets/moment/moment.min.js}"></script>
+		<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
+		
+		<script>
+		    $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+		        icons: {
+		            time: 'far fa-clock',
+		            date: 'far fa-calendar',
+		            up: 'fas fa-arrow-up',
+		            down: 'fas fa-arrow-down',
+		            previous: 'fas fa-chevron-left',
+		            next: 'fas fa-chevron-right',
+		            today: 'far fa-calendar-check-o',
+		            clear: 'far fa-trash',
+		            close: 'far fa-times'
+		        } });
+		    
+		    $('#datetimepicker1').datetimepicker({
+		        format: 'DD/MM/YYYY'//mealRetrievalDate
+		    });
+		    
+		    $('#datetimepicker2').datetimepicker({
+		        format: 'DD/MM/YYYY'//DateOfDeparture
+		    });
+		    
+            $(function () {
+                $('#datetimepicker3').datetimepicker({
+                    format: 'LT'
+                });
+            });
+		</script>
+		
     </body>
 </html>
