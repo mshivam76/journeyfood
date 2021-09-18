@@ -10,6 +10,7 @@ import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
+import org.brahmakumaris.journeyfood.repository.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.exceptions.InvalidTokenException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
 
@@ -25,6 +26,6 @@ public interface UserService {
 	public List<UserEntity> getUsers();
 	UserEntity getUser(long id);
 	void deleteUser(long id);
-	void updateUser(UserSignUpFormData user) throws IllegalArgumentException;
 //	void update(long id) throws IllegalArgumentException;
+	void updateUser(UserUpdateForm user) throws IllegalArgumentException;
 }

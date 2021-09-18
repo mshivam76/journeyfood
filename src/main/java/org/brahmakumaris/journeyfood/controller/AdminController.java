@@ -1,24 +1,20 @@
 package org.brahmakumaris.journeyfood.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.entity.AggregateJourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.SubmitFetchTotalQuantityModelByDate;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
-import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
+import org.brahmakumaris.journeyfood.repository.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.UserService;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,6 +35,11 @@ public class AdminController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 	
 	@GetMapping("/fetchAllJourneyFoodOrder")
     public ModelAndView fetchAllJourneyFoodOrder() {
@@ -162,12 +162,13 @@ public class AdminController {
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.info("AdminController updateUser method - Exit =>user: "+id);
+			 return "redirect:/admin/error";
 		}
 	    return "update-user";
 	}
 	
 	@PostMapping("/user/update/{id}")
-	public String updateUser( @Valid @ModelAttribute("user") UserSignUpFormData user, BindingResult result, @PathVariable("id") long id) {
+	public String updateUser( @Valid @ModelAttribute("user") UserUpdateForm user, BindingResult result, @PathVariable("id") long id) {
 		LOGGER.info("AdminController updateUser method - Enter");
 	    if (result.hasErrors()) {
 	    	LOGGER.error("AdminController updateUser method - Error occured");

@@ -127,9 +127,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 
 	@Override
 	public AggregateJourneyFoodOrder getOrdersByDateAndNotDisabled(LocalDate mealRetrievalDate) {
-		// TODO Auto-generated method stub
 		return repository.getOrdersByDateAndNotDisabled("PLACED",mealRetrievalDate);
-//		return null;
 	}
 
 }

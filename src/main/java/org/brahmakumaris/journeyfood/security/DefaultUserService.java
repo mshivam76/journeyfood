@@ -25,6 +25,7 @@ import org.brahmakumaris.journeyfood.order.web.UserSignUpFormData;
 import org.brahmakumaris.journeyfood.repository.PrivilegeRepository;
 import org.brahmakumaris.journeyfood.repository.RoleRepository;
 import org.brahmakumaris.journeyfood.repository.UserRepository;
+import org.brahmakumaris.journeyfood.repository.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.exceptions.InvalidTokenException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserAlreadyExistException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserNotFoundException;
@@ -291,17 +292,15 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
-	public void updateUser(UserSignUpFormData user) throws IllegalArgumentException{
+	public void updateUser(UserUpdateForm user) throws IllegalArgumentException{
 		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Enter ");
 		UserEntity userPOJO = getUser(user.getUserId());
 		userPOJO.setNameOfCenter(user.getNameOfCenter());
 		userPOJO.setNameOfGuide(user.getNameOfGuide());
 		userPOJO.setContactNoOfGuide(user.getContactNoOfGuide()); 
-		userPOJO.setEmail(user.getEmail()); 
 		userPOJO.setZone(user.getZone());
 		userPOJO.setSubZone(user.getSubZone());
 		userPOJO.setPincode(user.getPincode());
-		userPOJO.setPassword(user.getPassword());
 		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(user/null): "+ userRepository.save(userPOJO));
 	}
 	
