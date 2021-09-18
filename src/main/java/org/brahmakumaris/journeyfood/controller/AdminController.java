@@ -9,7 +9,7 @@ import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchTotalQuantityModelByDate;
-import org.brahmakumaris.journeyfood.repository.UserUpdateForm;
+import org.brahmakumaris.journeyfood.order.web.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.UserService;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;

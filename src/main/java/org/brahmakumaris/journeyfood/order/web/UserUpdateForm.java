@@ -1,4 +1,4 @@
-package org.brahmakumaris.journeyfood.repository;
+package org.brahmakumaris.journeyfood.order.web;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
