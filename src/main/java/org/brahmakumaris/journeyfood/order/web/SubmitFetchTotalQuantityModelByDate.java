@@ -1,4 +1,4 @@
-package org.brahmakumaris.journeyfood.entity;
+package org.brahmakumaris.journeyfood.order.web;
 
 import java.time.LocalDate;
 
