@@ -26,8 +26,26 @@ public interface JourneyFoodOrderRepository extends JpaRepository<JourneyFoodOrd
 	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
 			+ "j.puri,j.roti,j.achar,j.jam,j.bread,j.others) from JourneyFoodOrder j WHERE j.user.userId=:userId AND j.orderStatus='PLACED'")
 	List<JourneyFoodOrder> findEnabledOrderByUserId(@Param("userId") long userId);
-
-	@Query("SELECT new AggregateJourneyFoodOrder(SUM(headCount), SUM(bread), SUM(achar), SUM(jam) ,SUM(others), SUM(puri), SUM(roti), SUM(thepla), mealRetrievalDate)"
+	
+	@Query("SELECT new AggregateJourneyFoodOrder(SUM(headCount), SUM(bread), SUM(achar), SUM(jam) , SUM(puri), SUM(roti), SUM(thepla), mealRetrievalDate)"
 			+ "  FROM JourneyFoodOrder j WHERE j.orderStatus=:orderStatus AND j.mealRetrievalDate = :mealRetrievalDate")
 	AggregateJourneyFoodOrder getOrdersByDateAndNotDisabled(@Param("orderStatus")String orderStatus, @Param("mealRetrievalDate")LocalDate mealRetrievalDate);
-}
+	
+	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
+			+ "j.puri,j.roti,j.achar,j.jam,j.bread,j.others) from JourneyFoodOrder j WHERE j.mealRetrievalDate = :mealRetrievalDate")
+	List<JourneyFoodOrder> getOrdersByDate(LocalDate mealRetrievalDate);
+	
+	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
+			+ " j.puri,j.roti,j.achar,j.jam,j.bread,j.others) FROM JourneyFoodOrder j WHERE j.orderStatus=:orderStatus AND j.mealRetrievalDate = :mealRetrievalDate")
+	List<JourneyFoodOrder> getOrdersByDate(@Param("mealRetrievalDate")LocalDate mealRetrievalDate, @Param("orderStatus")String orderStatus);
+
+	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
+			+ " j.puri,j.roti,j.achar,j.jam,j.bread,j.others) FROM JourneyFoodOrder j WHERE j.orderStatus=:orderStatus AND j.mealRetrievalDate >= :fromDate AND j.mealRetrievalDate <= :endDate")
+	List<JourneyFoodOrder> getOrdersByDateRangeAndOrderStatus(LocalDate fromDate, LocalDate endDate, String orderStatus);
+	
+	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
+			+ " j.puri,j.roti,j.achar,j.jam,j.bread,j.others) FROM JourneyFoodOrder j WHERE j.mealRetrievalDate >= :fromDate AND j.mealRetrievalDate <= :endDate")
+	List<JourneyFoodOrder> getOrdersByDateRange(LocalDate fromDate, LocalDate endDate);
+
+
+	}

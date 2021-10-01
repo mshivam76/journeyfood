@@ -4,7 +4,7 @@
     <body>
     	<div th:replace="fragments :: menu"></div>
 	   	<div class="container">
-            <form th:action="@{/admin/fetchTotalQuantityForADate}" th:object="${submitFetchTotalQuantityModelByDate}"method="post">
+            <form th:action="@{/admin/fetchAllPlacedOrdersForADate}" th:object="${submitFetchTotalQuantityModelByDate}"method="post">
             	<div>
             		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 					    <ul>
@@ -17,7 +17,7 @@
 				        <li>Order submitted successfully. Please note order id to fetch/edit order details in future.</li>
 				    </ul>
 				</div>
-	            <h2 class="mb-5">Fetch total quantity for particular Date</h2>
+	            <h2 class="mb-5">Fetch  for a particular Date</h2>
                 <div class="col-sm-6 form-group">
                     <label for="date">Enter Date:</label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
@@ -30,7 +30,7 @@
                 </div>
 				
 				<div class="col-sm-6 form-group">
-					<button class="btn btn-primary" type="submit">Fetch total Quantity</button>
+					<button class="btn btn-primary" type="submit">Fetch All orders</button>
                 	<button class="btn btn-danger" type="reset">Reset Date</button>
                 </div>
             </form>

@@ -1,15 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Brahma Kumaris Journey Food</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
-	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css} "/>
-    </head>
-	<body>
-		<div th:switch="${journeyFoodOrders}" >
+	<head th:replace="fragments :: html_head">
+    <body>
+    	<div th:replace="fragments :: menu"></div>
+		<div class="container" th:switch="${journeyFoodOrders}" >
 				    <h2 th:case="null">No Orders yet!</h2>
 			        <div th:case="*" class="table-responsive-sm">
 						<h2>Journey Food Order</h2>
@@ -54,7 +48,6 @@
 				            </tbody>
 				        </table>
 			   		 </div>      
-			   		<p><a href="/signup">Add a new Order</a></p>
 		</div>
 	</body>
 </html>	

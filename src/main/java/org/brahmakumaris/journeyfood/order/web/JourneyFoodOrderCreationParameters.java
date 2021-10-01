@@ -46,13 +46,13 @@ public class JourneyFoodOrderCreationParameters {
     
     private int bread;
     
-    private int others;
+    private String others;
 
 	private LocalDate mealRetrievalDate;
 
     
 	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, LocalTime mealRetrievalTime,
-			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, int others) {
+			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, String others) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
@@ -153,11 +153,11 @@ public class JourneyFoodOrderCreationParameters {
 		this.bread = bread;
 	}
 
-	public int getOthers() {
+	public String getOthers() {
 		return others;
 	}
 
-	public void setOthers(int others) {
+	public void setOthers(String others) {
 		this.others = others;
 	}
 

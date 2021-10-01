@@ -77,4 +77,13 @@ public class SecureToken{
     public void setUser(UserEntity user) {
         this.user = user;
     }
+
+	@Override
+	public String toString() {
+		return "SecureToken [tokenId=" + tokenId + ", token=" + token + ", timeStamp=" + timeStamp + ", expireAt="
+				+ expireAt + ", user=" + user + ", isExpired=" + isExpired + "]";
+	}
+    
+    
+    
 }

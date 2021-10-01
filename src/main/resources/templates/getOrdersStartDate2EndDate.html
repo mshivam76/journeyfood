@@ -4,7 +4,7 @@
     <body>
     	<div th:replace="fragments :: menu"></div>
 	   	<div class="container">
-            <form th:action="@{/admin/fetchTotalQuantityForADate}" th:object="${submitFetchTotalQuantityModelByDate}"method="post">
+            <form th:action="@{/admin/fetchFromDate2EndDateOrders}" th:object="${submitFetchOrdersFromDate2EndDate}"method="post">
             	<div>
             		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 					    <ul>
@@ -12,26 +12,32 @@
 					    </ul>
 					</div>
             	</div>
-    			        <div class="alert alert-success" role="alert">
-				    <ul>
-				        <li>Order submitted successfully. Please note order id to fetch/edit order details in future.</li>
-				    </ul>
-				</div>
-	            <h2 class="mb-5">Fetch total quantity for particular Date</h2>
+	            <h2 class="mb-5">Fetch orders between Date</h2>
                 <div class="col-sm-6 form-group">
-                    <label for="date">Enter Date:</label>
+                    <label for="startDate">Enter Start Date:</label>
                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="Pick date using calender icon"/>
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{startDate}" id="date" placeholder="Pick date using calender icon"/>
                         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
                         </div>
                     </div>
-                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalDate')}" th:errors="*{mealRetrievalDate}"></div>
+                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
+                </div>
+                
+                <div class="col-sm-6 form-group">
+                    <label for="endDate">Enter End Date:</label>
+                    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" th:field="*{endDate}" id="date" placeholder="Pick date using calender icon"/>
+                        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
                 </div>
 				
 				<div class="col-sm-6 form-group">
-					<button class="btn btn-primary" type="submit">Fetch total Quantity</button>
-                	<button class="btn btn-danger" type="reset">Reset Date</button>
+					<button class="btn btn-primary" type="submit">Fetch Orders</button>
+                	<button class="btn btn-danger" type="reset">Reset Fields</button>
                 </div>
             </form>
         </div>
@@ -56,6 +62,10 @@
 		        } });
 		    
 		    $('#datetimepicker1').datetimepicker({
+		        format: 'DD/MM/YYYY'//mealRetrievalDate
+		    });
+		    
+		    $('#datetimepicker2').datetimepicker({
 		        format: 'DD/MM/YYYY'//mealRetrievalDate
 		    });
 		</script>

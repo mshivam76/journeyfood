@@ -23,9 +23,11 @@ public interface UserService {
 	boolean verifyUserResetPassword(String token) throws InvalidTokenException;
 	UserEntity register(UserSignUpFormData user, String link)throws UserAlreadyExistException, MessagingException, UnsupportedEncodingException;
 	UserEntity getUser(String email);
-	public List<UserEntity> getUsers();
+	List<UserEntity> getUsers();
 	UserEntity getUser(long id);
 	void deleteUser(long id);
+	boolean disableUser(long id);
 //	void update(long id) throws IllegalArgumentException;
 	void updateUser(UserUpdateForm user) throws IllegalArgumentException;
+	boolean enableUser(long id);
 }

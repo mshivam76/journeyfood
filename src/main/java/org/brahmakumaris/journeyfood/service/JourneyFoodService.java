@@ -10,6 +10,7 @@ import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.JourneyFoodOrderCreationParameters;
+import org.brahmakumaris.journeyfood.order.web.UpdateJourneyFoodOrderFormData;
 
 public interface JourneyFoodService {
 
@@ -27,11 +28,22 @@ public interface JourneyFoodService {
 
 	void update(long id);
 
-	void updateOrder(CreateJourneyFoodOrderFormData order);
+	void updateOrder(UpdateJourneyFoodOrderFormData order);
 
 	List<JourneyFoodOrder> getOrdersNotDisabledData();
 
 	void orderCompleted(long id) throws IllegalArgumentException;
 
 	AggregateJourneyFoodOrder getOrdersByDateAndNotDisabled(LocalDate mealRetrievalDate);
+
+	void updateOrderAdmin(CreateJourneyFoodOrderFormData order);
+
+	List<JourneyFoodOrder> getOrdersByDate(LocalDate mealRetrievalDate);
+	
+	List<JourneyFoodOrder> getOrdersByDate(LocalDate mealRetrievalDate, String orderStatus);
+
+	List<JourneyFoodOrder> getOrdersByDateRange(LocalDate fromDate, LocalDate endDate);
+
+	List<JourneyFoodOrder> getOrdersByDateRangeAndOrderStatus(LocalDate fromDate, LocalDate endDate,
+			String orderStatus);
 }

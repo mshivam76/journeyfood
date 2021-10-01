@@ -12,12 +12,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private UserRepository userRepo;
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
 		UserEntity user = userRepo.findByEmail(email); 
 		System.out.println("Email: "+email);
 		System.out.println("User: "+user);
 		if(user==null) {
 			throw new UsernameNotFoundException(email+" is not registered, please register before logging in.");
+		}else if(user.isDisabled()){
+			throw new UsernameNotFoundException(email+" is removed, please contact to BKJourneyfood to reactivate your account.");
 		}
 		return new CustomUserDetails(user);
 	}

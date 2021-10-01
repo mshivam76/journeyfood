@@ -10,6 +10,7 @@ import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.JourneyFoodOrderCreationParameters;
+import org.brahmakumaris.journeyfood.order.web.UpdateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.repository.JourneyFoodOrderRepository;
 import org.brahmakumaris.journeyfood.security.CustomUserDetails;
 import org.brahmakumaris.journeyfood.security.UserService;
@@ -105,13 +106,12 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 	}
 
 	@Override
-	public void updateOrder(CreateJourneyFoodOrderFormData order) {
+	public void updateOrderAdmin(CreateJourneyFoodOrderFormData order) {
 		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Enter ");
-		JourneyFoodOrder journeyFoodOrder= repository.getOne(order.getId());
-				journeyFoodOrder.setOrderId(order.getId());	journeyFoodOrder.setHeadCount(order.getHeadCount());
-				journeyFoodOrder.setDateOfOrderPlaced(order.getDateOfOrderPlaced());journeyFoodOrder.setDateOfDeparture(order.getDateOfDeparture());
+		JourneyFoodOrder journeyFoodOrder= repository.getOne(order.getOrderId());
+				journeyFoodOrder.setHeadCount(order.getHeadCount());
+				journeyFoodOrder.setDateOfDeparture(order.getDateOfDeparture());
 				journeyFoodOrder.setMealRetrievalDate(order.getMealRetrievalDate());journeyFoodOrder.setMealRetrievalTime(order.getMealRetrievalTime());
-				journeyFoodOrder.setUser(getCurrentLoggedInUserData());	
 				journeyFoodOrder.setThepla(order.getThepla());journeyFoodOrder.setPuri(order.getPuri());journeyFoodOrder.setRoti(order.getRoti()); 
 				journeyFoodOrder.setAchar(order.getAchar()); journeyFoodOrder.setJam(order.getJam());journeyFoodOrder.setBread(order.getBread());
 				journeyFoodOrder.setOthers(order.getOthers());
@@ -119,6 +119,18 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		 LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(object/null): "+ repository.save(journeyFoodOrder));
 	}
 
+	@Override
+	public void updateOrder(UpdateJourneyFoodOrderFormData order) {
+		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Enter ");
+		JourneyFoodOrder journeyFoodOrder= repository.getOne(order.getOrderId());
+				journeyFoodOrder.setHeadCount(order.getHeadCount());
+				journeyFoodOrder.setThepla(order.getThepla());journeyFoodOrder.setPuri(order.getPuri());journeyFoodOrder.setRoti(order.getRoti()); 
+				journeyFoodOrder.setAchar(order.getAchar()); journeyFoodOrder.setJam(order.getJam());journeyFoodOrder.setBread(order.getBread());
+				journeyFoodOrder.setOthers(order.getOthers());
+				if(order.getOrderStatus()!=null) journeyFoodOrder.setOrderStatus(order.getOrderStatus());
+		 LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(object/null): "+ repository.save(journeyFoodOrder));
+	}
+	
 	@Override
 	public List<JourneyFoodOrder> getOrdersNotDisabledData() {
 		//Need to give UI to fetch order which are Delivered /Cancelled/Placed order status
@@ -128,6 +140,26 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 	@Override
 	public AggregateJourneyFoodOrder getOrdersByDateAndNotDisabled(LocalDate mealRetrievalDate) {
 		return repository.getOrdersByDateAndNotDisabled("PLACED",mealRetrievalDate);
+	}
+	
+	@Override
+	public List<JourneyFoodOrder> getOrdersByDate(LocalDate mealRetrievalDate) {
+		return repository.getOrdersByDate(mealRetrievalDate);
+	}
+	
+	@Override
+	public List<JourneyFoodOrder> getOrdersByDate(LocalDate mealRetrievalDate, String orderStatus) {
+		return repository.getOrdersByDate(mealRetrievalDate, orderStatus);
+	}
+
+	@Override
+	public List<JourneyFoodOrder> getOrdersByDateRangeAndOrderStatus(LocalDate fromDate, LocalDate endDate, String orderStatus) {
+		return repository.getOrdersByDateRangeAndOrderStatus(fromDate, endDate, orderStatus);
+	}
+	
+	@Override
+	public List<JourneyFoodOrder> getOrdersByDateRange(LocalDate fromDate, LocalDate endDate) {
+		return repository.getOrdersByDateRange(fromDate, endDate);
 	}
 
 }

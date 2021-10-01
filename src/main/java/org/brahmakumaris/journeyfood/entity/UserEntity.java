@@ -58,7 +58,7 @@ public class UserEntity {
 	
 	private Date dateCreated;
 	
-	private boolean isDisabled;
+	private boolean isDisabled;//If user is disabled/removed from logging into application
 	
 	@Column(nullable = false, length = 150)
     private String password;
@@ -214,7 +214,7 @@ public class UserEntity {
         this.roles = roles;
     }
 	
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
@@ -238,7 +238,7 @@ public class UserEntity {
 		this.order = order;
 	}
 	
-	public boolean isDisabled() {
+	public Boolean isDisabled() {
 		return isDisabled;
 	}
 

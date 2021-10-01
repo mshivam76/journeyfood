@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
+import org.brahmakumaris.journeyfood.order.web.UpdateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public class HomeController {
 	public String deleteOrder(@PathVariable("id") long id, Model model) {
 		LOGGER.info("HomeController deleteOrder method - Enter =>id :"+id);
 		try {
-			journeyFoodServiceImpl.delete(id);
+			journeyFoodServiceImpl.delete(id);//Updating order to cancelled status
 		    LOGGER.info("HomeController deleteOrder method - Exit successful");
 	    }
 		catch(IllegalArgumentException e) {
@@ -90,7 +91,7 @@ public class HomeController {
 	}
 	
 	@PostMapping("/update/{id}")
-	public String updateOrder( @Valid @ModelAttribute("order") CreateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) {
+	public String updateOrder( @Valid @ModelAttribute("order") UpdateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) {
 	    if (result.hasErrors()) {
 	    	LOGGER.error("HomeController updateOrder method - Error occured");
             return "update-journeyFoodOrder";

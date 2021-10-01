@@ -17,7 +17,6 @@ public class AggregateJourneyFoodOrder {
 	private long totalBread;
 	private long totalAchar;
 	private long totalJam;
-	private long totalOthers;
 	private long totalPuri;
 	private long totalRoti;
 	private long totalThepla;
@@ -48,12 +47,6 @@ public class AggregateJourneyFoodOrder {
 	public void setTotalJam(long totalJam) {
 		this.totalJam = totalJam;
 	}
-	public long getTotalOthers() {
-		return totalOthers;
-	}
-	public void setTotalOthers(long totalOthers) {
-		this.totalOthers = totalOthers;
-	}
 	public long getTotalPuri() {
 		return totalPuri;
 	}
@@ -81,32 +74,18 @@ public class AggregateJourneyFoodOrder {
 
 	
 	
-	public AggregateJourneyFoodOrder(long totalHeadCount, long totalBread, long totalAchar, long totalJam, long totalOthers,
+	public AggregateJourneyFoodOrder(long totalHeadCount, long totalBread, long totalAchar, long totalJam, 
 			long totalPuri, long totalRoti, long totalThepla, LocalDate mealRetrievalDate) {
 		super();
 		this.totalHeadCount = totalHeadCount;
 		this.totalBread = totalBread;
 		this.totalAchar = totalAchar;
 		this.totalJam = totalJam;
-		this.totalOthers = totalOthers;
 		this.totalPuri = totalPuri;
 		this.totalRoti = totalRoti;
 		this.totalThepla = totalThepla;
 		this.mealRetrievalDate = mealRetrievalDate;
 	}
-	
-//	public AggregateJourneyFoodOrder(long totalHeadCount, long totalBread, long totalAchar, long totalJam, long totalOthers,
-//			long totalPuri, long totalRoti, long totalThepla) {
-//		super();
-//		this.totalHeadCount = totalHeadCount;
-//		this.totalBread = totalBread;
-//		this.totalAchar = totalAchar;
-//		this.totalJam = totalJam;
-//		this.totalOthers = totalOthers;
-//		this.totalPuri = totalPuri;
-//		this.totalRoti = totalRoti;
-//		this.totalThepla = totalThepla;
-//	}
 	
 	public AggregateJourneyFoodOrder() {
 		super();
@@ -115,8 +94,7 @@ public class AggregateJourneyFoodOrder {
 	@Override
 	public String toString() {
 		return "AggregateJourneyFoodOrder [totalHeadCount=" + totalHeadCount + ", totalBread=" + totalBread
-				+ ", totalAchar=" + totalAchar + ", totalJam=" + totalJam + ", totalOthers=" + totalOthers
-				+ ", totalPuri=" + totalPuri + ", totalRoti=" + totalRoti + ", totalThepla=" + totalThepla
-				+ ", mealRetrievalDate=" + mealRetrievalDate + "]";
+				+ ", totalAchar=" + totalAchar + ", totalJam=" + totalJam + ", totalPuri=" + totalPuri + 
+				", totalRoti=" + totalRoti + ", totalThepla=" + totalThepla	+ ", mealRetrievalDate=" + mealRetrievalDate + "]";
 	}
 }
