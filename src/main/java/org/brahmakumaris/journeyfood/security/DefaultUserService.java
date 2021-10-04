@@ -67,7 +67,6 @@ public class DefaultUserService implements UserService {
 		try {
 			userEntity = new UserEntity();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		userEntity.setContactNoOfGuide(user.getContactNoOfGuide());
@@ -181,7 +180,7 @@ public class DefaultUserService implements UserService {
     	LOGGER.info("DefaultUserService- forgotPassword() : starts");
     	UserEntity user = userRepository.findByEmail(email);
         if (checkIfUserExist(email)) {
-        emailUtils.sendPasswordResetEmail(user, link);
+        	emailUtils.sendPasswordResetEmail(user, link);
         } else throw new UserNotFoundException("Unregistered email - " + email+" .Please register first.");
         LOGGER.info("DefaultUserService- forgotPassword() : ends");
     } 
@@ -219,20 +218,24 @@ public class DefaultUserService implements UserService {
 		if(user.isPresent())
 			userRepository.deleteById(id);
 		else 
-			throw new IllegalArgumentException("Unable to find user with id - "+id);
+			throw new UserNotFoundException("Unable to find user with id - "+id);
 	}
 
 	@Override
-	public void updateUser(UserUpdateForm user) throws IllegalArgumentException{
+	public void updateUser(UserUpdateForm user) throws  UnsupportedEncodingException, MessagingException{
 		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Enter ");
 		UserEntity userPOJO = getUser(user.getUserId());
-		userPOJO.setNameOfCenter(user.getNameOfCenter());
-		userPOJO.setNameOfGuide(user.getNameOfGuide());
-		userPOJO.setContactNoOfGuide(user.getContactNoOfGuide()); 
-		userPOJO.setZone(user.getZone());
-		userPOJO.setSubZone(user.getSubZone());
-		userPOJO.setPincode(user.getPincode());
-		LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(user/null): "+ userRepository.save(userPOJO));
+		if(userPOJO!=null) {
+			userPOJO.setNameOfCenter(user.getNameOfCenter());
+			userPOJO.setNameOfGuide(user.getNameOfGuide());
+			userPOJO.setContactNoOfGuide(user.getContactNoOfGuide()); 
+			userPOJO.setZone(user.getZone());
+			userPOJO.setSubZone(user.getSubZone());
+			userPOJO.setPincode(user.getPincode());
+			LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(user/null): "+ userRepository.save(userPOJO));
+			emailUtils.userUpdatedMail(userPOJO);
+		}
+		else throw new UserNotFoundException("Unable to find user with id - "+user.getUserId());
 	}
 	
 	@Override
@@ -241,7 +244,7 @@ public class DefaultUserService implements UserService {
 		UserEntity user = getUser(id);
 		if(user==null) {
 			LOGGER.info("DefaultUserService disableUser method - Enter =>id :"+id);
-			return false;
+			throw new UserNotFoundException("Unable to find user with id - "+user.getUserId());
 		}
 		else {
 			user.setDisabled(true);
@@ -257,7 +260,7 @@ public class DefaultUserService implements UserService {
 		UserEntity user = getUser(id);
 		if(user==null) {
 			LOGGER.info("DefaultUserService enableUser method - Enter =>id :"+id);
-			return false;
+			throw new UserNotFoundException("Unable to find user with id - "+user.getUserId());
 		}
 		else {
 			user.setDisabled(false);
@@ -265,6 +268,5 @@ public class DefaultUserService implements UserService {
 			LOGGER.info("DefaultUserService enableUser method - Enter =>id :"+id);
 			return true;
 		}
-		
 	}
 }

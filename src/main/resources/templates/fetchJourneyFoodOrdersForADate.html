@@ -7,38 +7,8 @@
 		    <div th:switch="${orders}">
 		    	<h2 th:case="null">No orders yet!</h2>
 		    	<h2>Orders</h2>
-		        <table  th:case="*" class="table table-striped table-bordered">
-		            <thead class="thead-dark">
-		                <tr>
-		                    <th>Order ID</th>
-		                    <th>Head Count</th>
-		                    <th>Bread Quantity</th>
-		                    <th>Achar Quantity</th>
-		                    <th>Jam Quantity</th>
-		                    <th>Puri Quantity</th>
-		                    <th>Thepla Quantity</th>
-		                    <th>Roti Quantity</th>
-		                    <th>Other items</th>
-		                    <th>Order date</th>
-		                    <th>Date of departure</th>
-		                    <th>Meal retrieval time</th>
-		                    <th>Operations</th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <tr th:each="order: ${orders}">
-		                    <td th:text="${order.headCount}">Total Head Count</td>
-		                    <td th:text="${order.bread}">Total Bread Count</td>
-		                    <td th:text="${order.achar}">Total Achar Quantity</td>
-		                    <td th:text="${order.jam}">Total Jam Quantity</td>
-		                    <td th:text="${order.puri}">Total Puri Quantity</td>
-		                    <td th:text="${order.puri}">Total Thepla Quantity</td>
-		                    <td th:text="${order.roti}">Total Roti Quantity</td>
-		                    <td th:text="${order.others}">Total Other Items</td>
-		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval Date</td>
-		                </tr>
-		            </tbody>
-		        </table>
+		        <div th:replace="fragments :: show_orders">
+		        </div>
 		    </div>
 		</div>
 	</body>

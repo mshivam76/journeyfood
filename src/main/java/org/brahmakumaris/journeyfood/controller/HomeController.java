@@ -1,7 +1,9 @@
 package org.brahmakumaris.journeyfood.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
@@ -41,7 +43,7 @@ public class HomeController {
     }
     
 	@PostMapping("/addJourneyFoodOrder")
-    public String addJourneyFoodOrder(@Valid @ModelAttribute("createJourneyFoodOrderFormData")CreateJourneyFoodOrderFormData formData, BindingResult result, Model model) {
+    public String addJourneyFoodOrder(@Valid @ModelAttribute("createJourneyFoodOrderFormData")CreateJourneyFoodOrderFormData formData, BindingResult result, Model model) throws UnsupportedEncodingException, MessagingException {
 		LOGGER.info("HomeController addJourneyFoodOrder method - Entered");
 		if (result.hasErrors()) {
 			LOGGER.error("HomeController addJourneyFoodOrder method - Error occured");
@@ -62,7 +64,7 @@ public class HomeController {
     }
 	
 	@GetMapping("/delete/{id}")
-	public String deleteOrder(@PathVariable("id") long id, Model model) {
+	public String deleteOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {
 		LOGGER.info("HomeController deleteOrder method - Enter =>id :"+id);
 		try {
 			journeyFoodServiceImpl.delete(id);//Updating order to cancelled status

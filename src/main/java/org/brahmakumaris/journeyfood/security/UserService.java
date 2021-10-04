@@ -28,6 +28,6 @@ public interface UserService {
 	void deleteUser(long id);
 	boolean disableUser(long id);
 //	void update(long id) throws IllegalArgumentException;
-	void updateUser(UserUpdateForm user) throws IllegalArgumentException;
+	void updateUser(UserUpdateForm user) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException;
 	boolean enableUser(long id);
 }

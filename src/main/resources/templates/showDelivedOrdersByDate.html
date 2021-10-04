@@ -2,15 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	<head th:replace="fragments :: html_head"/>
 	<body>
-		<div th:replace="fragments :: menu"></div>
+		<div th:replace="fragments :: menu"/></div>
 			<div class="container text-center">
 			    <div th:switch="${orders}">
 			    	<h2 th:case="null">No orders yet!</h2>
 			    	<div th:case="*" class="table-responsive-sm">
-				    	<h2>Orders for a Date</h2> <a th:href="@{/admin/orders/export/excel/{date}(date=${date})}">Export to excel</a>
+				    	<h2>Delivered Orders for a Date</h2> <a th:href="@{/admin/orders/delivered/export/excel/{date}(date=${date})}">Export to excel</a>
 				        <div th:replace="fragments :: show_orders">
 				        </div>
-				        
 				    </div>    
 			    </div>
 			</div>

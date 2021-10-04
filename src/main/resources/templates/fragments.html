@@ -40,29 +40,18 @@
 						    <a class="nav-link" th:href="@{/admin/fetchAllOrdersForADate}">Orders for a Date</a>
 						    <a class="nav-link" th:href="@{/admin/fetchAllPlacedOrdersForADate}">Placed Orders for a Date</a>
 						    <a class="nav-link" th:href="@{/admin/fetchAllCanceledOrdersForADate}">Cancelled Orders for a Date</a>
-						    <a class="nav-link" th:href="@{/admin/fetchAllOrdersForADate}">Delivered Orders for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchDeliveredOrdersForADate}">Delivered Orders for a Date</a>
 						    <a class="nav-link" th:href="@{/admin/fetchTotalQuantityForADate}">Total quantity for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateOrders}">Date range orders</a>
+						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateWithOrderStatusOrders}">Date range orders filtered by order status</a>
 						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrder}">All Orders</a>
-						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">Placed Orders</a>
+						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">All Placed Orders</a>
 						    <div class="dropdown-divider"></div>
 						    <a class="nav-link" th:href="@{/admin/fetchAllUsers}">All Users</a>
 						    <a class="nav-link" th:href="@{/admin/users/export/excel}">Export all Users</a>
-						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateOrders}">Date range orders</a>
-						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateWithOrderStatusOrders}">Date range orders with order status</a>
 						  </div>
 						</div>
 					</li>
-    				<script>
-	    				 /* $(document).ready(function() {
-    			            $('li').click(function() {
-    			                $('li.list-group-item.active').removeClass("active");
-    			                $(this).addClass("active");
-    			            });
-    			        });	 */
-					  /*  $(document).ready(function () {
-					       $('.dropdown-toggle').dropdown();
-					   }); */
-					</script>
 					<li class="nav-item">
 						<a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/register}">Register</a>
 					</li>
@@ -76,6 +65,53 @@
 			    </form>
 			  </div>
 			</nav>
+	   	</div>
+	   	<div th:fragment="show_orders">
+		   	<table  class="table table-striped table-bordered">
+		   		<thead class="thead-dark">
+	                <tr>
+	                    <th>Edit Order</th>
+	                    <!-- <th>Name of Guide</th> -->
+	                    <th>Head Count</th>
+	                    <th>Bread Quantity</th>
+	                    <th>Achar Quantity</th>
+	                    <th>Jam Quantity</th>
+	                    <th>Puri Quantity</th>
+	                    <th>Thepla Quantity</th>
+	                    <th>Roti Quantity</th>
+	                    <th>Other items</th>
+	                    <th>Order date(YYYY-MM-DD HH:MM:ss)</th>
+	                    <th>Departure date(YYYY-MM-DD)</th>
+	                    <th>Meal retrieval Date(YYYY-MM-DD)</th>
+	                    <th>Order Status</th>
+	                    <th>Meal retrieval TIme</th>
+	                    <th>Cancel/Deliver Orders</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr th:each="order:${orders}">
+	                    <td><a th:href="@{/admin/order/edit/{orderId}(orderId=${order.orderId})}"  th:text="${order.orderId}"></a></td>
+	                    <!-- <td><a th:href="@{/admin/user/view/{userId}(userId=${order.user.userId})}" th:text="${order.user.nameOfGuide}"></a></td> -->
+	                    <td th:text="${order.headCount}">Head Count</td>
+	                    <td th:text="${order.bread}">Bread Count</td>
+	                    <td th:text="${order.achar}">Achar Quantity</td>
+	                    <td th:text="${order.jam}">Jam Quantity</td>
+	                    <td th:text="${order.puri}">Puri Quantity</td>
+	                    <td th:text="${order.puri}">Thepla Quantity</td>
+	                    <td th:text="${order.roti}">Roti Quantity</td>
+	                    <td th:text="${order.others}">Other Items</td>
+	                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
+	                    <td th:text="${order.dateOfDeparture}">Date at which Order placed</td>
+	                    <td th:text="${order.mealRetrievalDate}">Departure date</td>
+	                    <td th:text="${order.orderStatus}"></td>
+	                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
+	                    <td>
+	                    	<a th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>
+	                    	<a th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Deliver</a>&nbsp;&nbsp;&nbsp;
+	                    </td>		                    		                    
+	                </tr>
+	            </tbody>
+            </table>
 	   	</div>
     </body>
 </html>

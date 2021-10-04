@@ -1,13 +1,9 @@
 package org.brahmakumaris.journeyfood.controller;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.AggregateJourneyFoodOrder;
@@ -19,22 +15,23 @@ import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDate
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchTotalQuantityModelByDate;
 import org.brahmakumaris.journeyfood.order.web.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.UserService;
+import org.brahmakumaris.journeyfood.security.exceptions.OrderNotFoundException;
+import org.brahmakumaris.journeyfood.security.exceptions.UserNotFoundException;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
-import org.brahmakumaris.journeyfood.utils.ExcelUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -47,9 +44,6 @@ public class AdminController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private ExcelUtils excelUtils;
 	
 	@GetMapping("/error")
     public String error() {
@@ -72,163 +66,6 @@ public class AdminController {
         return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
     }
 	
-	@GetMapping("/fetchAllPlacedOrdersForADate")
-	public String fetchAllPlacedOrdersForADate(SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate) {
-		return "getAllPlacedOrdersForADate";
-	}
-	
-	@PostMapping("/fetchAllPlacedOrdersForADate")
-    public String fetchAllPlacedOrdersForADate( @Valid @ModelAttribute("submitFetchTotalQuantityModelByDate") SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate
-    		, BindingResult result, Model model) {
-		if (result.hasErrors()) {
-	    	LOGGER.error("AdminController updateOrder method - Error occured");
-            return "getAllPlacedOrdersForADate";
-	    }
-		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
-		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(), "PLACED");
-	 	 model.addAttribute("orders", orders.isEmpty()?null:orders);
-	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
-        return "showOrdersByDate";
-    }
-	
-	@GetMapping("/users/export/excel")
-    public void exportUsersToExcel(HttpServletResponse response) throws IOException {
-		LOGGER.info("AdminController exportUsersToExcel method - Enter ");
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        List<UserEntity> listUsers = userService.getUsers();
-        try {
-        	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-            String headerValue = "attachment; filename=users_" + currentDateTime + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            ExcelUtils excelExporter = new ExcelUtils();
-            excelExporter.setUsers(listUsers);
-            excelExporter.exportUsers(response);
-            LOGGER.info("AdminController exportUsersToExcel method - Exist- successfully ");
-			/*
-			 * String filename = "tutorials.xlsx"; InputStreamResource file = new
-			 * InputStreamResource(fileService.load());
-			 * 
-			 * return ResponseEntity.ok() .header(HttpHeaders.CONTENT_DISPOSITION,
-			 * "attachment; filename=" + filename)User 
-			 * .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-			 * .body(file);
-			 */
-        }catch (Exception e) {
-        	// TODO: handle exception
-        	LOGGER.error("ERROR: AdminController  User exportUsersToExcel method - "+ e.getMessage());
-		}
-        
-	}
-	
-	@GetMapping("/orders/export/excel/{date}")
-    public Object exportOrdersToExcel(HttpServletResponse response) throws IOException {
-		LOGGER.info("AdminController exportOrdersToExcel method - Enter ");
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        List<JourneyFoodOrder> listOrders = journeyFoodServiceImpl.getOrders();
-        try {
-        	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormatter.format(new Date());
-            String headerValue = "attachment; filename=orders_" + currentDateTime + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            ExcelUtils excelExporter = new ExcelUtils();
-            excelExporter.setOrders(listOrders);
-            excelExporter.exportOrders(response);
-            LOGGER.info("AdminController exportOrdersToExcel method - Exist- successfully ");
-            return "showTotalQuantityForADate";
-        }catch (Exception e) {
-        	LOGGER.error("ERROR: AdminController  Order exportOrdersToExcel method - "+ e.getMessage());
-        	return "getTotalQuantityForADate";
-		}
-    }   
-    
-	@GetMapping("/orders/totalPlacedOrders/export/excel/{date}")
-    public void exportTotalOrdersForADateToExcel(@PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, HttpServletResponse response) throws IOException {
-		LOGGER.info("AdminController exportTotalOrdersForADateToExcel method - Enter ");
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        List<JourneyFoodOrder> listOrders = journeyFoodServiceImpl.getOrdersByDate(date, "PLACED");
-        AggregateJourneyFoodOrder totalOrder=journeyFoodServiceImpl.getOrdersByDateAndNotDisabled(date);
-        try {
-            String headerValue = "attachment; filename=totalOrders_" + date.toString() + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            ExcelUtils excelExporter = new ExcelUtils();
-            excelExporter.setOrders(listOrders);
-            excelExporter.setTotalQuantity(totalOrder);
-            excelExporter.exportTotalOrders(response);
-            LOGGER.info("AdminController exportTotalOrdersForADateToExcel method - Exist- successfully ");
-        }catch (Exception e) {
-        	LOGGER.error("ERROR: AdminController  Order exportTotalOrdersForADateToExcel method - "+ e.getMessage());
-		}
-    }
-	
-	@GetMapping("/orders/canceledOrders/export/excel/{date}")
-    public void exportCanceledOrdersForADateToExcel(@PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, HttpServletResponse response) throws IOException {
-		LOGGER.info("AdminController exportCanceledOrdersForADateToExcel method - Enter ");
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        List<JourneyFoodOrder> listOrders = journeyFoodServiceImpl.getOrdersByDate(date, "CANCELLED");
-        try {
-            String headerValue = "attachment; filename=CanceledOrders_" + date.toString() + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            ExcelUtils excelExporter = new ExcelUtils();
-            excelExporter.setOrders(listOrders);
-            excelExporter.exportOrders(response);
-            LOGGER.info("AdminController exportCanceledOrdersForADateToExcel method - Exist- successfully ");
-        }catch (Exception e) {
-        	LOGGER.error("ERROR: AdminController  Order exportCanceledOrdersForADateToExcel method - "+ e.getMessage());
-		}
-    } 
-	
-	@GetMapping("/orders/dateRangeOrdersWithOrderStatus/export/excel")
-    public void exportFromDate2EndDateOrdersWithOrderStatusToExcel(
-    		@RequestParam(name = "startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, 
-    		@RequestParam(name = "endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-    		@RequestParam(name = "orderStatus") String orderStatus,
-    		HttpServletResponse response) throws IOException {
-		LOGGER.info("AdminController exportFromDate2EndDateOrdersToExcel method - Enter ");
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        List<JourneyFoodOrder> listOrders = journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(startDate,endDate,orderStatus);
-        try {
-        	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        	String currentDateTime = dateFormatter.format(new Date());
-            String headerValue = "attachment; filename=AllOrders_" + currentDateTime.toString() + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            ExcelUtils excelExporter = new ExcelUtils();
-            excelExporter.setOrders(listOrders);
-            excelExporter.exportOrders(response);
-            LOGGER.info("AdminController exportFromDate2EndDateOrdersToExcel method - Exist- successfully ");
-        }catch (Exception e) {
-        	LOGGER.error("ERROR: AdminController  Order exportFromDate2EndDateOrdersToExcel method - "+ e.getMessage());
-		}
-    }
-	
-	@GetMapping("/orders/dateRangeOrders/export/excel")
-    public void exportFromDate2EndDateOrdersToExcel(
-    		@RequestParam(name = "startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate, 
-    		@RequestParam(name = "endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-    		HttpServletResponse response) throws IOException {
-		LOGGER.info("AdminController exportFromDate2EndDateOrdersToExcel method - Enter ");
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        List<JourneyFoodOrder> listOrders = journeyFoodServiceImpl.getOrdersByDateRange(startDate,endDate);
-        try {
-        	DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        	String currentDateTime = dateFormatter.format(new Date());
-            String headerValue = "attachment; filename=AllOrders_" + currentDateTime.toString() + ".xlsx";
-            response.setHeader(headerKey, headerValue);
-            ExcelUtils excelExporter = new ExcelUtils();
-            excelExporter.setOrders(listOrders);
-            excelExporter.exportOrders(response);
-            LOGGER.info("AdminController exportFromDate2EndDateOrdersToExcel method - Exist- successfully ");
-        }catch (Exception e) {
-        	LOGGER.error("ERROR: AdminController  Order exportFromDate2EndDateOrdersToExcel method - "+ e.getMessage());
-		}
-    } 
-	
 	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
 	public String fetchFromDate2EndDateWithOrderStatusOrders(SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateStatus) {
 		return "getOrderStartDate2EndDateWithOrderStatus";
@@ -242,13 +79,14 @@ public class AdminController {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
             return "getOrderStartDate2EndDateWithOrderStatus";
 	    }
-		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
+		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
 		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate(),submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate(),submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus());
 	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("date", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:"Orders from "+submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate()+" to "+submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
 	 	model.addAttribute("startDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate());
 	 	model.addAttribute("endDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
 	 	model.addAttribute("orderStatus", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus());
-	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
+	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>orders: "+orders);
         return "showOrdersStartDate2EndDateWithStatus";
     }
 	
@@ -264,13 +102,34 @@ public class AdminController {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
             return "getOrdersStartDate2EndDate";
 	    }
-		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
+		LOGGER.info("AdminController fetchFromDate2EndDateOrders method - Enter");
 		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDateRange(submitFetchOrdersFromDate2EndDate.getStartDate(),submitFetchOrdersFromDate2EndDate.getEndDate());
 	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("date", submitFetchOrdersFromDate2EndDate==null?null:"Orders from "+submitFetchOrdersFromDate2EndDate.getStartDate()+" to "+submitFetchOrdersFromDate2EndDate.getEndDate());
 	 	model.addAttribute("startDate", submitFetchOrdersFromDate2EndDate==null?null:submitFetchOrdersFromDate2EndDate.getStartDate());
 	 	model.addAttribute("endDate", submitFetchOrdersFromDate2EndDate==null?null:submitFetchOrdersFromDate2EndDate.getEndDate());
-	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
+	 	LOGGER.info("AdminController fetchFromDate2EndDateOrders method - Exit =>orders: "+orders);
         return "showOrdersStartDate2EndDate";
+    }
+	
+	@GetMapping("/fetchAllPlacedOrdersForADate")
+	public String fetchAllPlacedOrdersForADate(SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate) {
+		return "getAllPlacedOrdersForADate";
+	}
+	
+	@PostMapping("/fetchAllPlacedOrdersForADate")
+    public String fetchAllPlacedOrdersForADate( @Valid @ModelAttribute("submitFetchTotalQuantityModelByDate") SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate
+    		, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateOrder method - Error occured");
+            return "getAllPlacedOrdersForADate";
+	    }
+		LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Enter");
+		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(), "PLACED");
+	 	 model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
+	 	LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Exit =>orders: "+orders);
+        return "showPlacedOrdersByDate";
     }
 	
 	@GetMapping("/fetchAllCanceledOrdersForADate")
@@ -285,12 +144,32 @@ public class AdminController {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
             return "getAllCancelledOrdersForADate";
 	    }
-		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
+		LOGGER.info("AdminController fetchAllCanceledOrdersForADate method - Enter");
 		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(),"CANCELLED");
 	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
 	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
-	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
-        return "showOrdersByDate";
+	 	LOGGER.info("AdminController fetchAllCanceledOrdersForADate method - Exit =>orders: "+orders);
+        return "showCanceledOrdersByDate";
+    }
+	
+	@GetMapping("/fetchDeliveredOrdersForADate")
+	public String fetchDeliveredOrdersForADate(SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate) {
+		return "getAllDeliveredOrdersForADate";
+	}
+	
+	@PostMapping("/fetchDeliveredOrdersForADate")
+    public String fetchDeliveredOrdersForADate( @Valid @ModelAttribute("submitFetchTotalQuantityModelByDate") SubmitFetchTotalQuantityModelByDate submitFetchTotalQuantityModelByDate
+    		, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateOrder method - Error occured");
+            return "getAllDeliveredOrdersForADate";
+	    }
+		LOGGER.info("AdminController fetchDeliveredOrdersForADate method - Enter");
+		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(),"DELIVERED");
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
+	 	LOGGER.info("AdminController fetchDeliveredOrdersForADate method - Exit =>orders: "+orders);
+        return "showDelivedOrdersByDate";
     }
 	
 	@GetMapping("/fetchAllOrdersForADate")
@@ -305,11 +184,11 @@ public class AdminController {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
             return "getAllOrdersForADate";
 	    }
-		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
+		LOGGER.info("AdminController fetchAllOrdersForADate method - Enter");
 		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
 	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
 	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
-	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
+	 	LOGGER.info("AdminController fetchAllOrdersForADate method - Exit =>orders: "+orders);
         return "showOrdersByDate";
     }
 	
@@ -326,9 +205,10 @@ public class AdminController {
             return "getTotalQuantityForADate";
 	    }
 		LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Enter");
+		List <JourneyFoodOrder> orders = journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(), "PLACED");
 		AggregateJourneyFoodOrder totalOrder=journeyFoodServiceImpl.getOrdersByDateAndNotDisabled(submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
-//		List <JourneyFoodOrder> orders = journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(), "PLACED");
-	 	model.addAttribute("order", totalOrder==null?null:totalOrder);
+	 	model.addAttribute("total", totalOrder==null?null:totalOrder);
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
 	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
 	 	LOGGER.info("AdminController fetchSumOfJourneyFoodOrdersNotDisabled method - Exit =>orders: "+totalOrder);
         return "showAggregateQuantityOrdersByDate";
@@ -343,7 +223,7 @@ public class AdminController {
     }
 	
 	@GetMapping("/order/delete/{id}")
-	public String deleteOrder(@PathVariable("id") long id, Model model) {
+	public String deleteOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController deleteOrder method - Enter =>id :"+id);
 		try {
 			journeyFoodServiceImpl.delete(id);
@@ -356,7 +236,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/order/delivered/{id}")
-	public String deliveredOrder(@PathVariable("id") long id, Model model) {
+	public String deliveredOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController updateOrder method - Enter =>id :"+id);
 		JourneyFoodOrder order =null;
 	    try {
@@ -387,7 +267,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/order/update/{id}")
-	public String updateOrder( @Valid @ModelAttribute("order") CreateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) {
+	public String updateOrder( @Valid @ModelAttribute("order") CreateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) throws UnsupportedEncodingException, MessagingException {
 	    if (result.hasErrors()) {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
             return "admin-update-journeyFoodOrder";
@@ -423,17 +303,17 @@ public class AdminController {
 	    return "redirect:/admin/fetchAllUsers";
 	}
 	
-	@GetMapping("/user/view/{id}")
-	public String viewUser(@PathVariable("id") long id, Model model) {
-		LOGGER.info("AdminController viewUser method - Enter =>id :"+id);
+	@GetMapping("/user/view/{userId}")
+	public String viewUser(@PathVariable("userId") long userId, Model model) {
+		LOGGER.info("AdminController viewUser method - Enter =>userId :"+userId);
 		UserEntity user =null;
 	    try {
-	    	user = userService.getUser(id);
+	    	user = userService.getUser(userId);
 	    	model.addAttribute("user", user);
 		    LOGGER.info("AdminController viewUser method - Exit =>user(object/null): "+ user);
 	    }
 		catch(IllegalArgumentException e) {
-			LOGGER.info("AdminController viewUser method - Exit =>user: "+id);
+			LOGGER.info("AdminController viewUser method - Exit =>user: "+userId);
 		}
 	    return "fetchUser";
 	}
@@ -455,7 +335,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/user/update/{id}")
-	public String updateUser( @Valid @ModelAttribute("user") UserUpdateForm user, BindingResult result, @PathVariable("id") long id) {
+	public String updateUser( @Valid @ModelAttribute("user") UserUpdateForm user, BindingResult result, @PathVariable("id") long id) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController updateUser method - Enter");
 	    if (result.hasErrors()) {
 	    	LOGGER.error("AdminController updateUser method - Error occured");
@@ -464,5 +344,27 @@ public class AdminController {
 	    userService.updateUser(user);
 	    LOGGER.info("AdminController updateUser method - Exit");
 	    return "redirect:/admin/fetchAllUsers";
+	}
+	
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(OrderNotFoundException.class)
+	public ModelAndView orderNotFound(Exception e) {
+		LOGGER.error("AdminController orderNotFound Exception - Enter");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("orderNotFoundError");
+		mv.addObject("ex", e.getMessage());
+		LOGGER.error(e.getMessage());
+		return mv;
+	}
+	
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(UserNotFoundException.class)
+	public ModelAndView userNotFound(Exception e) {
+		LOGGER.error("AdminController userNotFound Exception - Enter");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("userNotFoundError");
+		mv.addObject("ex", e.getMessage());
+		LOGGER.error(e.getMessage());
+		return mv;
 	}
 }

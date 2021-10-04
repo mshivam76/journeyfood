@@ -47,5 +47,4 @@ public interface JourneyFoodOrderRepository extends JpaRepository<JourneyFoodOrd
 			+ " j.puri,j.roti,j.achar,j.jam,j.bread,j.others) FROM JourneyFoodOrder j WHERE j.mealRetrievalDate >= :fromDate AND j.mealRetrievalDate <= :endDate")
 	List<JourneyFoodOrder> getOrdersByDateRange(LocalDate fromDate, LocalDate endDate);
 
-
-	}
+}
