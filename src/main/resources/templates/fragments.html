@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:fragment="html_head">
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Journeyfood - Order</title>
+	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
+	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
+	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
+        <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+        <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
+    </head>
+    <body>
+	   	<div th:fragment="menu">
+	   		<nav class="nav navbar-expand-lg nav-tabs">
+			  <a class="navbar-brand" th:href="@{/}">
+			  	<img th:src="@{/images/brahmakumaris-logo.png}" width="250" height="50">
+			  </a>
+			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			    <span class="navbar-toggler-icon"></span>
+			  </button>
+			
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				  <ul class="navbar-nav mr-auto">
+				    <li class="nav-item">
+				      <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
+				    </li>
+				    <li class="nav-item">
+				    	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/addJourneyFoodOrder}">Add Order</a>
+				    </li>
+				    <li class="nav-item">
+				      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/fetchAllJourneyFoodOrdersNotDisabled}">My Orders</a>
+				    </li>
+				    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+					   <div class="btn-group" >
+						  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    Admin operations
+						  </button>
+						  <div class="dropdown-menu">
+						    <a class="nav-link" th:href="@{/admin/fetchAllOrdersForADate}">Orders for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchAllPlacedOrdersForADate}">Placed Orders for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchAllCanceledOrdersForADate}">Cancelled Orders for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchDeliveredOrdersForADate}">Delivered Orders for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchTotalQuantityForADate}">Total quantity for a Date</a>
+						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateOrders}">Date range orders</a>
+						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateWithOrderStatusOrders}">Date range orders filtered by order status</a>
+						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrder}">All Orders</a>
+						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">All Placed Orders</a>
+						    <div class="dropdown-divider"></div>
+						    <a class="nav-link" th:href="@{/admin/fetchAllUsers}">All Users</a>
+						    <a class="nav-link" th:href="@{/admin/users/export/excel}">Export all Users</a>
+						  </div>
+						</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/register}">Register</a>
+					</li>
+					<li sec:authorize="isAuthenticated()" class="nav-item">
+						<a class="nav-link" th:href="@{/logout}">Logout</a>
+					</li>
+				</ul>
+			    <form class="form-inline my-2 my-lg-0"><h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
+			      <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+			      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+			    </form>
+			  </div>
+			</nav>
+	   	</div>
+	   	<div th:fragment="show_orders">
+		   	<table  class="table table-striped table-bordered">
+		   		<thead class="thead-dark">
+	                <tr>
+	                    <th>Edit Order</th>
+	                    <!-- <th>Name of Guide</th> -->
+	                    <th>Head Count</th>
+	                    <th>Bread Quantity</th>
+	                    <th>Achar Quantity</th>
+	                    <th>Jam Quantity</th>
+	                    <th>Puri Quantity</th>
+	                    <th>Thepla Quantity</th>
+	                    <th>Roti Quantity</th>
+	                    <th>Other items</th>
+	                    <th>Order date(YYYY-MM-DD HH:MM:ss)</th>
+	                    <th>Departure date(YYYY-MM-DD)</th>
+	                    <th>Meal retrieval Date(YYYY-MM-DD)</th>
+	                    <th>Order Status</th>
+	                    <th>Meal retrieval TIme</th>
+	                    <th>Cancel/Deliver Orders</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr th:each="order:${orders}">
+	                    <td><a th:href="@{/admin/order/edit/{orderId}(orderId=${order.orderId})}"  th:text="${order.orderId}"></a></td>
+	                    <!-- <td><a th:href="@{/admin/user/view/{userId}(userId=${order.user.userId})}" th:text="${order.user.nameOfGuide}"></a></td> -->
+	                    <td th:text="${order.headCount}">Head Count</td>
+	                    <td th:text="${order.bread}">Bread Count</td>
+	                    <td th:text="${order.achar}">Achar Quantity</td>
+	                    <td th:text="${order.jam}">Jam Quantity</td>
+	                    <td th:text="${order.puri}">Puri Quantity</td>
+	                    <td th:text="${order.puri}">Thepla Quantity</td>
+	                    <td th:text="${order.roti}">Roti Quantity</td>
+	                    <td th:text="${order.others}">Other Items</td>
+	                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
+	                    <td th:text="${order.dateOfDeparture}">Date at which Order placed</td>
+	                    <td th:text="${order.mealRetrievalDate}">Departure date</td>
+	                    <td th:text="${order.orderStatus}"></td>
+	                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
+	                    <td>
+	                    	<a th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>
+	                    	<a th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Deliver</a>&nbsp;&nbsp;&nbsp;
+	                    </td>		                    		                    
+	                </tr>
+	            </tbody>
+            </table>
+	   	</div>
+    </body>
+</html>

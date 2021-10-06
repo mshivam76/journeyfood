@@ -1,29 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Add Order</title>
-	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
-	    <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
-	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
-	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
-	    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
-    </head>
+    <head th:replace="fragments :: html_head">
     <body>
+    	<div th:replace="fragments :: menu"/></div>
 	   	<div class="container">
-	   		<div class="row">
-    			<div class="col-md-12">
-		    		<p><a th:href="@{/logout}">Logout</a></p>
-		    		<p><a th:href="@{/fetchAllJourneyFoodOrdersNotDisabled}">View User Specific Orders</a></p>
-		    		<p><a th:href="@{/admin/fetchTotalQuantityForADate}" sec:authorize="hasRole('ADMIN')">Total quantity for a Date</a>&nbsp;&nbsp;&nbsp;</p>
-		    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}" sec:authorize="hasRole('ADMIN')">View all placed Orders</a>&nbsp;&nbsp;&nbsp;</p>
-                   	<p><a th:href="@{/admin/fetchAllUsers}" sec:authorize="hasRole('ADMIN')">View all Users</a></p>
-                   	<p><a th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}" sec:authorize="hasRole('ADMIN')">Fetch all records not disabled/deleted</a></p>
-		        </div>
-		    </div>
 		    <div class="row">
-		        <div class="col-md-12"> <h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
+		        <div class="col-md-12"> 
 		            <form th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
 		            	<div>
 		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
@@ -32,11 +14,6 @@
 							    </ul>
 							</div>
 		            	</div>
-      			        <div class="alert alert-success" role="alert">
-						    <ul>
-						        <li>Order submitted successfully. Please note order id to fetch/edit order details in future.</li>
-						    </ul>
-						</div>
 			            <h2 class="mb-5">New Order</h2>
 		                <div class="col-sm-6 form-group">
 			                <label for="headCount">Head count</label>
@@ -115,8 +92,11 @@
 		                </div> 
 		                
 		                <div class="col-sm-6 form-group">
-			                <label for="others">Other items quantity</label>
-						    <input type="number" th:field="*{others}" class="form-control" placeholder="Other count">
+			                <label for="others">Other items</label>
+			                <textarea class="form-control" id="description" rows="5"
+                              name="Other items" placeholder="Description" th:field="*{others}" required="required">
+                            </textarea>
+						    <!-- <input type="textarea" th:field="*{others}" class="form-control" placeholder="Other items"> -->
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
 		                </div> 
 		                

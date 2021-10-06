@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,7 +33,7 @@ public class JourneyFoodOrder{
     @DateTimeFormat(pattern = "hh:mm:ss a")
     private LocalTime mealRetrievalTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private UserEntity user; 
     
     private Integer thepla;
@@ -47,7 +48,7 @@ public class JourneyFoodOrder{
     
     private Integer bread;
     
-    private Integer others;
+    private String others;
     
     private String orderStatus;
 
@@ -57,7 +58,7 @@ public class JourneyFoodOrder{
  
 	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
 			LocalTime mealRetrievalTime, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
-			Integer others) {
+			String others) {
 		super();
 		this.orderId = orderId;
 		this.headCount = headCount;
@@ -76,7 +77,7 @@ public class JourneyFoodOrder{
 	}
 	
 	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, 
-			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, Integer others, Integer thepla, Integer puri, Integer roti, Integer achar, 
+			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, String others, Integer thepla, Integer puri, Integer roti, Integer achar, 
 			Integer jam, Integer bread) {
 		super();
 		this.orderId = orderId;
@@ -98,7 +99,7 @@ public class JourneyFoodOrder{
 
 	public JourneyFoodOrder( Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
 			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
-			Integer others) {
+			String others) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
@@ -220,11 +221,11 @@ public class JourneyFoodOrder{
 		this.bread = bread;
 	}
 
-	public Integer getOthers() {
+	public String getOthers() {
 		return others;
 	}
 
-	public void setOthers(Integer others) {
+	public void setOthers(String others) {
 		this.others = others;
 	}
 	

@@ -11,7 +11,7 @@ import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZer
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class CreateJourneyFoodOrderFormData {
-	private long id;
+	private long orderId;
 	
 	@IntegerCountMustBeGreaterThanZeroConstraint(message="Head count must be greater than 0")
     private int headCount;
@@ -51,8 +51,8 @@ public class CreateJourneyFoodOrderFormData {
 	@NotNull(message="Bread count is mandatory")
     private int bread;
     
-    @NotNull(message="Other items count is mandatory")
-    private int others;
+//	@NotBlank(message="Other items is mandatory")
+    private String others;
     
     private String orderStatus;
     
@@ -67,12 +67,12 @@ public class CreateJourneyFoodOrderFormData {
 		this.dateOfOrderPlaced =  new java.util.Date();
 	}
 
-	 public long getId() {
-		return id;
+	public long getOrderId() {
+		return orderId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setOrderId(long orderId) {
+		this.orderId = orderId;
 	}
 
 	public java.util.Date getDateOfOrderPlaced() {
@@ -155,11 +155,11 @@ public class CreateJourneyFoodOrderFormData {
 		this.bread = bread;
 	}
 
-	public int getOthers() {
+	public String getOthers() {
 		return others;
 	}
 
-	public void setOthers(int others) {
+	public void setOthers(String others) {
 		this.others = others;
 	}
 

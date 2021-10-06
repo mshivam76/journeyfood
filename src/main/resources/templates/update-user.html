@@ -1,28 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="ISO-8859-1">
-    <title>Update User Information</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-    <script type="text/javascript" src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-</head>
-<body>
-    	<div class="container">
-	   		<div class="row">
-    			<div class="col-md-12">
-		    		<p><a th:href="@{/logout}">Logout</a></p>
-		    		<p><a th:href="@{/admin/fetchAllJourneyFoodOrder}">View Orders</a></p>
-		        </div>
-		    </div>
-		    <div class="row">
-		        <div class="col-md-12"> <h1 sec:authorize="isAuthenticated()" th:text="'Welcome: ' + ${#authentication?.principal?.nameOfGuide}"></h1>
+	<head th:replace="fragments :: html_head"/>
+	<body>
+	<div th:replace="fragments :: menu"/></div>
+	    	<div class="container">
+			    <div class="row">
 			        <form th:action="@{/admin/user/update/{id}(id=${user.userId})}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
-				        <!-- <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-					        <ul>
-						        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-						    </ul>
-				        </div> -->
 				        <div class="alert alert-danger" th:text="${message}" th:unless="${message==null}" role="alert"></div>
 					        <div class="m-3">
 					            <div class="form-group row">
@@ -96,9 +79,8 @@
 					                <button type="submit" class="btn btn-primary">Update User</button>
 					            </div>
 					        </div>
-			        </form>
+				        </form>
 		    </div>
-    </div>
-    </div>
-</body>
+   		 </div>
+	</body>
 </html>

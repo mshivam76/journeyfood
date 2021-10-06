@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="fragments :: html_head">
+    <body>
+    	<div th:replace="fragments :: menu"></div>
+	   	<div class="container">
+            <form th:action="@{/admin/fetchFromDate2EndDateOrders}" th:object="${submitFetchOrdersFromDate2EndDate}"method="post">
+            	<div>
+            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
+					    <ul>
+					        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+					    </ul>
+					</div>
+            	</div>
+	            <h2 class="mb-5">Fetch orders between Date</h2>
+                <div class="col-sm-6 form-group">
+                    <label for="startDate">Enter Start Date:</label>
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{startDate}" id="date" placeholder="Pick date using calender icon"/>
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
+                </div>
+                
+                <div class="col-sm-6 form-group">
+                    <label for="endDate">Enter End Date:</label>
+                    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" th:field="*{endDate}" id="date" placeholder="Pick date using calender icon"/>
+                        <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
+                </div>
+				
+				<div class="col-sm-6 form-group">
+					<button class="btn btn-primary" type="submit">Fetch Orders</button>
+                	<button class="btn btn-danger" type="reset">Reset Fields</button>
+                </div>
+            </form>
+        </div>
+		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{/assets/moment/moment.min.js}"></script>
+		<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
+		
+		<script>
+		    $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+		        icons: {
+		            time: 'far fa-clock',
+		            date: 'far fa-calendar',
+		            up: 'fas fa-arrow-up',
+		            down: 'fas fa-arrow-down',
+		            previous: 'fas fa-chevron-left',
+		            next: 'fas fa-chevron-right',
+		            today: 'far fa-calendar-check-o',
+		            clear: 'far fa-trash',
+		            close: 'far fa-times'
+		        } });
+		    
+		    $('#datetimepicker1').datetimepicker({
+		        format: 'DD/MM/YYYY'//mealRetrievalDate
+		    });
+		    
+		    $('#datetimepicker2').datetimepicker({
+		        format: 'DD/MM/YYYY'//mealRetrievalDate
+		    });
+		</script>
+		
+    </body>
+</html>

@@ -29,7 +29,7 @@ public class UserEntity {
 	@Id
 	@Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-	private long userId;
+	private Long userId;
 	
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"))
@@ -58,7 +58,7 @@ public class UserEntity {
 	
 	private Date dateCreated;
 	
-	private boolean isDisabled;
+	private boolean isDisabled;//If user is disabled/removed from logging into application
 	
 	@Column(nullable = false, length = 150)
     private String password;
@@ -67,8 +67,7 @@ public class UserEntity {
     @Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean enabled;//whether account is verified using email or not
 	
-	@OneToMany(mappedBy = "user")
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
 	private List<JourneyFoodOrder> order;
 	
 	public UserEntity(Long userId , String nameOfCenter, String nameOfGuide, String contactNoOfGuide,
@@ -134,11 +133,11 @@ public class UserEntity {
 		this.dateCreated = simpleDateFormat.parse( simpleDateFormat.format(new Date()));
 	}
 
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(final long userId) {
+	public void setUserId(final Long userId) {
 		this.userId = userId;
 	}
 
@@ -214,7 +213,7 @@ public class UserEntity {
         this.roles = roles;
     }
 	
-	public boolean isEnabled() {
+	public Boolean isEnabled() {
 		return enabled;
 	}
 
@@ -238,7 +237,7 @@ public class UserEntity {
 		this.order = order;
 	}
 	
-	public boolean isDisabled() {
+	public Boolean isDisabled() {
 		return isDisabled;
 	}
 
