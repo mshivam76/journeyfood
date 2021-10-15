@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if(user==null) {
 			throw new UsernameNotFoundException(email+" is not registered, please register before logging in.");
 		}else if(user.isDisabled()){
-			throw new UsernameNotFoundException(email+" is removed, please contact to BKJourneyfood to reactivate your account.");
+			throw new UsernameNotFoundException(email+" is blocked, please contact to BKJourneyfood to reactivate your account.");
 		}
 		return new CustomUserDetails(user);
 	}

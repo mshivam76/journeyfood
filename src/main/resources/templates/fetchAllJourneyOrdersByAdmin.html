@@ -6,6 +6,7 @@
 		<div class="container text-center" align="center">
 		<!-- <div class="container"> -->
 		    <div th:switch="${orders}">
+		    	<div th:replace="fragments :: show_alert_message"></div>
 		    	<h2 th:case="null">No orders yet!</h2>
 		    	
 		        <table  th:case="*" class="table table-striped table-bordered">
@@ -50,13 +51,14 @@
 		                    <td th:text="${order.mealRetrievalDate}">Meal retrieval date</td>
 		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
 		                    <td>
-		                    	<a th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Delivered</a>&nbsp;&nbsp;&nbsp;
-		                    	<a th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Delivered</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;&nbsp;
 		                    </td>		                    		                    
 		                </tr>
 		            </tbody>
 		        </table>
 		    </div>
 		</div>
+		<div th:replace="fragments :: menu_bug"></div>
 	</body>
 </html>

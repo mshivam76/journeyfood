@@ -66,7 +66,7 @@
 		                </div> 
 		                
 		                <div class="form-group">
-			                <label for="others">Other items quantity</label>
+			                <label for="others">Other items</label>
 						    <textarea th:field="*{others}" class="form-control" rows="4" cols="50" placeholder="Other items"></textarea>
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
 		                </div> 
@@ -79,41 +79,6 @@
 		        </div>
 		    </div>
 
-		</div>
-		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-		<script th:src="@{/assets/moment/moment.min.js}"></script>
-		<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
-		
-		<script>
-		    $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
-		        icons: {
-		            time: 'far fa-clock',
-		            date: 'far fa-calendar',
-		            up: 'fas fa-arrow-up',
-		            down: 'fas fa-arrow-down',
-		            previous: 'fas fa-chevron-left',
-		            next: 'fas fa-chevron-right',
-		            today: 'far fa-calendar-check-o',
-		            clear: 'far fa-trash',
-		            close: 'far fa-times'
-		        } });
-		    
-		    $('#datetimepicker1').datetimepicker({
-		        format: 'DD/MM/YYYY'//mealRetrievalDate
-		    });
-		    
-		    $('#datetimepicker2').datetimepicker({
-		        format: 'DD/MM/YYYY'//DateOfDeparture
-		    });
-		    
-            $(function () {
-                $('#datetimepicker3').datetimepicker({
-                    format: 'LT'
-                });
-            });
-		</script>
-		
+		<div th:replace="fragments :: datePicker_menu"></div>
     </body>
 </html>

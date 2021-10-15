@@ -50,4 +50,6 @@ public interface JourneyFoodService {
 
 	List<JourneyFoodOrder> getOrdersByDateRangeAndOrderStatus(LocalDate fromDate, LocalDate endDate,
 			String orderStatus);
+
+	List<JourneyFoodOrder> getPlacedOrdersByUser();
 }

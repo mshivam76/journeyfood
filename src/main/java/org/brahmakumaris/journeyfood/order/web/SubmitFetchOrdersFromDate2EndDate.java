@@ -2,7 +2,6 @@ package org.brahmakumaris.journeyfood.order.web;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.validation.ValidDateRange;
@@ -10,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
     @ValidDateRange(startDate = "startDate", endDate = "endDate")
 public class SubmitFetchOrdersFromDate2EndDate{
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@NotNull(message="From date is mandatory")
+	@NotNull(message="Start date is mandatory")
 	private LocalDate startDate;
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")

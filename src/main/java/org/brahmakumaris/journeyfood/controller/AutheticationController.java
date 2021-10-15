@@ -1,9 +1,9 @@
 package org.brahmakumaris.journeyfood.controller;
 
-import java.security.Principal;
 import java.text.ParseException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.UserEntity;
@@ -17,14 +17,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 /*
  * https://www.baeldung.com/spring-boot-crud-thymeleaf -->reference link
@@ -58,7 +62,7 @@ public class AutheticationController {
     		try {
                 userService.register(user,DefaultUserService.getSiteURL(request));
             }catch (Exception e){
-            	if(e instanceof UserAlreadyExistException)	mav.addObject("message", "An account with this email already exists.");
+            	if(e instanceof UserAlreadyExistException)	mav.addObject("message", "An account with this email already exists. Please login.");
             	LOGGER.error(e.getMessage());
                 return mav;
             }
@@ -90,10 +94,24 @@ public class AutheticationController {
 	   try {
 		model.addAttribute("user", new UserEntity());
 	} catch (ParseException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	   return "login";
+   }
+   
+   @GetMapping("/login-error")
+   public String login(HttpServletRequest request, Model model) {
+       HttpSession session = request.getSession(false);
+       String errorMessage = null;
+       if (session != null) {
+           AuthenticationException ex = (AuthenticationException) session
+                   .getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+           if (ex != null) {
+               errorMessage = ex.getMessage();
+           }
+       }
+       model.addAttribute("errorMessage", errorMessage);
+       return "login";
    }
     
    @GetMapping("/verifyUser")
@@ -185,5 +203,16 @@ public class AutheticationController {
 	       model.addAttribute("message", "You have successfully changed your password.");
 	   }
 	   return "passwordChangedSuccessfully";
+   }
+   
+   @ResponseStatus(HttpStatus.NOT_FOUND)
+   @ExceptionHandler(UsernameNotFoundException.class)
+   public ModelAndView userNameNotFound(Exception e) {
+		LOGGER.error("AuthenticationController userNameNotFound Exception - Enter");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("login");
+		mv.addObject("ex", e.getMessage());
+		LOGGER.error(e.getMessage());
+		return mv;
    }
 }

@@ -85,8 +85,16 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 	@Override
     public List<JourneyFoodOrder> getOrdersByUser()  {
 		UserEntity user = getCurrentLoggedInUserData();
-		List<JourneyFoodOrder> orders = repository.findEnabledOrderByUserId(user.getUserId());
-		if(orders.isEmpty())throw new OrderNotFoundException("No Order placed yet");
+		List<JourneyFoodOrder> orders = repository.findAllOrderByUserId(user.getUserId());
+		if(orders.isEmpty())throw new OrderNotFoundException("No Order is placed yet. Please add(place) orders to view orders");
+		else return orders;
+    }
+	
+	@Override
+    public List<JourneyFoodOrder> getPlacedOrdersByUser()  {
+		UserEntity user = getCurrentLoggedInUserData();
+		List<JourneyFoodOrder> orders = repository.findPlacedOrderByUserId(user.getUserId());
+		if(orders.isEmpty())throw new OrderNotFoundException("No Order is placed yet. Please add(place) orders to view orders");
 		else return orders;
     }
 	
@@ -155,7 +163,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 	public List<JourneyFoodOrder> getOrdersNotDisabledData()  {
 		//Need to give UI to fetch order which are Delivered /Cancelled/Placed order status
 		List<JourneyFoodOrder> orders = repository.findByOrderStatus("PLACED");
-		if(orders.isEmpty())throw new OrderNotFoundException("No Orders PLACED yet");
+		if(orders.isEmpty())throw new OrderNotFoundException("No Order PLACED  yet. Please add(place) orders to view orders");
 		else return orders;
 	}
 

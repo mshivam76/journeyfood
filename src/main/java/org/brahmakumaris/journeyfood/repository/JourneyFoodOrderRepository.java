@@ -25,7 +25,11 @@ public interface JourneyFoodOrderRepository extends JpaRepository<JourneyFoodOrd
 	
 	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
 			+ "j.puri,j.roti,j.achar,j.jam,j.bread,j.others) from JourneyFoodOrder j WHERE j.user.userId=:userId AND j.orderStatus='PLACED'")
-	List<JourneyFoodOrder> findEnabledOrderByUserId(@Param("userId") long userId);
+	List<JourneyFoodOrder> findPlacedOrderByUserId(@Param("userId") long userId);
+	
+	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
+			+ "j.puri,j.roti,j.achar,j.jam,j.bread,j.others) from JourneyFoodOrder j WHERE j.user.userId=:userId")
+	List<JourneyFoodOrder> findAllOrderByUserId(@Param("userId") long userId);
 	
 	@Query("SELECT new AggregateJourneyFoodOrder(SUM(headCount), SUM(bread), SUM(achar), SUM(jam) , SUM(puri), SUM(roti), SUM(thepla), mealRetrievalDate)"
 			+ "  FROM JourneyFoodOrder j WHERE j.orderStatus=:orderStatus AND j.mealRetrievalDate = :mealRetrievalDate")

@@ -7,7 +7,6 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
-import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UpdateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /*
  * https://www.baeldung.com/spring-boot-crud-thymeleaf -->reference link
  * https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
@@ -43,7 +43,10 @@ public class HomeController {
     }
     
 	@PostMapping("/addJourneyFoodOrder")
-    public String addJourneyFoodOrder(@Valid @ModelAttribute("createJourneyFoodOrderFormData")CreateJourneyFoodOrderFormData formData, BindingResult result, Model model) throws UnsupportedEncodingException, MessagingException {
+    public String addJourneyFoodOrder(@Valid @ModelAttribute("createJourneyFoodOrderFormData")CreateJourneyFoodOrderFormData formData, BindingResult result, 
+    		RedirectAttributes redirectAttributes,  Model model) throws UnsupportedEncodingException, MessagingException {
+//		redirectAttributes.addFlashAttribute("message", "Failed");
+//	    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 		LOGGER.info("HomeController addJourneyFoodOrder method - Entered");
 		if (result.hasErrors()) {
 			LOGGER.error("HomeController addJourneyFoodOrder method - Error occured");
@@ -52,15 +55,25 @@ public class HomeController {
         model.addAttribute("journeyFoorOrder", formData);
         journeyFoodServiceImpl.createJourneyFoodOrder(formData.toParams());
         LOGGER.info("HomeController addJourneyFoodOrder method - Exit");
-        return "redirect:/fetchAllJourneyFoodOrdersNotDisabled";
+        redirectAttributes.addFlashAttribute("message", "Order added successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+        return "redirect:/fetchAllJourneyFoodOrdersByLoggedInUser";
     }
    
-	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
-    public ModelAndView fetchAllJourneyFoodOrdersNotDisabled() {
-		LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Enter");
+	@GetMapping("/fetchAllJourneyFoodOrdersByLoggedInUser")
+    public ModelAndView fetchAllJourneyFoodOrdersByLoggedInUser() {
+		LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Enter");
 	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
-	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Exit =>orders: "+orders);
+	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Exit =>orders: "+orders);
         return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
+    }
+	
+	@GetMapping("/fetchPlacedOrdersByLoggedInUser")
+    public ModelAndView fetchPlacedOrdersByLoggedInUser() {
+		LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Enter");
+	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getPlacedOrdersByUser();
+	 	LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Exit =>orders: "+orders);
+        return new ModelAndView("fetchPlacedOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
     }
 	
 	@GetMapping("/delete/{id}")
@@ -74,7 +87,7 @@ public class HomeController {
 			LOGGER.error("HomeController deleteOrder method - Exit"+ e.getMessage());
 			return "redirect:/error";
 		}
-	    return "redirect:/fetchAllJourneyFoodOrdersNotDisabled";
+	    return "redirect:/fetchAllJourneyFoodOrdersByLoggedInUser";
 	}
 	
 	@GetMapping("/edit/{id}")
@@ -93,13 +106,15 @@ public class HomeController {
 	}
 	
 	@PostMapping("/update/{id}")
-	public String updateOrder( @Valid @ModelAttribute("order") UpdateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) {
+	public String updateOrder( @Valid @ModelAttribute("order") UpdateJourneyFoodOrderFormData order, BindingResult result, RedirectAttributes redirectAttributes, @PathVariable("id") long id) {
 	    if (result.hasErrors()) {
 	    	LOGGER.error("HomeController updateOrder method - Error occured");
             return "update-journeyFoodOrder";
 	    }
 	    journeyFoodServiceImpl.updateOrder(order);
+	    redirectAttributes.addFlashAttribute("message", "Order "+order.getOrderId()+" updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    LOGGER.error("HomeController updateOrder method - Exit");
-	    return "redirect:/fetchAllJourneyFoodOrdersNotDisabled";
+	    return "redirect:/fetchAllJourneyFoodOrdersByLoggedInUser";
 	}
 }

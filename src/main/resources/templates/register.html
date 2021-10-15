@@ -82,9 +82,11 @@
 		
 		            <div>
 		                <button type="submit" class="btn btn-primary">Sign Up</button>
+		                &nbsp;&nbsp;<b>Already registered</b>&nbsp;<a class="btn btn-secondary" th:href="@{/login}">Please login here.</a>
 		            </div>
 		        </div>
 	        </form>
 	    </div>
+	    <div th:replace="fragments :: menu_bug"></div>
 	</body>
 </html>

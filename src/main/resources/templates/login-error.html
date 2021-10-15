@@ -10,9 +10,7 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
    	<div class="col-md-12">
    		<form th:action="@{/login}" th:object="${user}" method="post" class="form-signin">               
             <div>
-           		<div th:if="${param.error}" class="alert alert-danger" role="alert" ><h3>Mandatory field validation Errors:</h3>
-				    <p th:text="${SPRING_SECURITY_LAST_EXCEPTION.message}" class="error"> Invalid email or password</p>
-				</div> 
+           		<div class="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
 				<!-- <c:if test="${param.auth eq 'failure'}">
 				  <div class="error">
 				    <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />

@@ -7,11 +7,12 @@
 				    <div th:switch="${orders}">
 				    	<h2 th:case="null">No orders yet!</h2>
 				    	<div th:case="*" class="table-responsive-sm">
-					    	<h3 th:text="${date}"></h3> <a th:href="@{/admin/orders/dateRangeOrdersWithOrderStatus/export/excel(startDate=${startDate},endDate=${endDate})}">Export to excel</a>
+					    	<h3 th:text="${date}"></h3> <a th:href="@{/admin/orders/dateRangeOrders/export/excel(startDate=${startDate},endDate=${endDate})}">Export to excel</a>
 					        <div th:replace="fragments :: show_orders">
 				       		 </div>
 					    </div>    
 				    </div>
 				</div>
+				<div th:replace="fragments :: menu_bug"></div>
 		</body>
 </html>

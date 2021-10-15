@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	<head th:replace="fragments :: html_head"/>
 	<body>
-		<div th:replace="fragments :: menu"/></div>
+		<div th:replace="fragments :: menu"></div>
 			<div class="container text-center">
 			    <div th:switch="${orders}">
 			    	<h2 th:case="null">No orders yet!</h2>
@@ -13,5 +13,6 @@
 				    </div>    
 			    </div>
 			</div>
+		<div th:replace="fragments :: menu_bug"></div>
 	</body>
 </html>

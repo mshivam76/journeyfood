@@ -15,13 +15,13 @@
 							</div>
 		            	</div>
 			            <h2 class="mb-5">New Order</h2>
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="headCount">Head count</label>
 						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
 		                </div> 
 
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 						    <label for="dateOfDeparture">Date of departure</label>
 						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2" th:field="*{dateOfDeparture}" id="date" placeholder="Choose departure date"/>
@@ -32,7 +32,7 @@
 		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('dateOfDeparture')}" th:errors="*{dateOfDeparture}"></div>
 		                </div>
 		
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 		                    <label for="date">Meal retrieval Date:</label>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="Choose meal retrieval date"/>
@@ -43,7 +43,7 @@
 		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalDate')}" th:errors="*{mealRetrievalDate}"></div>
 		                </div>
 						
-			            <div class="col-sm-6 form-group">
+			            <div class="form-group">
 			            	<label for="date">Meal retrieval Time:</label>
 			                <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
 			                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" th:field="*{mealRetrievalTime}" id="time" placeholder="Choose meal retrieval time"/>
@@ -55,52 +55,51 @@
 			            </div>
 						        
 						
-						<div class="col-sm-6 form-group">
+						<div class="form-group">
 			                <label for="thepla">Thepla count</label>
 						    <input type="number" th:field="*{thepla}" class="form-control" placeholder="Thepla count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('thepla')}" th:errors="*{thepla}"></div>
 		                </div> 
 
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="puri">Puri count</label>
 						    <input type="number" th:field="*{puri}" class="form-control" placeholder="Puri count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('puri')}" th:errors="*{headCount}"></div>
 		                </div> 
 
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="roti">Roti quantity</label>
 						    <input type="number" th:field="*{roti}" class="form-control" placeholder="Roti count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('roti')}" th:errors="*{roti}"></div>
 		                </div> 
 		                
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="achar">Achar(Pickle) quantity</label>
 						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Koki count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></div>
 		                </div> 
 		                
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="bread">Bread quantity</label>
 						    <input type="number" th:field="*{bread}" class="form-control" placeholder="bread count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
 		                </div> 
 		                
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="jam">Jam quantity</label>
 						    <input type="number" th:field="*{jam}" class="form-control" placeholder="jam count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></div>
 		                </div> 
 		                
-		                <div class="col-sm-6 form-group">
+		                <div class="form-group">
 			                <label for="others">Other items</label>
 			                <textarea class="form-control" id="description" rows="5"
-                              name="Other items" placeholder="Description" th:field="*{others}" required="required">
+                              name="Other items" placeholder="Description" th:field="*{others}">
                             </textarea>
-						    <!-- <input type="textarea" th:field="*{others}" class="form-control" placeholder="Other items"> -->
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('others')}" th:errors="*{others}"></div>
 		                </div> 
 		                
-						<div class="col-sm-6 form-group">
+						<div class="form-group">
 							<button class="btn btn-primary" type="submit">Add Order</button>
 		                	<button class="btn btn-danger" type="reset">Reset Order</button>
 		                </div>
@@ -109,40 +108,6 @@
 		    </div>
 
 		</div>
-		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-		<script th:src="@{/assets/moment/moment.min.js}"></script>
-		<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
-		
-		<script>
-		    $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
-		        icons: {
-		            time: 'far fa-clock',
-		            date: 'far fa-calendar',
-		            up: 'fas fa-arrow-up',
-		            down: 'fas fa-arrow-down',
-		            previous: 'fas fa-chevron-left',
-		            next: 'fas fa-chevron-right',
-		            today: 'far fa-calendar-check-o',
-		            clear: 'far fa-trash',
-		            close: 'far fa-times'
-		        } });
-		    
-		    $('#datetimepicker1').datetimepicker({
-		        format: 'DD/MM/YYYY'//mealRetrievalDate
-		    });
-		    
-		    $('#datetimepicker2').datetimepicker({
-		        format: 'DD/MM/YYYY'//DateOfDeparture
-		    });
-		    
-            $(function () {
-                $('#datetimepicker3').datetimepicker({
-                    format: 'LT'
-                });
-            });
-		</script>
-		
+		<div th:replace="fragments :: datePicker_menu"></div>
     </body>
 </html>

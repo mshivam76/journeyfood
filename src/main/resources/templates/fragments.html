@@ -12,7 +12,7 @@
     </head>
     <body>
 	   	<div th:fragment="menu">
-	   		<nav class="nav navbar-expand-lg nav-tabs">
+	   		<nav class="nav navbar-expand-lg navbar-light bg-light">
 			  <a class="navbar-brand" th:href="@{/}">
 			  	<img th:src="@{/images/brahmakumaris-logo.png}" width="250" height="50">
 			  </a>
@@ -29,7 +29,10 @@
 				    	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/addJourneyFoodOrder}">Add Order</a>
 				    </li>
 				    <li class="nav-item">
-				      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/fetchAllJourneyFoodOrdersNotDisabled}">My Orders</a>
+				      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/fetchAllJourneyFoodOrdersByLoggedInUser}">All Orders</a>
+				    </li>
+				    <li class="nav-item">
+				      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/fetchPlacedOrdersByLoggedInUser}">Placed Orders</a>
 				    </li>
 				    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 					   <div class="btn-group" >
@@ -37,18 +40,18 @@
 						    Admin operations
 						  </button>
 						  <div class="dropdown-menu">
-						    <a class="nav-link" th:href="@{/admin/fetchAllOrdersForADate}">Orders for a Date</a>
-						    <a class="nav-link" th:href="@{/admin/fetchAllPlacedOrdersForADate}">Placed Orders for a Date</a>
-						    <a class="nav-link" th:href="@{/admin/fetchAllCanceledOrdersForADate}">Cancelled Orders for a Date</a>
-						    <a class="nav-link" th:href="@{/admin/fetchDeliveredOrdersForADate}">Delivered Orders for a Date</a>
-						    <a class="nav-link" th:href="@{/admin/fetchTotalQuantityForADate}">Total quantity for a Date</a>
-						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateOrders}">Date range orders</a>
-						    <a class="nav-link" th:href="@{/admin/fetchFromDate2EndDateWithOrderStatusOrders}">Date range orders filtered by order status</a>
-						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrder}">All Orders</a>
-						    <a class="nav-link" th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">All Placed Orders</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllOrdersForADate}">Orders for a Date</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllPlacedOrdersForADate}">Placed Orders for a Date</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllCanceledOrdersForADate}">Cancelled Orders for a Date</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchDeliveredOrdersForADate}">Delivered Orders for a Date</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchTotalQuantityForADate}">Total quantity for a Date</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchFromDate2EndDateOrders}">Date range orders</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchFromDate2EndDateWithOrderStatusOrders}">Date range orders filtered by order status</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllJourneyFoodOrder}">All Orders</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">All Placed Orders</a>
 						    <div class="dropdown-divider"></div>
-						    <a class="nav-link" th:href="@{/admin/fetchAllUsers}">All Users</a>
-						    <a class="nav-link" th:href="@{/admin/users/export/excel}">Export all Users</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllUsers}">All Users</a>
+						    <a class="dropdown-item" th:href="@{/admin/users/export/excel}">Export all Users</a>
 						  </div>
 						</div>
 					</li>
@@ -66,8 +69,9 @@
 			  </div>
 			</nav>
 	   	</div>
+	   	<div th:fragment="show_alert_message" th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
 	   	<div th:fragment="show_orders">
-		   	<table  class="table table-striped table-bordered">
+		   	<table  class="table table-striped">
 		   		<thead class="thead-dark">
 	                <tr>
 	                    <th>Edit Order</th>
@@ -106,12 +110,55 @@
 	                    <td th:text="${order.orderStatus}"></td>
 	                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
 	                    <td>
-	                    	<a th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>
-	                    	<a th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Deliver</a>&nbsp;&nbsp;&nbsp;
+	                    	<a th:if="${order.orderStatus=='PLACED'}" th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>
+	                    	<a th:if="${order.orderStatus=='PLACED'}" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Deliver</a>&nbsp;&nbsp;&nbsp;
 	                    </td>		                    		                    
 	                </tr>
 	            </tbody>
             </table>
 	   	</div>
+	   	<div th:fragment="datePicker_menu">
+	   		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+			<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+			<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+			<script th:src="@{/assets/moment/moment.min.js}"></script>
+	 		<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
+			
+			<script>
+			    $.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+			        icons: {
+			            time: 'far fa-clock',
+			            date: 'far fa-calendar',
+			            up: 'fas fa-arrow-up',
+			            down: 'fas fa-arrow-down',
+			            previous: 'fas fa-chevron-left',
+			            next: 'fas fa-chevron-right',
+			            today: 'far fa-calendar-check-o',
+			            clear: 'far fa-trash',
+			            close: 'far fa-times'
+			        } });
+			    
+			    $('#datetimepicker1').datetimepicker({
+			        format: 'DD/MM/YYYY'//mealRetrievalDate
+			    });
+			    
+			    $('#datetimepicker2').datetimepicker({
+			        format: 'DD/MM/YYYY'//DateOfDeparture
+			    });
+			    
+	            $(function () {
+	                $('#datetimepicker3').datetimepicker({
+	                    format: 'LT'
+	                });
+	            });
+			</script>
+	   	</div>
+	   	<div th:fragment="menu_bug">
+	   		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+			<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+			<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+			<script th:src="@{/assets/moment/moment.min.js}"></script>
+	 		<script th:src="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js}"></script>
+	 	</div>
     </body>
 </html>
