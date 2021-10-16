@@ -46,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers("/admin/**").hasRole("ADMIN")
 		.antMatchers("/addJourneyFoodOrder").authenticated()
+		.antMatchers("/fetchAllJourneyFoodOrdersByLoggedInUser").authenticated()
 		.antMatchers("/edit/**").authenticated()
 		.antMatchers("/delete/**").authenticated()
 		.antMatchers("/h2-console/**","/login","/register").permitAll()
