@@ -29,6 +29,9 @@ import org.brahmakumaris.journeyfood.utils.EmailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -206,6 +209,11 @@ public class DefaultUserService implements UserService {
 	public List<UserEntity> getUsers() {
 		return userRepository.findAll();
 	}
+	
+	@Override
+	public List<UserEntity> getUsersByName(String name) {
+		return userRepository.findByName(name);
+	}
 
 	@Override
 	public UserEntity getUser(long id) {
@@ -268,5 +276,11 @@ public class DefaultUserService implements UserService {
 			LOGGER.info("DefaultUserService enableUser method - Enter =>id :"+id);
 			return true;
 		}
+	}
+
+	@Override
+	public Page<UserEntity> findPaginated(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.userRepository.findAll(pageable);
 	}
 }

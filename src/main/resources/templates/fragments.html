@@ -3,7 +3,7 @@
     <head th:fragment="html_head">
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Journeyfood - Order</title>
+        <title th:text="${title}"></title>
 	    <script type="text/javascript" src="@{/webjars/jquery/2.2.3/jquery.min.js}"></script>
 	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
 	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
@@ -26,7 +26,7 @@
 				      <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
 				    </li>
 				    <li class="nav-item">
-				    	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/addJourneyFoodOrder}">Add Order</a>
+				    	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/addJourneyFoodOrder}">New Order</a>
 				    </li>
 				    <li class="nav-item">
 				      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/fetchAllJourneyFoodOrdersByLoggedInUser}">All Orders</a>
@@ -120,6 +120,31 @@
 	            </tbody>
             </table>
 	   	</div>
+	   	<div  th:fragment="show_paginated">
+	   		<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			  	 <li th:if="${currentPage!=1}"  class="page-item">
+			      <a class="page-link" th:href="@{${url}+${currentPage-1}}" aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			        <span class="sr-only">Previous</span>
+			      </a>
+			    </li>
+			    <li th:classappend="${currentPage==i?'active':''}" th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item">
+				    <a class="page-link" th:if="${currentPage!=i}" th:href="@{${url}+${i}}">
+						<span th:if="${currentPage!=i}" th:text="${i}"></span>
+				    </a>
+				</li>
+			    <li class="page-item">
+			      <a class="page-link" th:if="${currentPage<totalPages}" th:href="@{${url}+${currentPage+1}}" aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			        <span th:unless="${currentPage<totalPages}" class="sr-only">Next</span>
+			      </a>
+			    </li>
+			  </ul>
+			</nav>
+	   	</div>
+	   	
+	   	
 	   	<div th:fragment="datePicker_menu">
 	   		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 			<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>

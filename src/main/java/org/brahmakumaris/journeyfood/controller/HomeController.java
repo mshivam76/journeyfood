@@ -13,6 +13,7 @@ import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,19 +62,49 @@ public class HomeController {
     }
    
 	@GetMapping("/fetchAllJourneyFoodOrdersByLoggedInUser")
-    public ModelAndView fetchAllJourneyFoodOrdersByLoggedInUser() {
-		LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Enter");
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
-	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Exit =>orders: "+orders);
-        return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
+    public String fetchAllJourneyFoodOrdersByLoggedInUser(Model model) {
+//		LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Enter");
+//	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
+//	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Exit =>orders: "+orders);
+//      return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
+		return paginateAllOrder(1, model);
+		
+    }
+	
+	@GetMapping("/fetchAllOrderByLoggedInUser/{pageNo}")
+    public String paginateAllOrder(@PathVariable(value="pageNo") Integer pageNo, Model model) {
+		int pageSize=8;
+		LOGGER.info("AdminController paginateAllOrder method - Enter");
+//	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrders();
+	 	Page<JourneyFoodOrder> page= journeyFoodServiceImpl.getPaginatedLoggedInUserOrders(pageNo, pageSize);
+	 	List<JourneyFoodOrder> orders = page.getContent();
+	 	model.addAttribute("title", "Show All Orders");
+//	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("currentPage", pageNo);
+	 	model.addAttribute("totalPages", page.getTotalPages());
+	 	model.addAttribute("orders", page.isEmpty()?null:page);
+	 	model.addAttribute("url","/fetchAllOrderByLoggedInUser/");
+//	 	model.addAttribute("totalItems", page.getTotalElements());
+	 	LOGGER.info("AdminController paginateAllOrder method - Exit =>orders: "+orders);
+        return "fetchJourneyFoodOrdersByLoggedInUser";
+    }
+	
+	@GetMapping("/fetchPlacedOrdersByLoggedInUser/{pageNo}")
+    public String paginatePlacedOrdersByLoggedInUser(@PathVariable(value="pageNo") Integer pageNo, Model model) {
+		int pageSize=8;
+		LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Enter");
+	 	Page<JourneyFoodOrder> orders=journeyFoodServiceImpl.getPaginatedPlacedOrdersByUser(pageNo, pageSize);
+	 	LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Exit =>orders: "+orders);
+        return "fetchPlacedOrdersByLoggedInUser";
     }
 	
 	@GetMapping("/fetchPlacedOrdersByLoggedInUser")
-    public ModelAndView fetchPlacedOrdersByLoggedInUser() {
-		LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Enter");
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getPlacedOrdersByUser();
-	 	LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Exit =>orders: "+orders);
-        return new ModelAndView("fetchPlacedOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
+    public String fetchPlacedOrdersByLoggedInUser(Model model) {
+//		LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Enter");
+//	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getPlacedOrdersByUser();
+//	 	LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Exit =>orders: "+orders);
+//        return new ModelAndView("fetchPlacedOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
+		return paginatePlacedOrdersByLoggedInUser(1, model);
     }
 	
 	@GetMapping("/delete/{id}")

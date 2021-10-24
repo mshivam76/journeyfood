@@ -2,6 +2,7 @@ package org.brahmakumaris.journeyfood.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,11 +55,23 @@ public class AdminController {
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrder")
-    public ModelAndView fetchAllJourneyFoodOrder() {
+    public String fetchAllJourneyFoodOrder(Model model) {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrders();
-	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fetchAllJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
+		return paginateAllOrder(1, model);
+    }
+	
+	@GetMapping("/fetchAllJourneyFoodOrder/{pageNo}")
+    public String paginateAllOrder(@PathVariable(value="pageNo") int pageNo, Model model) {
+		int pageSize=6;
+		LOGGER.info("AdminController paginateAllOrder method - Enter");
+	 	Page<JourneyFoodOrder> page= journeyFoodServiceImpl.findPaginated(pageNo, pageSize);
+	 	model.addAttribute("orders", page.isEmpty()?null:page);
+	 	model.addAttribute("title", "Show All Orders");
+	 	model.addAttribute("currentPage", pageNo);
+	 	model.addAttribute("totalPages", page.getTotalPages());
+	 	model.addAttribute("url","/admin/fetchAllJourneyFoodOrder/");
+	 	LOGGER.info("AdminController paginateAllOrder method - Exit =>orders-isEmpty()->: "+page.getContent().isEmpty());
+        return "fetchAllJourneyOrdersByAdmin";
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
@@ -215,10 +230,20 @@ public class AdminController {
         return "showAggregateQuantityOrdersByDate";
     }
 	
+	
+	
 	@GetMapping("/fetchAllUsers")
-    public ModelAndView fetchAllUsers() {
+    public ModelAndView fetchAll() {
 		LOGGER.info("AdminController fetchAllUsers method - Enter");
 	 	List<UserEntity> users=userService.getUsers();
+	 	LOGGER.info("AdminController fetchAllUsers method - Exit =>users: "+users);
+        return new ModelAndView("fetchAllUsers", "users", users.isEmpty()?null:users);
+    }
+	
+	@GetMapping("/fetchAllUsersByName")
+    public ModelAndView fetchAllUsers(@RequestParam Optional<String>name) {
+		LOGGER.info("AdminController fetchAllUsers method - Enter");
+	 	List<UserEntity> users=userService.getUsersByName(name.orElse("_"));
 	 	LOGGER.info("AdminController fetchAllUsers method - Exit =>users: "+users);
         return new ModelAndView("fetchAllUsers", "users", users.isEmpty()?null:users);
     }
@@ -284,6 +309,7 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    return "redirect:/admin/fetchAllJourneyFoodOrder";
 	}
+	
 	
 	@GetMapping("/user/block/{id}")
 	public String blockeUser(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) {

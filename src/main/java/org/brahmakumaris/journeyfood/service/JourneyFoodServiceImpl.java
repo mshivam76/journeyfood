@@ -21,6 +21,9 @@ import org.brahmakumaris.journeyfood.utils.EmailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,8 +97,15 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
     public List<JourneyFoodOrder> getPlacedOrdersByUser()  {
 		UserEntity user = getCurrentLoggedInUserData();
 		List<JourneyFoodOrder> orders = repository.findPlacedOrderByUserId(user.getUserId());
-		if(orders.isEmpty())throw new OrderNotFoundException("No Order is placed yet. Please add(place) orders to view orders");
-		else return orders;
+		return orders;
+    }
+	
+	@Override
+    public Page<JourneyFoodOrder> getPaginatedPlacedOrdersByUser(int pageNo, int pageSize)  {
+		UserEntity user = getCurrentLoggedInUserData();
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		Page<JourneyFoodOrder> orders = repository.findPlacedOrderByUserId(user.getUserId(), pageable);
+		return orders;
     }
 	
 	@Override
@@ -198,5 +208,53 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		List<JourneyFoodOrder> orders = repository.getOrdersByDateRange(fromDate, endDate);
 		if(orders.isEmpty())throw new OrderNotFoundException("No Orders yet for Daterange : "+fromDate.toString()+" to "+endDate.toString());
 		else return orders;
+	}
+
+	@Override
+	public Page<JourneyFoodOrder> findPaginated(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.findAll(pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getPaginatedLoggedInUserOrders(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.findAllOrderByUserIdPaging(getCurrentLoggedInUserData().getUserId(), pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getPaginatedOrdersByStatus(String orderStatus, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.findByOrderStatus(orderStatus, pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getPaginatedOrdersByStatus(long userId, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.findPlacedOrderByUserId(userId, pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getPaginatedLoggedInUserOrders(LocalDate date, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.getOrdersByDate(date, pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getPaginatedOrdersByStatus(LocalDate date, String orderStatus, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.getOrdersByDate(date, orderStatus, pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getOrdersByDateRangeAndOrderStatus(LocalDate fromDate, LocalDate endDate, String orderStatus, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.getOrdersByDateRangeAndOrderStatus(fromDate, endDate, orderStatus, pageable);
+	}
+	
+	@Override
+	public Page<JourneyFoodOrder> getOrdersByDateRange(LocalDate fromDate, LocalDate endDate, int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
+		return this.repository.getOrdersByDateRange(fromDate, endDate, pageable);
 	}
 }
