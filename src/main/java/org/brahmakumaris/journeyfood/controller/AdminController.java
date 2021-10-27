@@ -1,6 +1,7 @@
 package org.brahmakumaris.journeyfood.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,7 +64,7 @@ public class AdminController {
 	
 	@GetMapping("/fetchAllJourneyFoodOrder/{pageNo}")
     public String paginateAllOrder(@PathVariable(value="pageNo") int pageNo, Model model) {
-		int pageSize=6;
+		int pageSize=8;
 		LOGGER.info("AdminController paginateAllOrder method - Enter");
 	 	Page<JourneyFoodOrder> page= journeyFoodServiceImpl.findPaginated(pageNo, pageSize);
 	 	model.addAttribute("orders", page.isEmpty()?null:page);
@@ -75,11 +77,23 @@ public class AdminController {
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
-    public ModelAndView fetchAllJourneyFoodOrdersNotDisabled() {
+    public String fetchAllJourneyFoodOrdersNotDisabled(Model model) {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersNotDisabledData();
-	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fetchAllPlacedJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
+		return paginateAllPlacedOrder(1, model);
+    }
+	
+	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled/{pageNo}")
+    public String paginateAllPlacedOrder(@PathVariable(value="pageNo") int pageNo, Model model) {
+		LOGGER.info("AdminController paginateAllPlacedOrder method - Enter");
+		int pageSize=8;
+	 	Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getPaginatedPlacedOrdersByUser(pageNo, pageSize);
+	 	model.addAttribute("orders", page.isEmpty()?null:page);
+	 	model.addAttribute("title", "Show All Placed Orders");
+	 	model.addAttribute("currentPage", pageNo);
+	 	model.addAttribute("totalPages", page.getTotalPages());
+	 	model.addAttribute("url","/admin/fetchAllJourneyFoodOrdersNotDisabled/");
+	 	LOGGER.info("AdminController paginateAllPlacedOrder method - Exit =>orders-isEmpty()->: "+page.getContent().isEmpty());
+        return "fetchAllPlacedJourneyOrdersByAdmin";
     }
 	
 	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
@@ -89,7 +103,7 @@ public class AdminController {
 	
 	@PostMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
     public String fetchFromDate2EndDateWithOrderStatusOrders( 
-    		@Valid  @ModelAttribute("submitFetchOrdersFromDate2EndDateOrderStatus")SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateOrderStatus,
+    		@Valid  @ModelAttribute("submitFetchOrdersFromDate2EndDateStatus")SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateOrderStatus,
     		BindingResult result, Model model) {
 		if (result.hasErrors()) {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
@@ -105,6 +119,41 @@ public class AdminController {
 	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>orders: "+orders);
         return "showOrdersStartDate2EndDateWithStatus";
     }
+
+	
+//	@PostMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
+//    public String fetchFromDate2EndDateWithOrderStatusOrders( 
+//    		@Valid  @ModelAttribute("submitFetchOrdersFromDate2EndDateOrderStatus")SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateOrderStatus,
+//    		BindingResult result, Model model) {
+//		if (result.hasErrors()) {
+//	    	LOGGER.error("AdminController updateOrder method - Error occured");
+//            return "getOrderStartDate2EndDateWithOrderStatus";
+//	    }
+//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
+//	 	model.addAttribute("startDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate());
+//	 	model.addAttribute("endDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
+//	 	model.addAttribute("orderStatus", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus());
+//	 	return paginateFromDate2EndDateWithOrderStatusOrders(submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate(), submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate(), 
+//			 submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus(),1,null);
+//    }
+////	@PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+//	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders/{startDate}/{endDate}/{orderStatus}/{pageNo}")
+//    public String paginateFromDate2EndDateWithOrderStatusOrders(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
+//    			@PathVariable("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate, @PathVariable("orderStatus") String orderStatus, @PathVariable("pageNo") int pageNo, Model model) {
+//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
+//		int pageSize =8;
+//		Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(startDate,endDate,orderStatus,pageNo, pageSize);
+//	 	model.addAttribute("startDate", startDate);
+//	 	model.addAttribute("endDate", endDate);
+//	 	model.addAttribute("orderStatus", orderStatus);
+//	 	model.addAttribute("orders", page.isEmpty()?null:page);
+//	 	model.addAttribute("totalPages", page.getTotalPages());
+//	 	model.addAttribute("title", "Orders reporting");
+//	 	model.addAttribute("currentPage", pageNo);
+//	 	model.addAttribute("url","/admin/fetchFromDate2EndDateWithOrderStatusOrders");
+//	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>page null?: "+page.isEmpty());
+//        return "showOrdersStartDate2EndDateWithStatus";
+//    }
 	
 	@GetMapping("/fetchFromDate2EndDateOrders")
 	public String fetchFromDate2EndDateOrders(SubmitFetchOrdersFromDate2EndDate submitFetchOrdersFromDate2EndDate) {
@@ -230,8 +279,6 @@ public class AdminController {
         return "showAggregateQuantityOrdersByDate";
     }
 	
-	
-	
 	@GetMapping("/fetchAllUsers")
     public ModelAndView fetchAll() {
 		LOGGER.info("AdminController fetchAllUsers method - Enter");
@@ -309,7 +356,6 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    return "redirect:/admin/fetchAllJourneyFoodOrder";
 	}
-	
 	
 	@GetMapping("/user/block/{id}")
 	public String blockeUser(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) {

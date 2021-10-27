@@ -13,6 +13,9 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
            		<div th:if="${param.error}" class="alert alert-danger" role="alert" ><h3>Mandatory field validation Errors:</h3>
 				    <p th:text="${SPRING_SECURITY_LAST_EXCEPTION.message}" class="error"> Invalid email or password</p>
 				</div> 
+				<div th:if="${param.logout}" class="alert alert-success" role="alert" >
+				    <h5>You have been logged out successfully</h5>
+				</div>
 				<!-- <c:if test="${param.auth eq 'failure'}">
 				  <div class="error">
 				    <c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />

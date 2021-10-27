@@ -74,7 +74,7 @@ public class HomeController {
 	@GetMapping("/fetchAllOrderByLoggedInUser/{pageNo}")
     public String paginateAllOrder(@PathVariable(value="pageNo") Integer pageNo, Model model) {
 		int pageSize=8;
-		LOGGER.info("AdminController paginateAllOrder method - Enter");
+		LOGGER.info("HomeController paginateAllOrder method - Enter");
 //	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrders();
 	 	Page<JourneyFoodOrder> page= journeyFoodServiceImpl.getPaginatedLoggedInUserOrders(pageNo, pageSize);
 	 	List<JourneyFoodOrder> orders = page.getContent();
@@ -85,17 +85,8 @@ public class HomeController {
 	 	model.addAttribute("orders", page.isEmpty()?null:page);
 	 	model.addAttribute("url","/fetchAllOrderByLoggedInUser/");
 //	 	model.addAttribute("totalItems", page.getTotalElements());
-	 	LOGGER.info("AdminController paginateAllOrder method - Exit =>orders: "+orders);
+	 	LOGGER.info("HomeController paginateAllOrder method - Exit =>orders: "+orders);
         return "fetchJourneyFoodOrdersByLoggedInUser";
-    }
-	
-	@GetMapping("/fetchPlacedOrdersByLoggedInUser/{pageNo}")
-    public String paginatePlacedOrdersByLoggedInUser(@PathVariable(value="pageNo") Integer pageNo, Model model) {
-		int pageSize=8;
-		LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Enter");
-	 	Page<JourneyFoodOrder> orders=journeyFoodServiceImpl.getPaginatedPlacedOrdersByUser(pageNo, pageSize);
-	 	LOGGER.info("AdminController fetchPlacedOrdersByLoggedInUser method - Exit =>orders: "+orders);
-        return "fetchPlacedOrdersByLoggedInUser";
     }
 	
 	@GetMapping("/fetchPlacedOrdersByLoggedInUser")
@@ -106,6 +97,22 @@ public class HomeController {
 //        return new ModelAndView("fetchPlacedOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
 		return paginatePlacedOrdersByLoggedInUser(1, model);
     }
+	
+	@GetMapping("/fetchPlacedOrdersByLoggedInUser/{pageNo}")
+    public String paginatePlacedOrdersByLoggedInUser(@PathVariable(value="pageNo") Integer pageNo, Model model) {
+		int pageSize=8;
+		LOGGER.info("HomeController paginatePlacedOrdersByLoggedInUser method - Enter");
+	 	Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getPaginatedPlacedOrdersByUser(pageNo, pageSize);
+	 	model.addAttribute("title", "Show All Orders");
+	 	model.addAttribute("currentPage", pageNo);
+	 	model.addAttribute("totalPages", page.getTotalPages());
+	 	model.addAttribute("orders", page.isEmpty()?null:page);
+	 	model.addAttribute("url","/fetchPlacedOrdersByLoggedInUser/");
+	 	LOGGER.info("HomeController paginatePlacedOrdersByLoggedInUser method - Exit =>orders: "+page);
+        return "fetchPlacedOrdersByLoggedInUser";
+    }
+	
+
 	
 	@GetMapping("/delete/{id}")
 	public String deleteOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {
