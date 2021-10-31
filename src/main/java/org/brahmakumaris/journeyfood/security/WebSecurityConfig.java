@@ -10,10 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
-//https://www.pixeltrice.com/send-otpone-time-password-using-spring-boot-application-for-authentication/
-//This annotation indicates that class having one or more methods which tagged with @Bean annotation, which means the return type of the method is Object or Bean.
-//Login workflow -->https://www.javadevjournal.com/spring-security/spring-security-login/
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
+		authProvider.setHideUserNotFoundExceptions(false);
 		authProvider.setPasswordEncoder(passwordEncoder());
 		return authProvider;
 	}
@@ -54,10 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.formLogin()
 			.loginPage("/login")
 			.loginProcessingUrl("/login")
-			.usernameParameter("email")
-			.passwordParameter("password")
 			.defaultSuccessUrl("/addJourneyFoodOrder")
-            .failureUrl("/login-error")
+            .failureUrl("/login?error=true")
 		.and()
 		.logout().logoutSuccessUrl("/login").permitAll()
 		.and()
