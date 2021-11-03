@@ -50,13 +50,15 @@
 		                    <td th:text="${order.mealRetrievalDate}">Meal retrieval date</td>
 		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
 		                    <td>
-		                    	<a th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Delivered</a>&nbsp;&nbsp;&nbsp;
-		                    	<a th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Deliver</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;&nbsp;
 		                    </td>		                    		                    
 		                </tr>
 		            </tbody>
 		        </table>
+		        <div  th:replace="show_paginated"></div>
 		    </div>
 		</div>
+		<div th:replace="fragments :: menu_bug"></div>
 	</body>
 </html>

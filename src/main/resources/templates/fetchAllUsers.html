@@ -4,6 +4,7 @@
 	<body>
 		<div th:replace="fragments :: menu"/></div>
 		<div class="container text-center">
+			<div th:replace="fragments :: show_alert_message"></div>
 		    <div>
 		        <h1>List of Users</h1>
 		    </div>
@@ -43,14 +44,15 @@
 		                    <td th:text="${user.isDisabled}">User creation date</td>
 		                    <!-- <td th:text="${user.order}">Orders</td> -->
 		                    <td>
-		                    	<a th:href="@{/admin/user/edit/{userId}(userId=${user.userId})}">Edit  user</a>&nbsp;&nbsp;&nbsp;
-		                    	<a th:href="@{/admin/user/block/{userId}(userId=${user.userId})}">Block  user</a>
-		                    	<a th:href="@{/admin/user/unblock/{userId}(userId=${user.userId})}">Unblock user</a>
+		                    	<a th:href="@{/admin/user/edit/{userId}(userId=${user.userId})}">Edit</a>&nbsp;&nbsp;&nbsp;
+		                    	<a th:if="${user.isDisabled==false}" th:href="@{/admin/user/block/{userId}(userId=${user.userId})}">Block</a>
+		                    	<a th:if="${user.isDisabled==true}"th:href="@{/admin/user/unblock/{userId}(userId=${user.userId})}">Unblock</a>
 		                    </td>
 		                </tr>
 		            </tbody>
 		        </table>
 		    </div>
 		</div>
+		<div th:replace="fragments :: menu_bug"></div>
 	</body>
 </html>

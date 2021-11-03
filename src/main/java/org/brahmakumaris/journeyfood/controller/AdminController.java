@@ -1,7 +1,9 @@
 package org.brahmakumaris.journeyfood.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -21,6 +23,8 @@ import org.brahmakumaris.journeyfood.service.JourneyFoodService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,8 +35,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
@@ -51,19 +57,43 @@ public class AdminController {
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrder")
-    public ModelAndView fetchAllJourneyFoodOrder() {
+    public String fetchAllJourneyFoodOrder(Model model) {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrders();
-	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
+		return paginateAllOrder(1, model);
+    }
+	
+	@GetMapping("/fetchAllJourneyFoodOrder/{pageNo}")
+    public String paginateAllOrder(@PathVariable(value="pageNo") int pageNo, Model model) {
+		int pageSize=8;
+		LOGGER.info("AdminController paginateAllOrder method - Enter");
+	 	Page<JourneyFoodOrder> page= journeyFoodServiceImpl.findPaginated(pageNo, pageSize);
+	 	model.addAttribute("orders", page.isEmpty()?null:page);
+	 	model.addAttribute("title", "Show All Orders");
+	 	model.addAttribute("currentPage", pageNo);
+	 	model.addAttribute("totalPages", page.getTotalPages());
+	 	model.addAttribute("url","/admin/fetchAllJourneyFoodOrder/");
+	 	LOGGER.info("AdminController paginateAllOrder method - Exit =>orders-isEmpty()->: "+page.getContent().isEmpty());
+        return "fetchAllJourneyOrdersByAdmin";
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
-    public ModelAndView fetchAllJourneyFoodOrdersNotDisabled() {
+    public String fetchAllJourneyFoodOrdersNotDisabled(Model model) {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
-	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersNotDisabledData();
-	 	LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Exit =>orders: "+orders);
-        return new ModelAndView("fethAllJourneyOrdersByAdmin", "orders", orders.isEmpty()?null:orders);
+		return paginateAllPlacedOrder(1, model);
+    }
+	
+	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled/{pageNo}")
+    public String paginateAllPlacedOrder(@PathVariable(value="pageNo") int pageNo, Model model) {
+		LOGGER.info("AdminController paginateAllPlacedOrder method - Enter");
+		int pageSize=8;
+	 	Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getPaginatedPlacedOrdersByUser(pageNo, pageSize);
+	 	model.addAttribute("orders", page.isEmpty()?null:page);
+	 	model.addAttribute("title", "Show All Placed Orders");
+	 	model.addAttribute("currentPage", pageNo);
+	 	model.addAttribute("totalPages", page.getTotalPages());
+	 	model.addAttribute("url","/admin/fetchAllJourneyFoodOrdersNotDisabled/");
+	 	LOGGER.info("AdminController paginateAllPlacedOrder method - Exit =>orders-isEmpty()->: "+page.getContent().isEmpty());
+        return "fetchAllPlacedJourneyOrdersByAdmin";
     }
 	
 	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
@@ -89,6 +119,41 @@ public class AdminController {
 	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>orders: "+orders);
         return "showOrdersStartDate2EndDateWithStatus";
     }
+
+	
+//	@PostMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
+//    public String fetchFromDate2EndDateWithOrderStatusOrders( 
+//    		@Valid  @ModelAttribute("submitFetchOrdersFromDate2EndDateOrderStatus")SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateOrderStatus,
+//    		BindingResult result, Model model) {
+//		if (result.hasErrors()) {
+//	    	LOGGER.error("AdminController updateOrder method - Error occured");
+//            return "getOrderStartDate2EndDateWithOrderStatus";
+//	    }
+//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
+//	 	model.addAttribute("startDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate());
+//	 	model.addAttribute("endDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
+//	 	model.addAttribute("orderStatus", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus());
+//	 	return paginateFromDate2EndDateWithOrderStatusOrders(submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate(), submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate(), 
+//			 submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus(),1,null);
+//    }
+////	@PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+//	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders/{startDate}/{endDate}/{orderStatus}/{pageNo}")
+//    public String paginateFromDate2EndDateWithOrderStatusOrders(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
+//    			@PathVariable("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate, @PathVariable("orderStatus") String orderStatus, @PathVariable("pageNo") int pageNo, Model model) {
+//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
+//		int pageSize =8;
+//		Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(startDate,endDate,orderStatus,pageNo, pageSize);
+//	 	model.addAttribute("startDate", startDate);
+//	 	model.addAttribute("endDate", endDate);
+//	 	model.addAttribute("orderStatus", orderStatus);
+//	 	model.addAttribute("orders", page.isEmpty()?null:page);
+//	 	model.addAttribute("totalPages", page.getTotalPages());
+//	 	model.addAttribute("title", "Orders reporting");
+//	 	model.addAttribute("currentPage", pageNo);
+//	 	model.addAttribute("url","/admin/fetchFromDate2EndDateWithOrderStatusOrders");
+//	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>page null?: "+page.isEmpty());
+//        return "showOrdersStartDate2EndDateWithStatus";
+//    }
 	
 	@GetMapping("/fetchFromDate2EndDateOrders")
 	public String fetchFromDate2EndDateOrders(SubmitFetchOrdersFromDate2EndDate submitFetchOrdersFromDate2EndDate) {
@@ -126,7 +191,7 @@ public class AdminController {
 	    }
 		LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Enter");
 		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDate(submitFetchTotalQuantityModelByDate.getMealRetrievalDate(), "PLACED");
-	 	 model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
 	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
 	 	LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Exit =>orders: "+orders);
         return "showPlacedOrdersByDate";
@@ -215,19 +280,29 @@ public class AdminController {
     }
 	
 	@GetMapping("/fetchAllUsers")
-    public ModelAndView fetchAllUsers() {
+    public ModelAndView fetchAll() {
 		LOGGER.info("AdminController fetchAllUsers method - Enter");
 	 	List<UserEntity> users=userService.getUsers();
 	 	LOGGER.info("AdminController fetchAllUsers method - Exit =>users: "+users);
         return new ModelAndView("fetchAllUsers", "users", users.isEmpty()?null:users);
     }
 	
+	@GetMapping("/fetchAllUsersByName")
+    public ModelAndView fetchAllUsers(@RequestParam Optional<String>name) {
+		LOGGER.info("AdminController fetchAllUsers method - Enter");
+	 	List<UserEntity> users=userService.getUsersByName(name.orElse("_"));
+	 	LOGGER.info("AdminController fetchAllUsers method - Exit =>users: "+users);
+        return new ModelAndView("fetchAllUsers", "users", users.isEmpty()?null:users);
+    }
+	
 	@GetMapping("/order/delete/{id}")
-	public String deleteOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {
+	public String deleteOrder(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) throws UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController deleteOrder method - Enter =>id :"+id);
 		try {
 			journeyFoodServiceImpl.delete(id);
 		    LOGGER.info("AdminController deleteOrder method - Exit successful");
+		    redirectAttributes.addFlashAttribute("message", "Order : "+journeyFoodServiceImpl.findByOrderId(id)+" updated successfully");
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.error("AdminController deleteOrder method - Exit"+ e.getMessage());
@@ -236,12 +311,14 @@ public class AdminController {
 	}
 	
 	@GetMapping("/order/delivered/{id}")
-	public String deliveredOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {
+	public String deliveredOrder(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) throws UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController updateOrder method - Enter =>id :"+id);
 		JourneyFoodOrder order =null;
 	    try {
 	    	journeyFoodServiceImpl.orderCompleted(id);
 		    LOGGER.info("AdminController updateOrder method - Exit =>order(object/null): "+ order);
+		    redirectAttributes.addFlashAttribute("message", "Order : "+journeyFoodServiceImpl.findByOrderId(id)+" delivered successfully");
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.info("AdminController updateOrder method - Exit =>orders: "+order);
@@ -267,22 +344,27 @@ public class AdminController {
 	}
 	
 	@PostMapping("/order/update/{id}")
-	public String updateOrder( @Valid @ModelAttribute("order") CreateJourneyFoodOrderFormData order, BindingResult result, @PathVariable("id") long id) throws UnsupportedEncodingException, MessagingException {
+	public String updateOrder( @Valid @ModelAttribute("order") CreateJourneyFoodOrderFormData order, BindingResult result,
+			RedirectAttributes redirectAttributes, @PathVariable("id") long id) throws UnsupportedEncodingException, MessagingException {
 	    if (result.hasErrors()) {
 	    	LOGGER.error("AdminController updateOrder method - Error occured");
             return "admin-update-journeyFoodOrder";
 	    }
 	    journeyFoodServiceImpl.updateOrderAdmin(order);
 	    LOGGER.error("AdminController updateOrder method - Exit");
+	    redirectAttributes.addFlashAttribute("message", "Order : "+order.getOrderId()+" updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    return "redirect:/admin/fetchAllJourneyFoodOrder";
 	}
 	
 	@GetMapping("/user/block/{id}")
-	public String blockeUser(@PathVariable("id") long id, Model model) {
+	public String blockeUser(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) {
 		LOGGER.info("AdminController blockeUser method - Enter =>id :"+id);
 		try {
 			userService.disableUser(id);
 		    LOGGER.info("AdminController blockeUser method - Exit successful");
+		    redirectAttributes.addFlashAttribute("message", "User "+userService.getUser(id).getNameOfGuide()+" blocked successfully");
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.error("AdminController blockeUser method - Exit"+ e.getMessage());
@@ -291,11 +373,13 @@ public class AdminController {
 	}
 	
 	@GetMapping("/user/unblock/{id}")
-	public String unblockeUser(@PathVariable("id") long id, Model model) {
+	public String unblockeUser(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) {
 		LOGGER.info("AdminController unblockeUser method - Enter =>id :"+id);
 		try {
 			userService.enableUser(id);
 		    LOGGER.info("AdminController unblockeUser method - Exit successful");
+		    redirectAttributes.addFlashAttribute("message", "User "+userService.getUser(id).getNameOfGuide()+" unblocked successfully");
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    }
 		catch(IllegalArgumentException e) {
 			LOGGER.error("AdminController unblockeUser method - Exit"+ e.getMessage());
@@ -335,7 +419,8 @@ public class AdminController {
 	}
 	
 	@PostMapping("/user/update/{id}")
-	public String updateUser( @Valid @ModelAttribute("user") UserUpdateForm user, BindingResult result, @PathVariable("id") long id) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
+	public String updateUser( @Valid @ModelAttribute("user") UserUpdateForm user, BindingResult result, RedirectAttributes redirectAttributes,
+			@PathVariable("id") long id) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController updateUser method - Enter");
 	    if (result.hasErrors()) {
 	    	LOGGER.error("AdminController updateUser method - Error occured");
@@ -343,6 +428,8 @@ public class AdminController {
 	    }
 	    userService.updateUser(user);
 	    LOGGER.info("AdminController updateUser method - Exit");
+	    redirectAttributes.addFlashAttribute("message", "User "+userService.getUser(id).getNameOfGuide()+" profile data updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    return "redirect:/admin/fetchAllUsers";
 	}
 	

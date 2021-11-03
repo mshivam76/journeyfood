@@ -21,12 +21,12 @@ public class CreateJourneyFoodOrderFormData {
     
     @NotNull(message="Departure date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @Future(message = "Entered date must be after today's date")
+    @Future(message = "Departure date must be after today's date")
     private LocalDate dateOfDeparture;
     
 	@NotNull(message="Meal retrieval Date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Future(message = "Entered date must be after today's date")
+	@Future(message = "Meal retrieval date must be after today's date")
     private LocalDate mealRetrievalDate;
 	
 	@NotNull(message="Meal retrieval time is mandatory")

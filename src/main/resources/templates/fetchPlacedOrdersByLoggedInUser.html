@@ -5,11 +5,11 @@
 		<div th:replace="fragments :: menu"/></div>
 			<div class="container text-center">
 			    <div th:switch="${orders}">
-			    	<div th:replace="fragments::show_alert_message"></div>
+			    	<div th:replace="fragments :: show_alert_message"></div>
 			    	<h2 th:case="null">No orders yet!</h2>
 			    	<div th:case="*" class="table-responsive-sm">
 				    	<h2>Orders</h2>
-				        <table  class="table-striped table-bordered">
+				        <table  class="table table-striped table-bordered">
 					   		<thead class="thead-dark">
 				                <tr>
 				                    <th>Edit Order</th>
@@ -48,14 +48,12 @@
 				                    <td th:text="${order.orderStatus}"></td>
 				                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
 				                    <td>
-				                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;
-				                    	<a th:unless="${order.orderStatus!='PLACED'}" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Delivered</a>&nbsp;
+				                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>
 				                    </td>		                    		                    
 				                </tr>
 				            </tbody>
 			            </table>
-						<div th:replace="fragments :: show_paginated">
-						</div>
+			           <div th:replace="fragments :: show_paginated"></div> 
 				    </div>    
 			    </div>
 			</div>

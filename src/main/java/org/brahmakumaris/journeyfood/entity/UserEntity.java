@@ -19,8 +19,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -58,7 +56,7 @@ public class UserEntity {
 	
 	private Date dateCreated;
 	
-	private boolean isDisabled;//If user is disabled/removed from logging into application
+	private boolean isDisabled;//If user is disabled/Disabled Login into application
 	
 	@Column(nullable = false, length = 150)
     private String password;
