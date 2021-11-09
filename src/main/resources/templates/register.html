@@ -53,7 +53,7 @@
 					            <div class="form-group row">
 					                <label class="col-4 col-form-label">Pincode/Zipcode : </label>
 					                <div class="col-8">
-					                    <input type="number" th:field="*{pincode}" class="form-control" value="0" required />
+					                    <input type="number" th:field="*{pincode}" class="form-control" min="1000" max="999999"  required />
 										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('pincode')}" th:errors="*{pincode}"></div>
 					                </div>
 					            </div>	            
