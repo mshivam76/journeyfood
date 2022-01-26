@@ -1,12 +1,7 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
-
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,8 +16,7 @@ public class JourneyFoodOrderCreationParameters {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfDeparture;
     
-    @DateTimeFormat(pattern = "h:mm a")
-    private LocalTime mealRetrievalTime;
+    private String mealRetrievalTime;
 
     private UserEntity user; 
     
@@ -51,7 +45,7 @@ public class JourneyFoodOrderCreationParameters {
 	private LocalDate mealRetrievalDate;
 
     
-	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, LocalTime mealRetrievalTime,
+	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, String mealRetrievalTime,
 			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, String others) {
 		super();
 		this.headCount = headCount;
@@ -89,11 +83,11 @@ public class JourneyFoodOrderCreationParameters {
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public LocalTime getMealRetrievalTime() {
+	public String getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
+	public void setMealRetrievalTime(String mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 

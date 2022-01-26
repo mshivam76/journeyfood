@@ -1,7 +1,6 @@
 package org.brahmakumaris.journeyfood.entity;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -30,8 +29,7 @@ public class JourneyFoodOrder{
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate mealRetrievalDate;
     
-    @DateTimeFormat(pattern = "hh:mm:ss a")
-    private LocalTime mealRetrievalTime;
+    private String mealRetrievalTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private UserEntity user; 
@@ -57,7 +55,7 @@ public class JourneyFoodOrder{
 	}
  
 	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
-			LocalTime mealRetrievalTime, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
+			String mealRetrievalTime, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
 			String others) {
 		super();
 		this.orderId = orderId;
@@ -77,7 +75,7 @@ public class JourneyFoodOrder{
 	}
 	
 	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, 
-			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, String others, Integer thepla, Integer puri, Integer roti, Integer achar, 
+			String mealRetrievalTime, UserEntity user, String orderStatus, String others, Integer thepla, Integer puri, Integer roti, Integer achar, 
 			Integer jam, Integer bread) {
 		super();
 		this.orderId = orderId;
@@ -98,7 +96,7 @@ public class JourneyFoodOrder{
 	}
 
 	public JourneyFoodOrder( Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
-			LocalTime mealRetrievalTime, UserEntity user, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
+			String mealRetrievalTime, UserEntity user, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
 			String others) {
 		super();
 		this.headCount = headCount;
@@ -149,11 +147,11 @@ public class JourneyFoodOrder{
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public LocalTime getMealRetrievalTime() {
+	public String getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
+	public void setMealRetrievalTime(String mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 	

@@ -2,9 +2,9 @@ package org.brahmakumaris.journeyfood.order.web;
 
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
@@ -29,9 +29,8 @@ public class CreateJourneyFoodOrderFormData {
 	@Future(message = "Meal retrieval date must be after today's date")
     private LocalDate mealRetrievalDate;
 	
-	@NotNull(message="Meal retrieval time is mandatory")
-    @DateTimeFormat(pattern = "h:mm a")
-    private LocalTime mealRetrievalTime;
+	@NotEmpty(message="Food Pickup time is mandatory")
+    private String mealRetrievalTime;
 
     @NotNull(message="Thepla Count is mandatory")
     private int thepla;
@@ -99,11 +98,11 @@ public class CreateJourneyFoodOrderFormData {
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public LocalTime getMealRetrievalTime() {
+	public String getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
+	public void setMealRetrievalTime(String mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 

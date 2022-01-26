@@ -47,14 +47,19 @@
 		                </div>
 						
 			            <div class="form-group">
-			            	<label for="date">Meal retrieval Time:</label>
-			                <div class="input-group date" id="datetimepicker3" data-target-input="nearest">
-			                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker3" th:field="*{mealRetrievalTime}" id="time" placeholder="Choose meal retrieval time"/>
-			                    <div class="input-group-append" data-target="#datetimepicker3" data-toggle="datetimepicker">
-			                        <div class="input-group-text"><i class="far fa-clock"></i></div>
-			                    </div>
-			                </div>
-			                <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>
+			            	<label for="mealRetrievalTime">Choose Food pickup Slot:</label>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" value="08:00 AM to 10:00 AM">
+								<label class="form-check-label" for="mealRetrievalTime">08:00 AM to 10:00 AM</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" value="01:00 PM to 02:00 PM">
+								<label class="form-check-label" for="mealRetrievalTime">01:00 PM to 02:00 PM</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" value="08:00 PM to 09:00 PM">
+								<label class="form-check-label" for="mealRetrievalTime">08:00 PM to 09:00 PM</label>
+							</div>
 			            </div>
 						
 		                <div class="form-group">

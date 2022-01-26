@@ -29,7 +29,7 @@
 		                    <th>Order date</th>
 		                    <th>Date of departure</th>
 		                    <th>Meal retrieval Date</th>
-		                    <th>Meal retrieval time</th>
+		                    <th>Food Pickup Slot</th>
 		                    <th>Operations</th>
 		                </tr>
 		            </thead>
@@ -49,7 +49,7 @@
 		                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
 		                    <td th:text="${order.dateOfDeparture}">Departure date</td>
 		                    <td th:text="${order.mealRetrievalDate}">Meal retrieval date</td>
-		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
+		                    <td th:text="${order.mealRetrievalTime}">Food Pickup Slot</td>
 		                    <td>
 		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Delivered</a>&nbsp;&nbsp;&nbsp;
 		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;&nbsp;

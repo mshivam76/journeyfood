@@ -26,7 +26,7 @@
 				                    <th>Departure date(YYYY-MM-DD)</th>
 				                    <th>Meal retrieval Date(YYYY-MM-DD)</th>
 				                    <th>Order Status</th>
-				                    <th>Meal retrieval TIme</th>
+				                    <th>Food Pickup Slot</th>
 				                    <th>Cancel/Deliver Orders</th>
 				                </tr>
 				            </thead>
@@ -46,7 +46,7 @@
 				                    <td th:text="${order.dateOfDeparture}">Date at which Order placed</td>
 				                    <td th:text="${order.mealRetrievalDate}">Departure date</td>
 				                    <td th:text="${order.orderStatus}"></td>
-				                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
+				                    <td th:text="${order.mealRetrievalTime}">Food Pickup Slot</td>
 				                    <td>
 				                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;
 				                    	<a th:unless="${order.orderStatus!='PLACED'}" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Delivered</a>&nbsp;
