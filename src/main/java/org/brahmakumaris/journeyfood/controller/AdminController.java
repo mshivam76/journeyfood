@@ -121,39 +121,56 @@ public class AdminController {
     }
 
 	
-//	@PostMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
-//    public String fetchFromDate2EndDateWithOrderStatusOrders( 
-//    		@Valid  @ModelAttribute("submitFetchOrdersFromDate2EndDateOrderStatus")SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateOrderStatus,
-//    		BindingResult result, Model model) {
-//		if (result.hasErrors()) {
-//	    	LOGGER.error("AdminController updateOrder method - Error occured");
-//            return "getOrderStartDate2EndDateWithOrderStatus";
-//	    }
-//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
-//	 	model.addAttribute("startDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate());
-//	 	model.addAttribute("endDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
-//	 	model.addAttribute("orderStatus", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus());
-//	 	return paginateFromDate2EndDateWithOrderStatusOrders(submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate(), submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate(), 
-//			 submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus(),1,null);
-//    }
-////	@PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-//	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders/{startDate}/{endDate}/{orderStatus}/{pageNo}")
-//    public String paginateFromDate2EndDateWithOrderStatusOrders(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
-//    			@PathVariable("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate, @PathVariable("orderStatus") String orderStatus, @PathVariable("pageNo") int pageNo, Model model) {
-//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
-//		int pageSize =8;
-//		Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(startDate,endDate,orderStatus,pageNo, pageSize);
-//	 	model.addAttribute("startDate", startDate);
-//	 	model.addAttribute("endDate", endDate);
-//	 	model.addAttribute("orderStatus", orderStatus);
-//	 	model.addAttribute("orders", page.isEmpty()?null:page);
-//	 	model.addAttribute("totalPages", page.getTotalPages());
-//	 	model.addAttribute("title", "Orders reporting");
-//	 	model.addAttribute("currentPage", pageNo);
-//	 	model.addAttribute("url","/admin/fetchFromDate2EndDateWithOrderStatusOrders");
-//	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>page null?: "+page.isEmpty());
-//        return "showOrdersStartDate2EndDateWithStatus";
-//    }
+	/*
+	 * @PostMapping("/fetchFromDate2EndDateWithOrderStatusOrders") public String
+	 * fetchFromDate2EndDateWithOrderStatusOrders(
+	 * 
+	 * @Valid @ModelAttribute("submitFetchOrdersFromDate2EndDateOrderStatus")
+	 * SubmitFetchOrdersFromDate2EndDateOrderStatus
+	 * submitFetchOrdersFromDate2EndDateOrderStatus, BindingResult result, Model
+	 * model) { if (result.hasErrors()) {
+	 * LOGGER.error("AdminController updateOrder method - Error occured"); return
+	 * "getOrderStartDate2EndDateWithOrderStatus"; } LOGGER.
+	 * info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter"
+	 * ); model.addAttribute("startDate",
+	 * submitFetchOrdersFromDate2EndDateOrderStatus==null?null:
+	 * submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate());
+	 * model.addAttribute("endDate",
+	 * submitFetchOrdersFromDate2EndDateOrderStatus==null?null:
+	 * submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
+	 * model.addAttribute("orderStatus",
+	 * submitFetchOrdersFromDate2EndDateOrderStatus==null?null:
+	 * submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus()); return
+	 * paginateFromDate2EndDateWithOrderStatusOrders(
+	 * submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate(),
+	 * submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate(),
+	 * submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus(),1,null); }
+	 * // @PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	 * LocalDate date
+	 * 
+	 * @GetMapping(
+	 * "/fetchFromDate2EndDateWithOrderStatusOrders/{startDate}/{endDate}/{orderStatus}/{pageNo}")
+	 * public String paginateFromDate2EndDateWithOrderStatusOrders(@PathVariable(
+	 * "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate
+	 * startDate,
+	 * 
+	 * @PathVariable("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	 * LocalDate endDate, @PathVariable("orderStatus") String
+	 * orderStatus, @PathVariable("pageNo") int pageNo, Model model) { LOGGER.
+	 * info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter"
+	 * ); int pageSize =8; Page<JourneyFoodOrder>
+	 * page=journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(startDate,
+	 * endDate,orderStatus,pageNo, pageSize); model.addAttribute("startDate",
+	 * startDate); model.addAttribute("endDate", endDate);
+	 * model.addAttribute("orderStatus", orderStatus); model.addAttribute("orders",
+	 * page.isEmpty()?null:page); model.addAttribute("totalPages",
+	 * page.getTotalPages()); model.addAttribute("title", "Orders reporting");
+	 * model.addAttribute("currentPage", pageNo);
+	 * model.addAttribute("url","/admin/fetchFromDate2EndDateWithOrderStatusOrders")
+	 * ; LOGGER.
+	 * info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>page null?: "
+	 * +page.isEmpty()); return "showOrdersStartDate2EndDateWithStatus"; }
+	 */
 	
 	@GetMapping("/fetchFromDate2EndDateOrders")
 	public String fetchFromDate2EndDateOrders(SubmitFetchOrdersFromDate2EndDate submitFetchOrdersFromDate2EndDate) {
