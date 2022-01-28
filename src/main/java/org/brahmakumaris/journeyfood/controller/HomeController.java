@@ -62,11 +62,12 @@ public class HomeController {
     }
    
 	@GetMapping("/fetchAllJourneyFoodOrdersByLoggedInUser")
-    public String fetchAllJourneyFoodOrdersByLoggedInUser(Model model) {
-//		LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Enter");
-//	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
-//	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Exit =>orders: "+orders);
-//      return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
+//    public ModelAndView fetchAllJourneyFoodOrdersByLoggedInUser(Model model) {
+	public String fetchAllJourneyFoodOrdersByLoggedInUser(Model model) {
+		LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Enter");
+	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
+	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Exit =>orders: "+orders);
+//	 	return new ModelAndView("fetchJourneyFoodOrdersByLoggedInUser", "orders", orders.isEmpty()?null:orders);
 		return paginateAllOrder(1, model);
 		
     }

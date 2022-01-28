@@ -101,6 +101,12 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
     }
 	
 	@Override
+    public List<JourneyFoodOrder> getAllPlacedOrders()  {
+		List<JourneyFoodOrder> orders = repository.findByOrderStatus("PLACED");
+		return orders;
+    }
+	
+	@Override
     public Page<JourneyFoodOrder> getPaginatedPlacedOrdersByUser(int pageNo, int pageSize)  {
 		UserEntity user = getCurrentLoggedInUserData();
 		Pageable pageable = PageRequest.of(pageNo-1, pageSize);

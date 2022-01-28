@@ -1,7 +1,6 @@
 package org.brahmakumaris.journeyfood.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,8 +76,15 @@ public class AdminController {
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
     public String fetchAllJourneyFoodOrdersNotDisabled(Model model) {
-		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
-		return paginateAllPlacedOrder(1, model);
+		LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Enter");
+	 	List <JourneyFoodOrder> orders=journeyFoodServiceImpl.getAllPlacedOrders();
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("title", "Show All Placed Orders");
+	 	model.addAttribute("url","/admin/fetchAllJourneyFoodOrdersNotDisabled/");
+	 	System.out.println("User data in Journeyfood UserId :-> "+orders.get(0).getUser().getUserId());
+	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Exit =>orders-isEmpty()->: "+orders.isEmpty());
+		return "fetchAllPlacedJourneyOrdersByAdmin";
+//		return paginateAllPlacedOrder(1, model);
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled/{pageNo}")
@@ -334,7 +339,7 @@ public class AdminController {
 	    try {
 	    	journeyFoodServiceImpl.orderCompleted(id);
 		    LOGGER.info("AdminController updateOrder method - Exit =>order(object/null): "+ order);
-		    redirectAttributes.addFlashAttribute("message", "Order : "+journeyFoodServiceImpl.findByOrderId(id)+" delivered successfully");
+		    redirectAttributes.addFlashAttribute("message", "Order : "+journeyFoodServiceImpl.findByOrderId(id).getOrderId()+" delivered successfully");
 	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    }
 		catch(IllegalArgumentException e) {

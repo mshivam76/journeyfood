@@ -69,4 +69,6 @@ public interface JourneyFoodService {
 	Page<JourneyFoodOrder> getOrdersByDateRange(LocalDate fromDate, LocalDate endDate, int pageNo, int pageSize);
 
 	Page<JourneyFoodOrder> getPaginatedPlacedOrdersByUser(int pageNo, int pageSize);
+
+	List<JourneyFoodOrder> getAllPlacedOrders();
 }
