@@ -28,6 +28,10 @@ public interface JourneyFoodOrderRepository extends JpaRepository<JourneyFoodOrd
 	Page<JourneyFoodOrder> findByOrderStatus(String  orderStatus, Pageable pageable);
 	
 	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
+			+ "j.puri,j.roti,j.achar,j.jam,j.bread,j.others) from JourneyFoodOrder j WHERE  j.mealRetrievalDate = :mealRetrievalDate AND j.mealRetrievalTime=:mealRetrievalTime AND j.orderStatus='PLACED'")
+	List<JourneyFoodOrder> findByMealRetrievalDateAndMealRetrievalTimeAndOrderStatus(LocalDate mealRetrievalDate, String mealRetrievalTime);
+	
+	@Query("SELECT new JourneyFoodOrder(j.orderId, j.headCount,j.dateOfOrderPlaced,j.dateOfDeparture,j.mealRetrievalDate,j.mealRetrievalTime,j.orderStatus,j.thepla,"
 			+ "j.puri,j.roti,j.achar,j.jam,j.bread,j.others) from JourneyFoodOrder j WHERE j.user.userId=:userId AND j.orderStatus='PLACED'")
 	List<JourneyFoodOrder> findPlacedOrderByUserId(@Param("userId") long userId);
 	

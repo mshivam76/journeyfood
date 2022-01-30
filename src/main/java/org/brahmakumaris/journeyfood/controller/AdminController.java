@@ -14,6 +14,7 @@ import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDate;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDateOrderStatus;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchTotalQuantityModelByDate;
+import org.brahmakumaris.journeyfood.order.web.SubmitFetchTotalQuantityModelByDateForASlot;
 import org.brahmakumaris.journeyfood.order.web.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.UserService;
 import org.brahmakumaris.journeyfood.security.exceptions.OrderNotFoundException;
@@ -217,6 +218,26 @@ public class AdminController {
 	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
 	 	LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Exit =>orders: "+orders);
         return "showPlacedOrdersByDate";
+    }
+	
+	@GetMapping("/fetchAllPlacedOrdersForADateInASlot")
+	public String fetchAllPlacedOrdersForADateInASlot(SubmitFetchTotalQuantityModelByDateForASlot submitFetchTotalQuantityModelByDateForASlot) {
+		return "getAllPlacedOrderForADateAndSlot";
+	}
+	
+	@PostMapping("/fetchAllPlacedOrdersForADateInASlot")
+    public String fetchAllPlacedOrdersForADateInASlot( @Valid @ModelAttribute("submitFetchTotalQuantityModelByDateForASlot") SubmitFetchTotalQuantityModelByDateForASlot submitFetchTotalQuantityModelByDateForASlot
+    		, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateOrder method - Error occured");
+            return "getAllPlacedOrderForADateAndSlot";
+	    }
+		LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Enter");
+		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDateAndSlot(submitFetchTotalQuantityModelByDateForASlot.getMealRetrievalDate(), submitFetchTotalQuantityModelByDateForASlot.getMealRetrievalTime(), "PLACED");
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("date", submitFetchTotalQuantityModelByDateForASlot==null?null:submitFetchTotalQuantityModelByDateForASlot.getMealRetrievalDate());
+	 	LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Exit =>orders: "+orders);
+        return "showPlacedOrdersByDateForASlot";
     }
 	
 	@GetMapping("/fetchAllCanceledOrdersForADate")

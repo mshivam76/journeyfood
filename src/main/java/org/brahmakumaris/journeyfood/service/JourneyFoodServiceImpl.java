@@ -217,6 +217,13 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 	}
 
 	@Override
+	public List<JourneyFoodOrder> getOrdersByDateAndSlot(LocalDate mealRetrievalDate, String mealRetrievalTime, String orderStatus) {
+		List<JourneyFoodOrder> orders = repository.findByMealRetrievalDateAndMealRetrievalTimeAndOrderStatus(mealRetrievalDate, mealRetrievalTime);
+		if(orders.isEmpty())throw new OrderNotFoundException("No Orders yet for Date : "+mealRetrievalDate.toString()+" and Pickup slot of - "+mealRetrievalTime+" Order Status is - "+orderStatus);
+		else return orders;
+	}
+	
+	@Override
 	public Page<JourneyFoodOrder> findPaginated(int pageNo, int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
 		return this.repository.findAll(pageable);
@@ -263,4 +270,5 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
 		return this.repository.getOrdersByDateRange(fromDate, endDate, pageable);
 	}
+
 }

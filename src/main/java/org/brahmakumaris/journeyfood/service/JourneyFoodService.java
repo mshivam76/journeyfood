@@ -71,4 +71,6 @@ public interface JourneyFoodService {
 	Page<JourneyFoodOrder> getPaginatedPlacedOrdersByUser(int pageNo, int pageSize);
 
 	List<JourneyFoodOrder> getAllPlacedOrders();
+
+	List<JourneyFoodOrder> getOrdersByDateAndSlot(LocalDate mealRetrievalDate, String mealRetrievalTime, String orderStatus);
 }
