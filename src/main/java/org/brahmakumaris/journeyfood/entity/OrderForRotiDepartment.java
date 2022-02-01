@@ -3,18 +3,21 @@ package org.brahmakumaris.journeyfood.entity;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class OrderForRotiDepartment {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long rotiDeptId;
 	private LocalDate orderForDate;
 	private int thepla;
 	private int puri;
 	private int roti;
 	private int sandwich;
-	private String schedule;
+	private String slot;
 	
 	public Long getRotiDeptId() {
 		return rotiDeptId;
@@ -52,10 +55,16 @@ public class OrderForRotiDepartment {
 	public void setSandwich(int sandwich) {
 		this.sandwich = sandwich;
 	}
-	public String getSchedule() {
-		return schedule;
+	public String getSlot() {
+		return slot;
 	}
-	public void setSchedule(String schedule) {
-		this.schedule = schedule;
+	public void setSlot(String slot) {
+		this.slot = slot;
 	}
+	@Override
+	public String toString() {
+		return "OrderForRotiDepartment [rotiDeptId=" + rotiDeptId + ", orderForDate=" + orderForDate + ", thepla="
+				+ thepla + ", puri=" + puri + ", roti=" + roti + ", sandwich=" + sandwich + ", slot=" + slot + "]";
+	}
+	
 }

@@ -2,10 +2,15 @@ package org.brahmakumaris.journeyfood.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity
 public class OrderForKitchenDepartment {
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long kitchenDeptId;
 	private LocalDate orderForDate;
 	private int chips;
@@ -14,7 +19,7 @@ public class OrderForKitchenDepartment {
 	private int curdRice;
 	private int soojiDhokla;
 	private int idli;
-	private String schedule;
+	private String slot;
 	
 	public Long getKitchenDeptId() {
 		return kitchenDeptId;
@@ -64,10 +69,16 @@ public class OrderForKitchenDepartment {
 	public void setIdli(int idli) {
 		this.idli = idli;
 	}
-	public String getSchedule() {
-		return schedule;
+	public String getSlot() {
+		return slot;
 	}
-	public void setSchedule(String schedule) {
-		this.schedule = schedule;
+	public void setSlot(String slot) {
+		this.slot = slot;
+	}
+	@Override
+	public String toString() {
+		return "OrderForKitchenDepartment [kitchenDeptId=" + kitchenDeptId + ", orderForDate=" + orderForDate
+				+ ", chips=" + chips + ", chutney=" + chutney + ", tomatoRice=" + tomatoRice + ", curdRice=" + curdRice
+				+ ", soojiDhokla=" + soojiDhokla + ", idli=" + idli + ", slot=" + slot + "]";
 	}
 }

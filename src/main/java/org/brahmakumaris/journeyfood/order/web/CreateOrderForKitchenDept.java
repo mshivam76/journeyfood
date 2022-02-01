@@ -2,16 +2,21 @@ package org.brahmakumaris.journeyfood.order.web;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
+@Entity
 public class CreateOrderForKitchenDept {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long kitchenDeptId;
 	@NotNull(message="Order date is mandatory")
-    @Future(message = "Order date must be after today's date")
+    @Future(message="Order date must be after today's date")
 	private LocalDate orderForDate;
 	private int chips;
 	private int chutney;
@@ -20,7 +25,7 @@ public class CreateOrderForKitchenDept {
 	private int soojiDhokla;
 	private int idli;
 	@NotEmpty(message="Order schedule is mandatory")
-	private String schedule;
+	private String slot;
 	
 	public Long getKitchenDeptId() {
 		return kitchenDeptId;
@@ -70,11 +75,11 @@ public class CreateOrderForKitchenDept {
 	public void setIdli(int idli) {
 		this.idli = idli;
 	}
-	public String getSchedule() {
-		return schedule;
+	public String getSlot() {
+		return slot;
 	}
-	public void setSchedule(String schedule) {
-		this.schedule = schedule;
+	public void setSlot(String slot) {
+		this.slot = slot;
 	}
 
 }
