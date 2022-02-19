@@ -8,7 +8,8 @@
 	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
 	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
         <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
-         <link th:rel="stylesheet" href="/assets/css/style.css">
+        <link th:rel="stylesheet" href="/assets/css/style.css">
+        <link th:rel="stylesheet" href="/assets/css/index_css.css">
         <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
     </head>
     <body>
@@ -38,9 +39,10 @@
 				    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 					   <div class="btn-group" >
 						  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						    Admin operations
+						    Admin Operations
 						  </button>
 						  <div class="dropdown-menu">
+						  	<a class="dropdown-item" th:href="@{/admin/addSpecialItems}">Add Special Items</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllOrdersForADate}">Orders for a Date</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllPlacedOrdersForADate}">Placed Orders for a Date</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllCanceledOrdersForADate}">Cancelled Orders for a Date</a>

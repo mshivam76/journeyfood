@@ -9,7 +9,7 @@
 					<div class="card-body login-card-body">
 						<div class="card-header text-center"><h3>Register to place order</h3></div>
 	        
-				        <form th:action="@{/register}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
+				        <form  th:action="@{/register}" th:object="${user}" method="post" style="max-width: 600px; margin: 0 auto;">
 					        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
 						        <ul>
 							        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />

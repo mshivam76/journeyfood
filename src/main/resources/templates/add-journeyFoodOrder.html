@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:replace="fragments :: html_head">
-    <body>
+    <body style="background-image:url('images/Baba3.png'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
     	<div th:replace="fragments :: menu"/></div>
 	   	<div class="container">
 		    <div class="row">
@@ -35,7 +35,7 @@
 		                <div class="form-group">
 		                    <label for="date">Meal retrieval Date:</label>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="Calender icon"/>
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="click on Calender icon"/>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
 		                        </div>

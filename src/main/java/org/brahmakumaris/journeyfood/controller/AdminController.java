@@ -1,6 +1,7 @@
 package org.brahmakumaris.journeyfood.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -474,6 +475,26 @@ public class AdminController {
 	    redirectAttributes.addFlashAttribute("message", "User "+userService.getUser(id).getNameOfGuide()+" profile data updated successfully");
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    return "redirect:/admin/fetchAllUsers";
+	}
+	
+	@GetMapping("/addSpecialItems")
+	public String addSpecialItems(Model map) {
+		List<String> specialItems = new ArrayList<>();
+		specialItems.add("Potato Chips");
+		specialItems.add("Tomato Chutney");
+		specialItems.add("Lemon Rice");
+		specialItems.add("Curd Rice");
+		specialItems.add("Suji Dhokla");
+		specialItems.add("Idli");
+		specialItems.add("Sandwich");
+		map.addAttribute("specialItems", specialItems);
+		return "addSpecialItems";
+	}
+	
+	@PostMapping("/addSpecialItems")
+	public String addSpecialItems(@ModelAttribute("specialItems") List<String> specialItems) {
+		
+		return "addSpecialItems";
 	}
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
