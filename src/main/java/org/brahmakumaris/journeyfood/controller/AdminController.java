@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.brahmakumaris.journeyfood.entity.AggregateJourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
+import org.brahmakumaris.journeyfood.order.web.AddSpecialItems;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDate;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDateOrderStatus;
@@ -478,7 +479,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/addSpecialItems")
-	public String addSpecialItems(Model map) {
+	public String addSpecialItems(@Valid @ModelAttribute("addSpecialItems")AddSpecialItems addSpecialItems, BindingResult result, 
+    		RedirectAttributes redirectAttributes,  Model map) {
 		List<String> specialItems = new ArrayList<>();
 		specialItems.add("Potato Chips");
 		specialItems.add("Tomato Chutney");
@@ -487,13 +489,24 @@ public class AdminController {
 		specialItems.add("Suji Dhokla");
 		specialItems.add("Idli");
 		specialItems.add("Sandwich");
+//		addSpecialItems.setSpecialItems(specialItems);
 		map.addAttribute("specialItems", specialItems);
+		map.addAttribute("addSpecialItems", addSpecialItems);
 		return "addSpecialItems";
 	}
 	
 	@PostMapping("/addSpecialItems")
-	public String addSpecialItems(@ModelAttribute("specialItems") List<String> specialItems) {
-		
+	public String addSpecialItems(@ModelAttribute("addSpecialItems") AddSpecialItems addSpecialItems, BindingResult result, RedirectAttributes redirectAttributes) {
+		 if (result.hasErrors()) {
+			 	System.out.println("==================================================================");
+			 	System.out.println(addSpecialItems.getSpecialItems());
+		    	LOGGER.error("AdminController updateUser method - Error occured");
+	            return "addSpecialItems";
+		    }
+		 	System.out.println(addSpecialItems.getSpecialItems());
+		    LOGGER.info("AdminController updateUser method - Exit");
+		    
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 		return "addSpecialItems";
 	}
 	

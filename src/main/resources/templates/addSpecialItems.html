@@ -6,39 +6,41 @@
 	   	<div class="container">
 		    <div class="row">
 		        <div class="col-md-12"> 
-		            <form th:action="@{/addSpecialItems}" th:object="${specialItems}" method="post">
+		            <form th:action="@{/admin/addSpecialItems}" th:object="${addSpecialItems}" method="post">
 			            <h2 class="mb-5">Special Items to be displayed in Journeyfood</h2>
-			            <div class="form-group">
+			            <divclass="form-group">
 			            	<label>Choose Special Food:</label>
-							<div class="form-group" th:each="item : ${specialItems}">
-								<input type="checkbox" th:field="*{specialItems}" th:value="${item}"/>
-							    <label th:for="${#ids.prev('item')}" th:text="${item}"></label>
+							<div class="form-group" th:each="item: ${specialItems}">
+								<div class="form-check form-check-inline">
+									 <label th:for="${#ids.next('specialItems')}" th:text="${item}"></label>
+									 <input type="checkbox" th:field="*{specialItems}" th:value="${item}"/>
+								</div>
 							</div>
 			            </div>
 			            <div class="form-group">
-		                    <label for="date">Meal retrieval Date:</label>
+		                    <label for="date">Serving Date:</label>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="click on Calender icon"/>
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{addSpecialItems.servingDate}" id="date" placeholder="click on Calender icon"/>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
 		                        </div>
 		                    </div>
-		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalDate')}" th:errors="*{mealRetrievalDate}"></div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('addSpecialItems.servingDate')}" th:errors="*{addSpecialItems.servingDate}"></div>
 		                </div>
 						
 			            <div class="form-group">
-			            	<label for="mealRetrievalTime">Choose Food pickup Slot:</label>
+			            	<label for="mealRetrievalTime">Serving Slot:</label>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" selected type="radio" th:field="*{mealRetrievalTime}" value="08:00 AM to 10:00 AM">
-								<label th:for="${#ids.prev('mealRetrievalTime')}" class="form-check-label" for="mealRetrievalTime">08:00 AM to 10:00 AM</label>
+								<input class="form-check-input" selected type="radio" th:field="*{addSpecialItems.servingSlot}" value="08:00 AM to 10:00 AM">
+								<label th:for="${#ids.prev('servingSlot')}" class="form-check-label">08:00 AM to 10:00 AM</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" value="01:00 PM to 02:00 PM">
-								<label th:for="${#ids.prev('mealRetrievalTime')}" class="form-check-label" for="mealRetrievalTime">01:00 PM to 02:00 PM</label>
+								<input class="form-check-input" type="radio" th:field="*{addSpecialItems.servingSlot}" value="01:00 PM to 02:00 PM">
+								<label th:for="${#ids.prev('servingSlot')}" class="form-check-label">01:00 PM to 02:00 PM</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" value="08:00 PM to 09:00 PM">
-								<label th:for="${#ids.prev('mealRetrievalTime')}" class="form-check-label" for="mealRetrievalTime">08:00 PM to 09:00 PM</label>
+								<input class="form-check-input" type="radio" th:field="*{addSpecialItems.servingSlot}" value="08:00 PM to 09:00 PM">
+								<label th:for="${#ids.prev('servingSlot')}" class="form-check-label">08:00 PM to 09:00 PM</label>
 							</div>
 			            </div>
 		                <div class="form-group">
@@ -56,5 +58,6 @@
 		    </div>
 
 		</div>
+		<div th:replace="fragments :: datePicker_menu"></div>
     </body>
 </html>
