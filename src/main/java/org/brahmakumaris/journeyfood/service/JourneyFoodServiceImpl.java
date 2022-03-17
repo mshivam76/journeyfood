@@ -65,7 +65,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
     	if(user!=null) {
     		journeyFoodOrder= new JourneyFoodOrder(parameters.getHeadCount(), parameters.getDateOfOrderPlaced(), parameters.getDateOfDeparture(), parameters.getMealRetrievalDate(),
     				parameters.getMealRetrievalTime(),	getCurrentLoggedInUserData(), "PLACED", parameters.getThepla(), parameters.getPuri(), 
-    				parameters.getRoti(), parameters.getAchar(), parameters.getJam(), parameters.getBread(), parameters.getOthers());
+    				parameters.getRoti(), parameters.getAchar(), parameters.getJam(), parameters.getBread(), parameters.getItems());
     		emailUtils.orderPlacedMail(journeyFoodOrder.getUser());
     		return repository.save(journeyFoodOrder);
     	}
@@ -154,7 +154,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		journeyFoodOrder.setMealRetrievalDate(order.getMealRetrievalDate());journeyFoodOrder.setMealRetrievalTime(order.getMealRetrievalTime());
 		journeyFoodOrder.setThepla(order.getThepla());journeyFoodOrder.setPuri(order.getPuri());journeyFoodOrder.setRoti(order.getRoti()); 
 		journeyFoodOrder.setAchar(order.getAchar()); journeyFoodOrder.setJam(order.getJam());journeyFoodOrder.setBread(order.getBread());
-		journeyFoodOrder.setOthers(order.getOthers());
+		journeyFoodOrder.setItems(order.getItems());
 		if(order.getOrderStatus()!=null) {
 			journeyFoodOrder.setOrderStatus(order.getOrderStatus());
 			emailUtils.orderUpdatedMail(journeyFoodOrder.getUser(), order.getOrderId());
@@ -170,7 +170,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 				journeyFoodOrder.setHeadCount(order.getHeadCount());
 				journeyFoodOrder.setThepla(order.getThepla());journeyFoodOrder.setPuri(order.getPuri());journeyFoodOrder.setRoti(order.getRoti()); 
 				journeyFoodOrder.setAchar(order.getAchar()); journeyFoodOrder.setJam(order.getJam());journeyFoodOrder.setBread(order.getBread());
-				journeyFoodOrder.setOthers(order.getOthers());
+				journeyFoodOrder.setItems(order.getItems());
 				if(order.getOrderStatus()!=null) journeyFoodOrder.setOrderStatus(order.getOrderStatus());
 		 LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(object/null): "+ repository.save(journeyFoodOrder));
 	}

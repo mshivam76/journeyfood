@@ -46,7 +46,7 @@ public class JourneyFoodOrder{
     
     private Integer bread;
     
-    private String others;
+    private String items;
     
     private String orderStatus;
 
@@ -56,7 +56,7 @@ public class JourneyFoodOrder{
  
 	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
 			String mealRetrievalTime, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
-			String others) {
+			String items) {
 		super();
 		this.orderId = orderId;
 		this.headCount = headCount;
@@ -70,12 +70,12 @@ public class JourneyFoodOrder{
 		this.achar = achar;
 		this.jam = jam;
 		this.bread = bread;
-		this.others = others;
+		this.items = items;
 		this.orderStatus = orderStatus;
 	}
 	
 	public JourneyFoodOrder(Long orderId, Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, 
-			String mealRetrievalTime, UserEntity user, String orderStatus, String others, Integer thepla, Integer puri, Integer roti, Integer achar, 
+			String mealRetrievalTime, UserEntity user, String orderStatus, String items, Integer thepla, Integer puri, Integer roti, Integer achar, 
 			Integer jam, Integer bread) {
 		super();
 		this.orderId = orderId;
@@ -91,13 +91,13 @@ public class JourneyFoodOrder{
 		this.achar = achar;
 		this.jam = jam;
 		this.bread = bread;
-		this.others = others;
+		this.items = items;
 		this.orderStatus = orderStatus;
 	}
 
 	public JourneyFoodOrder( Integer headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate,
 			String mealRetrievalTime, UserEntity user, String orderStatus, Integer thepla, Integer puri, Integer roti, Integer achar, Integer jam, Integer bread,
-			String others) {
+			String items) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
@@ -112,7 +112,7 @@ public class JourneyFoodOrder{
 		this.achar = achar;
 		this.jam = jam;
 		this.bread = bread;
-		this.others = others;
+		this.items = items;
 	}
 
 	public Long getOrderId() {
@@ -219,15 +219,14 @@ public class JourneyFoodOrder{
 		this.bread = bread;
 	}
 
-	public String getOthers() {
-		return others;
+	public String getItems() {
+		return items;
 	}
 
-	public void setOthers(String others) {
-		this.others = others;
+	public void setItems(String items) {
+		this.items = items;
 	}
-	
-	
+
 	public String getOrderStatus() {
 		return orderStatus;
 	}

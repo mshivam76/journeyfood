@@ -22,15 +22,9 @@ public class JourneyFoodOrderCreationParameters {
     
     private int thepla;
     
-    public Date getDateOfOrderPlaced() {
-		return dateOfOrderPlaced;
-	}
-
-	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
-		this.dateOfOrderPlaced = dateOfOrderPlaced;
-	}
-
-	private int puri;
+    private String items;
+    
+    private int puri;
     
     private int roti;
 
@@ -40,13 +34,18 @@ public class JourneyFoodOrderCreationParameters {
     
     private int bread;
     
-    private String others;
-
 	private LocalDate mealRetrievalDate;
-
     
+    public Date getDateOfOrderPlaced() {
+		return dateOfOrderPlaced;
+	}
+
+	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+	}
+
 	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, String mealRetrievalTime,
-			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, String others) {
+			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, String items) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
@@ -60,7 +59,7 @@ public class JourneyFoodOrderCreationParameters {
 		this.achar = achar;
 		this.jam = jam;
 		this.bread = bread;
-		this.others = others;
+		this.items = items;
 	}
 
 	public JourneyFoodOrderCreationParameters() {
@@ -147,12 +146,12 @@ public class JourneyFoodOrderCreationParameters {
 		this.bread = bread;
 	}
 
-	public String getOthers() {
-		return others;
+	public String getItems() {
+		return items;
 	}
 
-	public void setOthers(String others) {
-		this.others = others;
+	public void setItems(String items) {
+		this.items = items;
 	}
 
 	public LocalDate getMealRetrievalDate() {

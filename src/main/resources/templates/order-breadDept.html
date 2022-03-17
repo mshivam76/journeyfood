@@ -6,7 +6,7 @@
 	   	<div class="container">
 		    <div class="row">
 		        <div class="col-md-12"> 
-		            <form th:action="@{/admin/addOrderForKitchenDepartment}" th:object="${createOrderForKitchenDepartment}"method="post">
+		            <form th:action="@{/admin/addOrderForBreadDepartment}" th:object="${createOrderForBreadDepartment}"method="post">
 		            	<div>
 		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 							    <ul>
@@ -14,7 +14,7 @@
 							    </ul>
 							</div>
 		            	</div>
-			            <h2 class="mb-5">Order for Kitchen Department</h2>
+			            <h2 class="mb-5">Order for Bread Department</h2>
 		                <div class="form-group">
 						    <label for="orderForDate">Order for Date</label>
 						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
@@ -25,42 +25,6 @@
 		                    </div>
 		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('orderForDate')}" th:errors="*{orderForDate}"></div>
 		                </div>
-		                
-						<div class="form-group">
-			                <label for="chips">Chips count</label>
-						    <input type="number" th:field="*{chips}" class="form-control" placeholder="Chips count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('chips')}" th:errors="*{chips}"></div>
-		                </div> 
-
-		                <div class="form-group">
-			                <label for="chutney">Chutney count</label>
-						    <input type="number" th:field="*{chutney}" class="form-control" placeholder="Chutney count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('chutney')}" th:errors="*{chutney}"></div>
-		                </div>
-		                
-		                <div class="form-group">
-			                <label for="tomatoRice">Tomato Rice count</label>
-						    <input type="number" th:field="*{tomatoRice}" class="form-control" placeholder="Tomato Rice count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('tomatoRice')}" th:errors="*{tomatoRice}"></div>
-		                </div> 
-
-		                <div class="form-group">
-			                <label for="curdRice">Curd Rice count</label>
-						    <input type="number" th:field="*{curdRice}" class="form-control" placeholder="Curd Rice count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('curdRice')}" th:errors="*{curdRice}"></div>
-		                </div>
-		                
-		                <div class="form-group">
-			                <label for="soojiDhokla">Dhokla(Sooji) count</label>
-						    <input type="number" th:field="*{soojiDhokla}" class="form-control" placeholder="Dhokla count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('soojiDhokla')}" th:errors="*{soojiDhokla}"></div>
-		                </div> 
-
-		                <div class="form-group">
-			                <label for="idli">Idli count</label>
-						    <input type="number" th:field="*{idli}" class="form-control" placeholder="Idli count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('idli')}" th:errors="*{idli}"></div>
-		                </div> 
 		
 			            <div class="form-group">
 			            	<label for="slot">Choose Food pickup Slot:</label>
@@ -79,6 +43,19 @@
 							<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('slot')}" th:errors="*{slot}"></div>
 			            </div>
 						        
+						
+						<div class="form-group">
+			                <label for="bread">Bread count</label>
+						    <input type="number" th:field="*{bread}" class="form-control" placeholder="Bread count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
+		                </div> 
+
+		                <div class="form-group">
+			                <label for="slicedBread">Sliced Bread count</label>
+						    <input type="number" th:field="*{slicedBread}" class="form-control" placeholder="Sliced Bread count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('slicedBread')}" th:errors="*{slicedBread}"></div>
+		                </div> 
+
 		                <div class="form-group">
 							<div class="form-row align-items-center">
 								<div class="col-auto my-1">

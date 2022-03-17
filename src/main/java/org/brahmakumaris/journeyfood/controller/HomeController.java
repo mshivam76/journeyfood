@@ -8,8 +8,10 @@ import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
+import org.brahmakumaris.journeyfood.order.web.PreOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UpdateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
+import org.brahmakumaris.journeyfood.service.SpecialItemForADateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /*
  * https://www.baeldung.com/spring-boot-crud-thymeleaf -->reference link
@@ -33,21 +34,40 @@ public class HomeController {
 	@Autowired
 	private JourneyFoodService journeyFoodServiceImpl;
 	
+	@Autowired
+	private SpecialItemForADateService specialItemForADateService;
+	
     @GetMapping("/error")
     public String error() {
         return "error";
     }
 	
-    @GetMapping("/addJourneyFoodOrder")
-    public String addJourneyFoodOrder(CreateJourneyFoodOrderFormData formData) {
-        return "add-journeyFoodOrder";
+    @GetMapping("/preAddJourneyFoodOrder")
+    public String preAddOrder(PreOrderFormData formData) {
+        return "pre-add-journeyFoodOrder";
+    }
+    
+    @GetMapping("/preAddOrder")
+    public String preAddJourneyFoodOrder(@Valid @ModelAttribute("preAddJourneyFoodOrder")PreOrderFormData preAddJourneyFoodOrder, BindingResult result, 
+    		Model model) {
+    	LOGGER.info("HomeController preAddJourneyFoodOrder method - Entered");
+    	if (result.hasErrors()) {
+			LOGGER.error("HomeController preAddJourneyFoodOrder method - Error occured");
+            return "pre-add-journeyFoodOrder";
+        }
+    	CreateJourneyFoodOrderFormData formData = new CreateJourneyFoodOrderFormData();
+    	formData.setDateOfDeparture(preAddJourneyFoodOrder.getDateOfDeparture());
+    	formData.setMealRetrievalDate(preAddJourneyFoodOrder.getMealRetrievalDate());
+    	formData.setMealRetrievalTime(preAddJourneyFoodOrder.getMealRetrievalTime());
+    	formData.setItems(specialItemForADateService.getItemsByServingDate(formData.getMealRetrievalDate()).getSpecialItems());
+    	model.addAttribute("createJourneyFoodOrderFormData", formData);
+    	LOGGER.info("HomeController preAddJourneyFoodOrder method - Entered");
+    	return "add-journeyFoodOrder";
     }
     
 	@PostMapping("/addJourneyFoodOrder")
     public String addJourneyFoodOrder(@Valid @ModelAttribute("createJourneyFoodOrderFormData")CreateJourneyFoodOrderFormData formData, BindingResult result, 
     		RedirectAttributes redirectAttributes,  Model model) throws UnsupportedEncodingException, MessagingException {
-//		redirectAttributes.addFlashAttribute("message", "Failed");
-//	    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 		LOGGER.info("HomeController addJourneyFoodOrder method - Entered");
 		if (result.hasErrors()) {
 			LOGGER.error("HomeController addJourneyFoodOrder method - Error occured");

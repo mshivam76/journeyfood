@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="fragments :: html_head"/>
+	<body style="background-image:url('images/Baba3.png'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+	<div th:replace="fragments :: menu"/></div>
+	    	<div class="container">
+			    <div class="row">
+			        <form th:action="@{/admin/specialItem/edit/{id}(id=${item.id})}" th:object="${item}" method="post" style="max-width: 600px; margin: 0 auto;">
+				        <div class="alert alert-danger" th:text="${message}" th:unless="${message==null}" role="alert"></div>
+					        <div class="m-3">
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Item Id: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{id}" readonly class="form-control" required />
+					                </div>
+					            </div>
+					            <div class="form-group row">
+					            	<div class="alert alert-warning" role="alert">
+					            		<caption><b>Note: Please separate each item using comma(,) e.g., Idli, Dosa, Dhokla,...,</b></caption>
+					            	</div>
+					                <label class="col-4 col-form-label">Item names: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{specialItems}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('specialItems')}" th:errors="*{specialItems}"></div>
+					                </div>
+					            </div>
+								 <div class="form-group">
+								    <label for="dateOfDeparture">Serving Date</label>
+								    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+				                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{servingDate}" id="date" placeholder="Choose Serving date"/>
+				                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+				                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+				                        </div>
+				                    </div>
+				                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('servingDate')}" th:errors="*{servingDate}"></div>
+				                </div>
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Serving Slot: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{servingSlot}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('servingSlot')}" th:errors="*{servingSlot}"></div>
+					                </div>
+					            </div>
+					            <div>
+					                <button type="submit" class="btn btn-primary">Update Special Item</button>
+					            </div>
+					        </div>
+				        </form>
+		    </div>
+   		 </div>
+   		 <div th:replace="fragments :: datePicker_menu"></div>
+	</body>
+</html>

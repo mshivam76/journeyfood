@@ -6,7 +6,7 @@
 	   	<div class="container">
 		    <div class="row">
 		        <div class="col-md-12"> 
-		            <form th:action="@{/addJourneyFoodOrder}" th:object="${createJourneyFoodOrderFormData}"method="post">
+		            <form th:action="@{/preAddOrder}" th:object="${preOrderFormData}"method="get">
 		            	<div>
 		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 							    <ul>
@@ -15,12 +15,7 @@
 							</div>
 		            	</div>
 			            <h2 class="mb-5">New Order</h2>
-		                <div class="form-group">
-			                <label for="headCount">Head count</label>
-						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
-		                </div> 
-
+		                
 		                <div class="form-group">
 						    <label for="dateOfDeparture">Date of departure</label>
 						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
@@ -33,7 +28,10 @@
 		                </div>
 		
 		                <div class="form-group">
-		                    <label for="date">Meal retrieval Date:</label>
+		                    <label for="date">Food Pickup Date:</label>
+		                    <div class="alert alert-warning" role="alert">
+		                    	<span>Food Pickup Date is not editable, please be sure of date of journey before placing order</span>
+		                    </div>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="click on Calender icon"/>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -60,48 +58,6 @@
 							<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>
 			            </div>
 						        
-						
-						<div class="form-group">
-			                <label for="thepla">Thepla count</label>
-						    <input type="number" th:field="*{thepla}" class="form-control" placeholder="Thepla count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('thepla')}" th:errors="*{thepla}"></div>
-		                </div> 
-
-		                <div class="form-group">
-			                <label for="puri">Puri count</label>
-						    <input type="number" th:field="*{puri}" class="form-control" placeholder="Puri count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('puri')}" th:errors="*{headCount}"></div>
-		                </div> 
-
-		                <div class="form-group">
-			                <label for="roti">Roti quantity</label>
-						    <input type="number" th:field="*{roti}" class="form-control" placeholder="Roti count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('roti')}" th:errors="*{roti}"></div>
-		                </div> 
-		                
-		                <div class="form-group">
-			                <label for="achar">Achar(Pickle) quantity</label>
-						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Koki count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></div>
-		                </div> 
-		                
-		                <div class="form-group">
-			                <label for="bread">Bread quantity</label>
-						    <input type="number" th:field="*{bread}" class="form-control" placeholder="bread count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
-		                </div> 
-		                
-		                <div class="form-group">
-			                <label for="jam">Jam quantity</label>
-						    <input type="number" th:field="*{jam}" class="form-control" placeholder="jam count">
-						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></div>
-		                </div>
-		                
-		                <div class="form-group">
-			                <label for="specialItems">Edit Special Item for Journey</label>
-						    <input type="text" th:field="*{items}" class="form-control" placeholder="refresh to reload special item for Date">
-		                </div>  
-		                
 		                <div class="form-group">
 							<div class="form-row align-items-center">
 								<div class="col-auto my-1">

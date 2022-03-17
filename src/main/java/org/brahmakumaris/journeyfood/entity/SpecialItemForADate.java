@@ -1,36 +1,33 @@
-package org.brahmakumaris.journeyfood.order.web;
+package org.brahmakumaris.journeyfood.entity;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class AddSpecialItems {
-	
+@Entity
+public class SpecialItemForADate{
+	@Id
+	@Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@NotEmpty(message="Special Item is mandatory")
 	private String specialItems;
 
-	@NotNull(message="Item prepration date is mandatory")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Future(message = "Item prepration date must be after today's date")
+    private Date dateOfOrder;
+    
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate servingDate;
-	
-	@NotEmpty(message="Item serving slot is mandatory")
-    private String servingSlot;
 
-	private Date dateOfOrder;
-	
-	public AddSpecialItems() {
-		super();
-		this.dateOfOrder = new Date();
-	}
-	
+	private String servingSlot;
+
 	public Long getId() {
 		return id;
 	}
@@ -63,17 +60,12 @@ public class AddSpecialItems {
 		this.servingSlot = servingSlot;
 	}
 	
-	public Date getDateOfOrder() {
+
+    public Date getDateOfOrder() {
 		return dateOfOrder;
 	}
 
 	public void setDateOfOrder(Date dateOfOrder) {
-		this.dateOfOrder = new Date();
-	}
-
-	@Override
-	public String toString() {
-		return "AddSpecialItems [specialItems=" + specialItems + ", servingDate=" + servingDate + ", servingSlot="
-				+ servingSlot + ", dateOfOrder=" + dateOfOrder + "]";
+		this.dateOfOrder = dateOfOrder;
 	}
 }

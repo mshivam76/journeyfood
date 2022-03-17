@@ -50,15 +50,15 @@ public class CreateJourneyFoodOrderFormData {
 	@NotNull(message="Bread count is mandatory")
     private int bread;
     
-//	@NotBlank(message="Other items is mandatory")
-    private String others;
+	
+	private String items;
     
     private String orderStatus;
     
 	public JourneyFoodOrderCreationParameters toParams() {
 		return new JourneyFoodOrderCreationParameters(
 				headCount, dateOfOrderPlaced, dateOfDeparture, mealRetrievalDate, mealRetrievalTime, 
-				null, thepla, puri, roti, achar, jam, bread, others);
+				null, thepla, puri, roti, achar, jam, bread, items);
     }
     
 	public CreateJourneyFoodOrderFormData() {
@@ -154,14 +154,6 @@ public class CreateJourneyFoodOrderFormData {
 		this.bread = bread;
 	}
 
-	public String getOthers() {
-		return others;
-	}
-
-	public void setOthers(String others) {
-		this.others = others;
-	}
-
 	public String getOrderStatus() {
 		return orderStatus;
 	}
@@ -176,5 +168,13 @@ public class CreateJourneyFoodOrderFormData {
 
 	public void setMealRetrievalDate(LocalDate mealRetrievalDate) {
 		this.mealRetrievalDate = mealRetrievalDate;
+	}
+
+	public String getItems() {
+		return items;
+	}
+
+	public void setItems(String items) {
+		this.items = items;
 	}
 }

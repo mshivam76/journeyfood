@@ -1,24 +1,32 @@
-package org.brahmakumaris.journeyfood.entity;
+package org.brahmakumaris.journeyfood.order.web;
 
 import java.time.LocalDate;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-@Entity
-public class OrderForBreadDepartment {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+import org.springframework.format.annotation.DateTimeFormat;
+
+public class CreateOrderForBreadDepartment {
 	private Long breadOrderId;
+	@NotNull(message="Order date is mandatory")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Future(message = "Order date must be after today's date")
 	private LocalDate orderForDate;
-	private Date orderDate; 
+	private Date orderDate;
+	@NotNull(message="Bread Count is mandatory")
 	private int bread;
+	@NotNull(message="Sliced Bread Count is mandatory")
 	private int slicedBread;
+	@NotEmpty(message="Food delivery slot is mandatory")
 	private String slot;
 	
+	public CreateOrderForBreadDepartment() {
+		super();
+		this.orderDate = new Date();
+	}
 	public Long getBreadOrderId() {
 		return breadOrderId;
 	}
@@ -55,10 +63,9 @@ public class OrderForBreadDepartment {
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
 	}
-	
 	@Override
 	public String toString() {
-		return "OrderForBreadDepartment [breadOrderId=" + breadOrderId + ", orderForDate=" + orderForDate
+		return "CreateOrderForBreadDepartment [breadOrderId=" + breadOrderId + ", orderForDate=" + orderForDate
 				+ ", orderDate=" + orderDate + ", bread=" + bread + ", slicedBread=" + slicedBread + ", slot=" + slot
 				+ "]";
 	}

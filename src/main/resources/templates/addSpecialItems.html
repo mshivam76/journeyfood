@@ -8,40 +8,49 @@
 		        <div class="col-md-12"> 
 		            <form th:action="@{/admin/addSpecialItems}" th:object="${addSpecialItems}" method="post">
 			            <h2 class="mb-5">Special Items to be displayed in Journeyfood</h2>
-			            <divclass="form-group">
-			            	<label>Choose Special Food:</label>
-							<div class="form-group" th:each="item: ${specialItems}">
-								<div class="form-check form-check-inline">
-									 <label th:for="${#ids.next('specialItems')}" th:text="${item}"></label>
-									 <input type="checkbox" th:field="*{specialItems}" th:value="${item}"/>
-								</div>
+			            <div>
+			            	<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
+							    <ul>
+							        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+							    </ul>
 							</div>
 			            </div>
 			            <div class="form-group">
 		                    <label for="date">Serving Date:</label>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{addSpecialItems.servingDate}" id="date" placeholder="click on Calender icon"/>
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{servingDate}" id="date" placeholder="click on Calender icon"/>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
 		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
 		                        </div>
 		                    </div>
-		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('addSpecialItems.servingDate')}" th:errors="*{addSpecialItems.servingDate}"></div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('servingDate')}" th:errors="*{servingDate}"></div>
 		                </div>
 						
 			            <div class="form-group">
 			            	<label for="mealRetrievalTime">Serving Slot:</label>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" selected type="radio" th:field="*{addSpecialItems.servingSlot}" value="08:00 AM to 10:00 AM">
+								<input class="form-check-input" selected type="radio" th:field="*{servingSlot}" value="08:00 AM to 10:00 AM">
 								<label th:for="${#ids.prev('servingSlot')}" class="form-check-label">08:00 AM to 10:00 AM</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" th:field="*{addSpecialItems.servingSlot}" value="01:00 PM to 02:00 PM">
+								<input class="form-check-input" type="radio" th:field="*{servingSlot}" value="01:00 PM to 02:00 PM">
 								<label th:for="${#ids.prev('servingSlot')}" class="form-check-label">01:00 PM to 02:00 PM</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" th:field="*{addSpecialItems.servingSlot}" value="08:00 PM to 09:00 PM">
+								<input class="form-check-input" type="radio" th:field="*{servingSlot}" value="08:00 PM to 09:00 PM">
 								<label th:for="${#ids.prev('servingSlot')}" class="form-check-label">08:00 PM to 09:00 PM</label>
 							</div>
+							<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('servingSlot')}" th:errors="*{servingSlot}"></div>
+			            </div>
+			            <div class="form-group">
+			            	<div class="alert alert-warning" role="alert">
+			            		<caption><b>Note: Please separate each Special item using comma(,) e.g., Idli, Dosa, Dhokla,...,</b></caption>
+			            	</div>
+			                <label for="specialItems">Special items</label>
+			                <textarea class="form-control" id="description" rows="5"
+                              name="Other items" placeholder="Enter Special items separated by comma" th:field="*{specialItems}">
+                            </textarea>
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('specialItems')}" th:errors="*{specialItems}"></div>
 			            </div>
 		                <div class="form-group">
 							<div class="form-row align-items-center">

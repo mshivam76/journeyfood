@@ -1,6 +1,7 @@
 package org.brahmakumaris.journeyfood.entity;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ public class OrderForKitchenDepartment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long kitchenDeptId;
 	private LocalDate orderForDate;
+	private Date orderDate;
 	private int chips;
 	private int chutney;
 	private int tomatoRice;
@@ -20,7 +22,6 @@ public class OrderForKitchenDepartment {
 	private int soojiDhokla;
 	private int idli;
 	private String slot;
-	
 	public Long getKitchenDeptId() {
 		return kitchenDeptId;
 	}
@@ -32,6 +33,12 @@ public class OrderForKitchenDepartment {
 	}
 	public void setOrderForDate(LocalDate orderForDate) {
 		this.orderForDate = orderForDate;
+	}
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
 	}
 	public int getChips() {
 		return chips;
@@ -75,10 +82,12 @@ public class OrderForKitchenDepartment {
 	public void setSlot(String slot) {
 		this.slot = slot;
 	}
+	
 	@Override
 	public String toString() {
 		return "OrderForKitchenDepartment [kitchenDeptId=" + kitchenDeptId + ", orderForDate=" + orderForDate
-				+ ", chips=" + chips + ", chutney=" + chutney + ", tomatoRice=" + tomatoRice + ", curdRice=" + curdRice
-				+ ", soojiDhokla=" + soojiDhokla + ", idli=" + idli + ", slot=" + slot + "]";
+				+ ", orderDate=" + orderDate + ", chips=" + chips + ", chutney=" + chutney + ", tomatoRice="
+				+ tomatoRice + ", curdRice=" + curdRice + ", soojiDhokla=" + soojiDhokla + ", idli=" + idli + ", slot="
+				+ slot + "]";
 	}
 }

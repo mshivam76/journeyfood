@@ -4,33 +4,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
-public class SpecialItem{
+public class SpecialItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Integer itemId;
 	
+	@NotEmpty(message = "Item is mandatory")
 	private String item;
-
-	public Long getId() {
-		return id;
+	
+	public int getItemId() {
+		return itemId;
+	}
+	
+	public SpecialItem() {
+		super();
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getItem() {
-		return item;
-	}
-
-	public void setItem(String item) {
+	public SpecialItem(String item) {
+		super();
 		this.item = item;
 	}
 
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
+	public String getItem() {
+		return item;
+	}
+	public void setItem(String item) {
+		this.item = item;
+	}
 	@Override
 	public String toString() {
-		return "SpecialItem [id=" + id + ", item=" + item + "]";
+		return "SpecialItem [itemId=" + itemId + ", item=" + item + "]";
 	}
 }

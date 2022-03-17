@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="fragments :: html_head">
+    <body>
+    	<div th:replace="fragments :: menu"></div>
+	   	<div class="container">
+		    <div class="row">
+		        <div class="col-md-12"> 
+		            <form th:action="@{/admin/addSpecialItem}" th:object="${specialItem}" method="post">
+			            <h2 class="mb-5">Special Items to be displayed in Journeyfood</h2>
+			            <div>
+			            	<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
+							    <ul>
+							        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+							    </ul>
+							</div>
+			            </div>
+						
+			            <div class="form-group">
+			                <label for="item">Special items</label>
+			                 <input type="text" th:field="*{item}" class="form-control" placeholder="Enter Special Item">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('item')}" th:errors="*{item}"></div>
+			            </div>
+		                <div class="form-group">
+							<div class="form-row align-items-center">
+								<div class="col-auto my-1">
+									<button class="btn btn-primary" type="submit">Add Item</button>
+								</div>
+			                </div>
+		                </div>
+		            </form>
+		        </div>
+		    </div>
+			<script>
+				function addInputLine() {
+					var node = document.createElement("input");                 // Create an <input> node                         
+					document.getElementById("parentElement").appendChild(node);     // Append it to the parent
+				}
+			</script>
+		</div>
+		<div th:replace="fragments :: datePicker_menu"></div>
+    </body>
+</html>

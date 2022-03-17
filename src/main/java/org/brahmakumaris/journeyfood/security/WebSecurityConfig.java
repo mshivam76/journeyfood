@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http)throws Exception{
 		http.authorizeRequests()
 		.antMatchers("/admin/**").hasRole("ADMIN")
-		.antMatchers("/addJourneyFoodOrder").authenticated()
+		.antMatchers("/preAddJourneyFoodOrder").authenticated()
 		.antMatchers("/fetchAllJourneyFoodOrdersByLoggedInUser").authenticated()
 		.antMatchers("/edit/**").authenticated()
 		.antMatchers("/delete/**").authenticated()
@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.formLogin()
 			.loginPage("/login")
 			.loginProcessingUrl("/login")
-			.defaultSuccessUrl("/addJourneyFoodOrder")
+			.defaultSuccessUrl("/preAddJourneyFoodOrder")
             .failureUrl("/login?error=true")
 		.and()
 		.logout().logoutSuccessUrl("/login").permitAll()
