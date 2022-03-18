@@ -15,7 +15,7 @@ public class SpecialItem {
 	@NotEmpty(message = "Item is mandatory")
 	private String item;
 	
-	public int getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
 	
