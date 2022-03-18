@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.brahmakumaris.journeyfood.entity.AggregateJourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.OrderForBreadDepartment;
+import org.brahmakumaris.journeyfood.entity.OrderForKitchenDepartment;
 import org.brahmakumaris.journeyfood.entity.OrderForRotiDepartment;
 import org.brahmakumaris.journeyfood.entity.SpecialItem;
 import org.brahmakumaris.journeyfood.entity.SpecialItemForADate;
@@ -637,7 +638,14 @@ public class AdminController {
 		OrderForBreadDepartment order = null;
 	    try {
 	    	order = orderBreadDeptService.getOrder(id);
-	    	model.addAttribute("order", order);
+	    	CreateOrderForBreadDepartment createOrderForBreadDepartment = new CreateOrderForBreadDepartment();
+	    	createOrderForBreadDepartment.setBreadOrderId(order.getBreadOrderId());
+	    	createOrderForBreadDepartment.setBread(order.getBread());
+	    	createOrderForBreadDepartment.setOrderDate(order.getOrderDate());
+	    	createOrderForBreadDepartment.setOrderForDate(order.getOrderForDate());
+	    	createOrderForBreadDepartment.setSlicedBread(order.getSlicedBread());
+	    	createOrderForBreadDepartment.setSlot(order.getSlot());
+	    	model.addAttribute("order", createOrderForBreadDepartment);
 		    LOGGER.info("AdminController editOrderForBreadDepartment method - Exit =>order(object/null): "+ order);
 	    }
 		catch(IllegalArgumentException e) {
@@ -647,9 +655,9 @@ public class AdminController {
 	    return "edit-order-breadDept";
 	}
 	
-	@PostMapping("/editOrderForBreadDepartment/{breadOrderId}")
-	public String editOrderForBreadDepartment( @Valid @ModelAttribute("order") CreateOrderForBreadDepartment order, BindingResult result, RedirectAttributes redirectAttributes,
-			@PathVariable("breadOrderId") long breadOrderId) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
+	@PostMapping("/editOrderForBreadDepartment")
+	public String editOrderForBreadDepartment( @Valid @ModelAttribute("order") CreateOrderForBreadDepartment order, BindingResult result
+			, RedirectAttributes redirectAttributes) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController editOrderForBreadDepartment method - Enter");
 	    if (result.hasErrors()) {
 	    	LOGGER.error("AdminController editOrderForBreadDepartment method - Error occured");
@@ -693,7 +701,18 @@ public class AdminController {
 	@GetMapping("/editOrderForKitchenDepartment/{kitchenDeptId}")
 	public String editOrderForKitchenDepartment(@PathVariable("kitchenDeptId")Long kitchenDeptId, Model model) {
 		LOGGER.info("======Admin editOrderForKitchenDepartment GET method - Start=====");
-		model.addAttribute("order", orderKitchenDeptService.getOrder(kitchenDeptId));
+		OrderForKitchenDepartment order = orderKitchenDeptService.getOrder(kitchenDeptId);
+		CreateOrderForKitchenDepartment createOrderForKitchenDepartment = new CreateOrderForKitchenDepartment();
+		createOrderForKitchenDepartment.setChips(order.getChips());
+		createOrderForKitchenDepartment.setChutney(order.getChutney());
+		createOrderForKitchenDepartment.setCurdRice(order.getCurdRice());
+		createOrderForKitchenDepartment.setIdli(order.getIdli());
+		createOrderForKitchenDepartment.setKitchenOrderId(order.getKitchenDeptId());
+		createOrderForKitchenDepartment.setOrderForDate(order.getOrderForDate());
+		createOrderForKitchenDepartment.setSlot(order.getSlot());
+		createOrderForKitchenDepartment.setSoojiDhokla(order.getSoojiDhokla());
+		createOrderForKitchenDepartment.setTomatoRice(order.getTomatoRice());
+		model.addAttribute("order", createOrderForKitchenDepartment);
 		LOGGER.info("======Admin editOrderForKitchenDepartment GET method - End=====");
 		return "edit-order-kitchenDept";
 	}

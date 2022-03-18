@@ -28,13 +28,13 @@ public class OrderBreadDeptServiceImpl implements OrderBreadDeptService {
 	}
 	
 	@Override
-	public OrderForBreadDepartment updateOrder(CreateOrderForBreadDepartment createOrderForKitchenDepartment) {
-		OrderForBreadDepartment order = repository.getOne(createOrderForKitchenDepartment.getBreadOrderId());
-		order.setBread(createOrderForKitchenDepartment.getBread());
-		order.setSlicedBread(createOrderForKitchenDepartment.getSlicedBread());
-		order.setOrderDate(createOrderForKitchenDepartment.getOrderDate());
-		order.setOrderForDate(createOrderForKitchenDepartment.getOrderForDate());
-		order.setSlot(createOrderForKitchenDepartment.getSlot());
+	public OrderForBreadDepartment updateOrder(CreateOrderForBreadDepartment createOrderForBreadDepartment) {
+		OrderForBreadDepartment order = repository.getOne(createOrderForBreadDepartment.getBreadOrderId());
+		order.setBread(createOrderForBreadDepartment.getBread());
+		order.setSlicedBread(createOrderForBreadDepartment.getSlicedBread());
+		order.setOrderDate(createOrderForBreadDepartment.getOrderDate());
+		order.setOrderForDate(createOrderForBreadDepartment.getOrderForDate());
+		order.setSlot(createOrderForBreadDepartment.getSlot());
 		return repository.save(order);
 	}
 
