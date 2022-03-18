@@ -655,7 +655,7 @@ public class AdminController {
 	    return "edit-order-breadDept";
 	}
 	
-	@PostMapping("/editOrderForBreadDepartment")
+	@PostMapping("/editOrderForBreadDepartment/{breadOrderId}")
 	public String editOrderForBreadDepartment( @Valid @ModelAttribute("order") CreateOrderForBreadDepartment order, BindingResult result
 			, RedirectAttributes redirectAttributes) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
 		LOGGER.info("AdminController editOrderForBreadDepartment method - Enter");
