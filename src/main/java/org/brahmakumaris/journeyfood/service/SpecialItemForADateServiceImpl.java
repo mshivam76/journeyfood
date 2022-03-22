@@ -6,23 +6,27 @@ import java.util.List;
 import org.brahmakumaris.journeyfood.entity.SpecialItemForADate;
 import org.brahmakumaris.journeyfood.order.web.AddSpecialItems;
 import org.brahmakumaris.journeyfood.repository.SpecialItemForADateRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SpecialItemForADateServiceImpl implements SpecialItemForADateService {
-	
+	private Logger LOGGER = LoggerFactory.getLogger(SpecialItemForADateServiceImpl.class);
 	private SpecialItemForADate specialItemForADate;
 	@Autowired
 	private SpecialItemForADateRepository specialItemForADateRepository;
 
 	@Override
 	public SpecialItemForADate addItem(AddSpecialItems item) {
+		LOGGER.info("SpecialItemForADateServiceImpl addItem method - Entered");
 		this.specialItemForADate = new SpecialItemForADate();
 		this.specialItemForADate.setServingSlot(item.getServingSlot());
 		this.specialItemForADate.setSpecialItems(item.getSpecialItems());
 		this.specialItemForADate.setServingDate(item.getServingDate());
 		this.specialItemForADate.setDateOfOrder(item.getDateOfOrder());
+		LOGGER.info("SpecialItemForADateServiceImpl addItem method - Exit");
 		return specialItemForADateRepository.save(specialItemForADate);
 	}
 
@@ -33,10 +37,10 @@ public class SpecialItemForADateServiceImpl implements SpecialItemForADateServic
 
 	@Override
 	public SpecialItemForADate getItemsByServingDate(LocalDate date) {
-		SpecialItemForADate specialItemForADate = null;
 		try {
 			specialItemForADate = specialItemForADateRepository.findByServingDate(date);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		return specialItemForADate;
@@ -65,12 +69,13 @@ public class SpecialItemForADateServiceImpl implements SpecialItemForADateServic
 
 	@Override
 	public void update(AddSpecialItems item) {
+		LOGGER.info("SpecialItemForADateServiceImpl update method - Exit");
 		this.specialItemForADate = getItem(item.getId());
 		this.specialItemForADate.setServingSlot(item.getServingSlot());
 		this.specialItemForADate.setSpecialItems(item.getSpecialItems());
 		this.specialItemForADate.setServingDate(item.getServingDate());
 		specialItemForADateRepository.save(specialItemForADate);
-
+		LOGGER.info("SpecialItemForADateServiceImpl update method - Exit");
 	}
 
 	@Override
@@ -82,5 +87,4 @@ public class SpecialItemForADateServiceImpl implements SpecialItemForADateServic
 	public void delete(long id) {
 		specialItemForADateRepository.deleteById(id);
 	}
-
 }

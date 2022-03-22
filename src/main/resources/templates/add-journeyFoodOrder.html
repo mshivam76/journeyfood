@@ -81,7 +81,7 @@
 		                
 		                <div class="form-group">
 			                <label for="achar">Achar(Pickle) quantity</label>
-						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Koki count">
+						    <input type="number" th:field="*{achar}" class="form-control" placeholder="Achar(Pickle) count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('achar')}" th:errors="*{achar}"></div>
 		                </div> 
 		                
@@ -97,7 +97,7 @@
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('jam')}" th:errors="*{jam}"></div>
 		                </div>
 		                
-		                <div class="form-group">
+		                <div class="form-group" th:if="${createJourneyFoodOrderFormData.items!=null}">
 			                <label for="specialItems">Edit Special Item for Journey</label>
 						    <input type="text" th:field="*{items}" class="form-control" placeholder="refresh to reload special item for Date">
 		                </div>  

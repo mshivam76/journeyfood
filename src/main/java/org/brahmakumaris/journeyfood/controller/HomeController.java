@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
+import org.brahmakumaris.journeyfood.entity.SpecialItemForADate;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.PreOrderFormData;
 import org.brahmakumaris.journeyfood.order.web.UpdateJourneyFoodOrderFormData;
@@ -59,7 +60,10 @@ public class HomeController {
     	formData.setDateOfDeparture(preAddJourneyFoodOrder.getDateOfDeparture());
     	formData.setMealRetrievalDate(preAddJourneyFoodOrder.getMealRetrievalDate());
     	formData.setMealRetrievalTime(preAddJourneyFoodOrder.getMealRetrievalTime());
-    	formData.setItems(specialItemForADateService.getItemsByServingDate(formData.getMealRetrievalDate()).getSpecialItems());
+    	SpecialItemForADate item = specialItemForADateService.getItemsByServingDate(formData.getMealRetrievalDate());
+    	if(item!=null) {
+    		formData.setItems(item.getSpecialItems());
+    	}
     	model.addAttribute("createJourneyFoodOrderFormData", formData);
     	LOGGER.info("HomeController preAddJourneyFoodOrder method - Entered");
     	return "add-journeyFoodOrder";
@@ -82,7 +86,6 @@ public class HomeController {
     }
    
 	@GetMapping("/fetchAllJourneyFoodOrdersByLoggedInUser")
-//    public ModelAndView fetchAllJourneyFoodOrdersByLoggedInUser(Model model) {
 	public String fetchAllJourneyFoodOrdersByLoggedInUser(Model model) {
 		LOGGER.info("AdminController fetchAllJourneyFoodOrdersByLoggedInUser method - Enter");
 	 	List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByUser();
