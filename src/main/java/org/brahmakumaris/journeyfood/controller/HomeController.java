@@ -44,12 +44,12 @@ public class HomeController {
     }
 	
     @GetMapping("/preAddJourneyFoodOrder")
-    public String preAddOrder(PreOrderFormData formData) {
+    public String preAddOrder(PreOrderFormData preOrderFormData) {
         return "pre-add-journeyFoodOrder";
     }
     
-    @GetMapping("/preAddOrder")
-    public String preAddJourneyFoodOrder(@Valid @ModelAttribute("preAddJourneyFoodOrder")PreOrderFormData preAddJourneyFoodOrder, BindingResult result, 
+    @PostMapping("/preAddOrder")
+    public String preAddJourneyFoodOrder(@Valid @ModelAttribute("preOrderFormData")PreOrderFormData preOrderFormData, BindingResult result, 
     		Model model) {
     	LOGGER.info("HomeController preAddJourneyFoodOrder method - Entered");
     	if (result.hasErrors()) {
@@ -57,9 +57,9 @@ public class HomeController {
             return "pre-add-journeyFoodOrder";
         }
     	CreateJourneyFoodOrderFormData formData = new CreateJourneyFoodOrderFormData();
-    	formData.setDateOfDeparture(preAddJourneyFoodOrder.getDateOfDeparture());
-    	formData.setMealRetrievalDate(preAddJourneyFoodOrder.getMealRetrievalDate());
-    	formData.setMealRetrievalTime(preAddJourneyFoodOrder.getMealRetrievalTime());
+    	formData.setDateOfDeparture(preOrderFormData.getDateOfDeparture());
+    	formData.setMealRetrievalDate(preOrderFormData.getMealRetrievalDate());
+    	formData.setMealRetrievalTime(preOrderFormData.getMealRetrievalTime());
     	SpecialItemForADate item = specialItemForADateService.getItemsByServingDate(formData.getMealRetrievalDate());
     	if(item!=null) {
     		formData.setItems(item.getSpecialItems());
@@ -135,8 +135,6 @@ public class HomeController {
 	 	LOGGER.info("HomeController paginatePlacedOrdersByLoggedInUser method - Exit =>orders: "+page);
         return "fetchPlacedOrdersByLoggedInUser";
     }
-	
-
 	
 	@GetMapping("/delete/{id}")
 	public String deleteOrder(@PathVariable("id") long id, Model model) throws UnsupportedEncodingException, MessagingException {

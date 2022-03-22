@@ -21,7 +21,7 @@ public class PreOrderFormData {
 	@Future(message = "Meal retrieval date must be after today's date")
     private LocalDate mealRetrievalDate;
 	
-	@NotEmpty(message="Food Pickup time is mandatory")
+	@NotEmpty(message="Food Pickup slot is mandatory")
     private String mealRetrievalTime;
 
 	public PreOrderFormData() {

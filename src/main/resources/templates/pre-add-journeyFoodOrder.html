@@ -6,7 +6,7 @@
 	   	<div class="container">
 		    <div class="row">
 		        <div class="col-md-12"> 
-		            <form th:action="@{/preAddOrder}" th:object="${preOrderFormData}"method="get">
+		            <form th:action="@{/preAddOrder}" th:object="${preOrderFormData}"method="post">
 		            	<div>
 		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
 							    <ul>
@@ -15,7 +15,9 @@
 							</div>
 		            	</div>
 			            <h2 class="mb-5">New Order</h2>
-		                
+		                <div class="alert alert-warning" role="alert">
+	                    	<p><b>Note:&nbsp;&nbsp;</b>All below fields are not editable later so please be sure of below mentioned fields before placing order.</p>
+	                    </div>
 		                <div class="form-group">
 						    <label for="dateOfDeparture">Date of departure</label>
 						    <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
@@ -29,9 +31,6 @@
 		
 		                <div class="form-group">
 		                    <label for="date">Food Pickup Date:</label>
-		                    <div class="alert alert-warning" role="alert">
-		                    	<span>Food Pickup Date is not editable, please be sure of date of journey before placing order</span>
-		                    </div>
 		                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
 		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{mealRetrievalDate}" id="date" placeholder="click on Calender icon"/>
 		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
