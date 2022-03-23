@@ -15,9 +15,10 @@
 							</div>
 		            	</div>
 			            <h2 class="mb-5">New Order</h2>
+			            <p th:text="${createJourneyFoodOrderFormData.mealRetrievalTime}"></p>
 		                <div class="form-group">
 			                <label for="headCount">Head count</label>
-						    <input type="number" th:field="*{headCount}" class="form-control" placeholder="Head count">
+						    <input type="number" th:field="*{headCount}" min="0" class="form-control" placeholder="Head count">
 						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('headCount')}" th:errors="*{headCount}"></div>
 		                </div> 
 
@@ -46,15 +47,15 @@
 			            <div class="form-group">
 			            	<label for="mealRetrievalTime">Choose Food pickup Slot:</label>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" selected type="radio" th:field="*{mealRetrievalTime}" disabled value="08:00 AM to 10:00 AM">
+								<input class="form-check-input" selected type="radio" th:field="*{mealRetrievalTime}" readonly value="08:00 AM to 10:00 AM">
 								<label th:for="${#ids.prev('mealRetrievalTime')}" class="form-check-label" for="mealRetrievalTime">08:00 AM to 10:00 AM</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" disabled value="01:00 PM to 02:00 PM">
+								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" readonly value="01:00 PM to 02:00 PM">
 								<label th:for="${#ids.prev('mealRetrievalTime')}" class="form-check-label" for="mealRetrievalTime">01:00 PM to 02:00 PM</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" disabled value="08:00 PM to 09:00 PM">
+								<input class="form-check-input" type="radio" th:field="*{mealRetrievalTime}" readonly value="08:00 PM to 09:00 PM">
 								<label th:for="${#ids.prev('mealRetrievalTime')}" class="form-check-label" for="mealRetrievalTime">08:00 PM to 09:00 PM</label>
 							</div>
 							<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('mealRetrievalTime')}" th:errors="*{mealRetrievalTime}"></div>

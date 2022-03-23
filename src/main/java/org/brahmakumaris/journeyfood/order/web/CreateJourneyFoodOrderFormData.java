@@ -1,12 +1,12 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-
 import java.time.LocalDate;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanEqualZeroConstraint;
 import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,27 +29,32 @@ public class CreateJourneyFoodOrderFormData {
 	@Future(message = "Meal retrieval date must be after today's date")
     private LocalDate mealRetrievalDate;
 	
-	@NotEmpty(message="Food Pickup time is mandatory")
+	@NotEmpty(message="Food Pickup slot is mandatory")
     private String mealRetrievalTime;
 
     @NotNull(message="Thepla Count is mandatory")
+    @IntegerCountMustBeGreaterThanEqualZeroConstraint(message="Invalid Thepla count")
     private int thepla;
     
     @NotNull(message="Puri Count is mandatory")
+    @IntegerCountMustBeGreaterThanEqualZeroConstraint(message="Invalid Puri count")
     private int puri;
     
     @NotNull(message="Roti Count is mandatory")
+    @IntegerCountMustBeGreaterThanEqualZeroConstraint(message="Invalid Roti count")
     private int roti;
 
     @NotNull(message="Achar count is mandatory")
+    @IntegerCountMustBeGreaterThanEqualZeroConstraint(message="Invalid Achar count")
     private int achar;
     
     @NotNull(message="Jam count is mandatory")
+    @IntegerCountMustBeGreaterThanEqualZeroConstraint(message="Invalid Jam count")
     private int jam;
     
 	@NotNull(message="Bread count is mandatory")
+	@IntegerCountMustBeGreaterThanEqualZeroConstraint(message="Invalid Bread count")
     private int bread;
-    
 	
 	private String items;
     
