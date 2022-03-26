@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:replace="fragments :: html_head">
-    <body style="background-image:url('images/Baba3.png'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+    <body>
     	<div th:replace="fragments :: menu"/></div>
 	   	<div class="container">
 		    <div class="row">
@@ -15,7 +15,6 @@
 							</div>
 		            	</div>
 			            <h2 class="mb-5">New Order</h2>
-			            <p th:text="${createJourneyFoodOrderFormData.mealRetrievalTime}"></p>
 		                <div class="form-group">
 			                <label for="headCount">Head count</label>
 						    <input type="number" th:field="*{headCount}" min="0" class="form-control" placeholder="Head count">
