@@ -155,8 +155,6 @@ public class AdminController {
         return "showOrdersStartDate2EndDateWithStatus";
     }
 
-	
-	
 	@GetMapping("/fetchFromDate2EndDateOrders")
 	public String fetchFromDate2EndDateOrders(SubmitFetchOrdersFromDate2EndDate submitFetchOrdersFromDate2EndDate) {
 		return "getOrdersStartDate2EndDate";
