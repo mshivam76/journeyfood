@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="fragments :: html_head">
+	<body>
+		<div th:replace="fragments :: menu"/></div>
+		<div class="container text-center" align="center">
+		<!-- <div class="container"> -->
+		    <div th:switch="${orders}">
+		    	<div th:replace="fragments :: show_alert_message"></div>
+		    	<h2 th:case="null">No orders yet!</h2>
+		    	
+		        <table  th:case="*" class="table table-striped table-bordered">
+		            <thead class="thead-dark">
+		            	<tr>
+		            		<th colspan="16"><h2>Kitchen Department</h2></th>
+		            	</tr>
+		                <tr>
+		                    <th>Order ID</th>
+		                    <th>Chips Count</th>
+		                    <th>Chutney Quantity</th>
+		                    <th>Tomato Rice Quantity</th>
+		                    <th>Curd Rice Quantity</th>
+		                    <th>Dhokla(Sooji) Quantity</th>
+		                    <th>Idli Quantity</th>
+		                    <th>Order for Date</th>
+		                    <th>Order date</th>
+		                    <th>Food Pickup Slot</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr th:each="order: ${orders}">
+		                    <td><a th:href="@{/admin/editOrderForKitchenDepartment/{kitchenDeptId}(kitchenDeptId=${order.kitchenDeptId})}" th:text="${order.kitchenDeptId}"></a></td>
+		                    <td th:text="${order.chips}">Chips Count</td>
+		                    <td th:text="${order.chutney}">Chutney Quantity</td>
+		                    <td th:text="${order.tomatoRice}">Tomato Rice Quantity</td>
+		                    <td th:text="${order.curdRice}">Curd Rice  Quantity</td>
+		                    <td th:text="${order.soojiDhokla}">Dhokla Quantity</td>
+		                    <td th:text="${order.idli}">Idli Quantity</td>
+		                    <td th:text="${order.orderForDate}">Order for Date</td>
+		                    <td th:text="${order.orderDate}">Date at which Order placed</td>
+		                    <td th:text="${order.slot}">Slot</td>
+		                </tr>
+		            </tbody>
+		        </table>
+		</div>
+		<div th:replace="fragments :: menu_bug"></div>
+	</body>
+</html>

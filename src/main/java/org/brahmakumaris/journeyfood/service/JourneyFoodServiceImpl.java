@@ -65,7 +65,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
     	if(user!=null) {
     		journeyFoodOrder= new JourneyFoodOrder(parameters.getHeadCount(), parameters.getDateOfOrderPlaced(), parameters.getDateOfDeparture(), parameters.getMealRetrievalDate(),
     				parameters.getMealRetrievalTime(),	getCurrentLoggedInUserData(), "PLACED", parameters.getThepla(), parameters.getPuri(), 
-    				parameters.getRoti(), parameters.getAchar(), parameters.getJam(), parameters.getBread(), parameters.getOthers());
+    				parameters.getRoti(), parameters.getAchar(), parameters.getJam(), parameters.getBread(), parameters.getItems());
     		emailUtils.orderPlacedMail(journeyFoodOrder.getUser());
     		return repository.save(journeyFoodOrder);
     	}
@@ -97,6 +97,12 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
     public List<JourneyFoodOrder> getPlacedOrdersByUser()  {
 		UserEntity user = getCurrentLoggedInUserData();
 		List<JourneyFoodOrder> orders = repository.findPlacedOrderByUserId(user.getUserId());
+		return orders;
+    }
+	
+	@Override
+    public List<JourneyFoodOrder> getAllPlacedOrders()  {
+		List<JourneyFoodOrder> orders = repository.findByOrderStatus("PLACED");
 		return orders;
     }
 	
@@ -148,7 +154,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		journeyFoodOrder.setMealRetrievalDate(order.getMealRetrievalDate());journeyFoodOrder.setMealRetrievalTime(order.getMealRetrievalTime());
 		journeyFoodOrder.setThepla(order.getThepla());journeyFoodOrder.setPuri(order.getPuri());journeyFoodOrder.setRoti(order.getRoti()); 
 		journeyFoodOrder.setAchar(order.getAchar()); journeyFoodOrder.setJam(order.getJam());journeyFoodOrder.setBread(order.getBread());
-		journeyFoodOrder.setOthers(order.getOthers());
+		journeyFoodOrder.setItems(order.getItems());
 		if(order.getOrderStatus()!=null) {
 			journeyFoodOrder.setOrderStatus(order.getOrderStatus());
 			emailUtils.orderUpdatedMail(journeyFoodOrder.getUser(), order.getOrderId());
@@ -164,7 +170,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 				journeyFoodOrder.setHeadCount(order.getHeadCount());
 				journeyFoodOrder.setThepla(order.getThepla());journeyFoodOrder.setPuri(order.getPuri());journeyFoodOrder.setRoti(order.getRoti()); 
 				journeyFoodOrder.setAchar(order.getAchar()); journeyFoodOrder.setJam(order.getJam());journeyFoodOrder.setBread(order.getBread());
-				journeyFoodOrder.setOthers(order.getOthers());
+				journeyFoodOrder.setItems(order.getItems());
 				if(order.getOrderStatus()!=null) journeyFoodOrder.setOrderStatus(order.getOrderStatus());
 		 LOGGER.info("JourneyFoodServiceImpl updateOrder method - Exit =>order(object/null): "+ repository.save(journeyFoodOrder));
 	}
@@ -210,6 +216,13 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		else return orders;
 	}
 
+	@Override
+	public List<JourneyFoodOrder> getOrdersByDateAndSlot(LocalDate mealRetrievalDate, String mealRetrievalTime, String orderStatus) {
+		List<JourneyFoodOrder> orders = repository.findByMealRetrievalDateAndMealRetrievalTimeAndOrderStatus(mealRetrievalDate, mealRetrievalTime);
+		if(orders.isEmpty())throw new OrderNotFoundException("No Orders yet for Date : "+mealRetrievalDate.toString()+" and Pickup slot of - "+mealRetrievalTime+" Order Status is - "+orderStatus);
+		else return orders;
+	}
+	
 	@Override
 	public Page<JourneyFoodOrder> findPaginated(int pageNo, int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
@@ -257,4 +270,5 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 		Pageable pageable = PageRequest.of(pageNo-1, pageSize);
 		return this.repository.getOrdersByDateRange(fromDate, endDate, pageable);
 	}
+
 }

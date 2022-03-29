@@ -2,18 +2,23 @@ package org.brahmakumaris.journeyfood.security;
 
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //https://www.baeldung.com/role-and-privilege-for-spring-security-registration-->User login via privileges(Role based login)
 public class CustomUserDetailsService implements UserDetailsService {
+	private Logger LOGGER = LoggerFactory.getLogger(CustomUserDetailsService.class);
 	@Autowired
 	private UserRepository userRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
 		UserEntity user = userRepo.findByEmail(email); 
+		LOGGER.info("Email: "+email);
+		LOGGER.info("User: "+user);
 		System.out.println("Email: "+email);
 		System.out.println("User: "+user);
 		if(user==null) {
