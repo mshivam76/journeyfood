@@ -93,7 +93,7 @@ public class ExcelUtils {
 	            row.createCell(10).setCellValue(order.getAchar());
 	            row.createCell(11).setCellValue(order.getJam());
 	            row.createCell(12).setCellValue(order.getBread());
-	            row.createCell(13).setCellValue(order.getOthers());
+	            row.createCell(13).setCellValue(order.getItems());
 	        }
 			
 			workbook.write(out);
@@ -134,7 +134,7 @@ public class ExcelUtils {
 	            row.createCell(10).setCellValue(order.getAchar());
 	            row.createCell(11).setCellValue(order.getJam());
 	            row.createCell(12).setCellValue(order.getBread());
-	            row.createCell(13).setCellValue(order.getOthers());
+	            row.createCell(13).setCellValue(order.getItems());
 	        }
 			row1=sheet.createRow(rowCount++);
 			row1.createCell(6).setCellValue(totalOrder.getTotalHeadCount());

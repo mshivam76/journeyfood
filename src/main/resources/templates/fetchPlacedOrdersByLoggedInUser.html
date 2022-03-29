@@ -12,7 +12,7 @@
 				        <table  class="table table-striped table-bordered">
 					   		<thead class="thead-dark">
 				                <tr>
-				                    <th>Edit Order</th>
+				                    <th style="color: orange;">Edit Order</th>
 				                    <!-- <th>Name of Guide</th> -->
 				                    <th>Head Count</th>
 				                    <th>Bread Quantity</th>
@@ -26,7 +26,7 @@
 				                    <th>Departure date(YYYY-MM-DD)</th>
 				                    <th>Meal retrieval Date(YYYY-MM-DD)</th>
 				                    <th>Order Status</th>
-				                    <th>Meal retrieval TIme</th>
+				                    <th>Food Pickup Slot</th>
 				                    <th>Cancel/Deliver Orders</th>
 				                </tr>
 				            </thead>
@@ -41,12 +41,12 @@
 				                    <td th:text="${order.puri}">Puri Quantity</td>
 				                    <td th:text="${order.thepla}">Thepla Quantity</td>
 				                    <td th:text="${order.roti}">Roti Quantity</td>
-				                    <td th:text="${order.others}">Other Items</td>
+				                    <td th:text="${order.items}">Other Items</td>
 				                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
 				                    <td th:text="${order.dateOfDeparture}">Date at which Order placed</td>
 				                    <td th:text="${order.mealRetrievalDate}">Departure date</td>
 				                    <td th:text="${order.orderStatus}"></td>
-				                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
+				                    <td th:text="${order.mealRetrievalTime}">Food Pickup Slot</td>
 				                    <td>
 				                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>
 				                    </td>		                    		                    

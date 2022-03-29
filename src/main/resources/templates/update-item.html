@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="fragments :: html_head"/>
+	<body>
+	<div th:replace="fragments :: menu"/></div>
+	    	<div class="container">
+			    <div class="row">
+			        <form th:action="@{/admin/item/update/{itemId}(itemId=${specialItem.itemId})}" th:object="${specialItem}" method="post" style="max-width: 600px; margin: 0 auto;">
+				        <div class="alert alert-danger" th:text="${message}" th:unless="${message==null}" role="alert"></div>
+					        <div class="m-3">
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Item Id: </label>
+					                <div class="col-8">
+					                    <input type="number" th:field="*{itemId}" readonly class="form-control" required />
+					                </div>
+					            </div>
+					            <div class="form-group row">
+					                <label class="col-4 col-form-label">Item names: </label>
+					                <div class="col-8">
+					                    <input type="text" th:field="*{item}" class="form-control" required />
+										<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('item')}" th:errors="*{item}"></div>
+					                </div>
+					            </div>
+					            <div>
+					                <button type="submit" class="btn btn-primary">Update Special Item</button>
+					            </div>
+					        </div>
+				        </form>
+		    </div>
+   		 </div>
+   		 <div th:replace="fragments :: datePicker_menu"></div>
+	</body>
+</html>

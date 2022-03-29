@@ -8,7 +8,7 @@
 		    <div th:switch="${orders}">
 		    	<h2 th:case="null">No orders yet!</h2>
 		    	
-		        <table  th:case="*" class="table table-striped table-bordered">
+		        <table  th:case="*" class="table-striped table-bordered">
 		            <thead class="thead-dark">
 		            	<tr>
 		            		<th colspan="16"><h2>All Orders</h2></th>
@@ -28,7 +28,7 @@
 		                    <th>Order date</th>
 		                    <th>Date of departure</th>
 		                    <th>Meal retrieval Date</th>
-		                    <th>Meal retrieval time</th>
+		                    <th>Food Pickup slot</th>
 		                    <th>Operations</th>
 		                </tr>
 		            </thead>
@@ -43,12 +43,12 @@
 		                    <td th:text="${order.puri}">Puri Quantity</td>
 		                    <td th:text="${order.thepla}">Thepla Quantity</td>
 		                    <td th:text="${order.roti}">Roti Quantity</td>
-		                    <td th:text="${order.others}">Other Items</td>
+		                    <td th:text="${order.items}">Other Items</td>
 		                     <td th:text="${order.orderStatus}">Items is removed</td>
 		                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
 		                    <td th:text="${order.dateOfDeparture}">Departure date</td>
 		                    <td th:text="${order.mealRetrievalDate}">Meal retrieval date</td>
-		                    <td th:text="${order.mealRetrievalTime}">Meal retrieval time</td>
+		                    <td th:text="${order.mealRetrievalTime}">Food Pickup Slot</td>
 		                    <td>
 		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delivered/{orderId}(orderId=${order.orderId})}">Deliver</a>&nbsp;&nbsp;&nbsp;
 		                    	<a th:unless="${order.orderStatus!='PLACED'}" th:href="@{/admin/order/delete/{orderId}(orderId=${order.orderId})}">Cancel</a>&nbsp;&nbsp;&nbsp;
@@ -56,7 +56,7 @@
 		                </tr>
 		            </tbody>
 		        </table>
-		        <div  th:replace="show_paginated"></div>
+		        <!--<div  th:replace="show_paginated"></div>-->
 		    </div>
 		</div>
 		<div th:replace="fragments :: menu_bug"></div>

@@ -1,12 +1,7 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
-
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,22 +16,15 @@ public class JourneyFoodOrderCreationParameters {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfDeparture;
     
-    @DateTimeFormat(pattern = "h:mm a")
-    private LocalTime mealRetrievalTime;
+    private String mealRetrievalTime;
 
     private UserEntity user; 
     
     private int thepla;
     
-    public Date getDateOfOrderPlaced() {
-		return dateOfOrderPlaced;
-	}
-
-	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
-		this.dateOfOrderPlaced = dateOfOrderPlaced;
-	}
-
-	private int puri;
+    private String items;
+    
+    private int puri;
     
     private int roti;
 
@@ -46,13 +34,18 @@ public class JourneyFoodOrderCreationParameters {
     
     private int bread;
     
-    private String others;
-
 	private LocalDate mealRetrievalDate;
-
     
-	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, LocalTime mealRetrievalTime,
-			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, String others) {
+    public Date getDateOfOrderPlaced() {
+		return dateOfOrderPlaced;
+	}
+
+	public void setDateOfOrderPlaced(Date dateOfOrderPlaced) {
+		this.dateOfOrderPlaced = dateOfOrderPlaced;
+	}
+
+	public JourneyFoodOrderCreationParameters(int headCount, Date dateOfOrderPlaced, LocalDate dateOfDeparture, LocalDate mealRetrievalDate, String mealRetrievalTime,
+			UserEntity user, int thepla, int puri, int roti, int achar, int jam, int bread, String items) {
 		super();
 		this.headCount = headCount;
 		this.dateOfOrderPlaced = dateOfOrderPlaced;
@@ -66,7 +59,7 @@ public class JourneyFoodOrderCreationParameters {
 		this.achar = achar;
 		this.jam = jam;
 		this.bread = bread;
-		this.others = others;
+		this.items = items;
 	}
 
 	public JourneyFoodOrderCreationParameters() {
@@ -89,11 +82,11 @@ public class JourneyFoodOrderCreationParameters {
 		this.dateOfDeparture = dateOfDeparture;
 	}
 
-	public LocalTime getMealRetrievalTime() {
+	public String getMealRetrievalTime() {
 		return mealRetrievalTime;
 	}
 
-	public void setMealRetrievalTime(LocalTime mealRetrievalTime) {
+	public void setMealRetrievalTime(String mealRetrievalTime) {
 		this.mealRetrievalTime = mealRetrievalTime;
 	}
 
@@ -153,12 +146,12 @@ public class JourneyFoodOrderCreationParameters {
 		this.bread = bread;
 	}
 
-	public String getOthers() {
-		return others;
+	public String getItems() {
+		return items;
 	}
 
-	public void setOthers(String others) {
-		this.others = others;
+	public void setItems(String items) {
+		this.items = items;
 	}
 
 	public LocalDate getMealRetrievalDate() {

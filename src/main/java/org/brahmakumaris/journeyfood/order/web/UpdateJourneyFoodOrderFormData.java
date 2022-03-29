@@ -1,7 +1,5 @@
 package org.brahmakumaris.journeyfood.order.web;
 
-
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.brahmakumaris.journeyfood.validation.IntegerCountMustBeGreaterThanZeroConstraint;
@@ -30,8 +28,7 @@ public class UpdateJourneyFoodOrderFormData {
 	@NotNull(message="Bread count is mandatory")
     private int bread;
     
-	@NotBlank(message="Other items count is mandatory")
-    private String others;
+	private String items;
     
     private String orderStatus;
     
@@ -103,12 +100,12 @@ public class UpdateJourneyFoodOrderFormData {
 		this.bread = bread;
 	}
 
-	public String getOthers() {
-		return others;
+	public String getItems() {
+		return items;
 	}
 
-	public void setOthers(String others) {
-		this.others = others;
+	public void setItems(String items) {
+		this.items = items;
 	}
 
 	public String getOrderStatus() {
