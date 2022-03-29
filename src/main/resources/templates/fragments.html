@@ -8,13 +8,15 @@
 	    <link th:rel="stylesheet" th:href="@{/assets/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css}"/>
 	    <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/5.11.2/css/all.css}"/>
         <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css}"/>
+        <link th:rel="stylesheet" href="/assets/css/style.css">
+        <link th:rel="stylesheet" href="/assets/css/index_css.css">
         <script	type="text/javascript" src="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.js}"></script>
     </head>
     <body>
 	   	<div th:fragment="menu">
 	   		<nav class="nav navbar-expand-lg navbar-light bg-light">
 			  <a class="navbar-brand" th:href="@{/}">
-			  	<img th:src="@{/images/brahmakumaris-logo.png}" width="250" height="50">
+			  	<img th:src="@{/images/brahmakumaris-logo.png}" width="160" height="40">
 			  </a>
 			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			    <span class="navbar-toggler-icon"></span>
@@ -26,7 +28,7 @@
 				      <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
 				    </li>
 				    <li class="nav-item">
-				    	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/addJourneyFoodOrder}">New Order</a>
+				    	<a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/preAddJourneyFoodOrder}">New Order</a>
 				    </li>
 				    <li class="nav-item">
 				      <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/fetchAllJourneyFoodOrdersByLoggedInUser}">All Orders</a>
@@ -36,10 +38,30 @@
 				    </li>
 				    <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 					   <div class="btn-group" >
-						  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						    Admin operations
+						  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    Admin Operations
 						  </button>
 						  <div class="dropdown-menu">
+						  	<a class="dropdown-item" th:href="@{/admin/addOrderForBreadDepartment}">Add Order for Bread Department</a>
+						  	<a class="dropdown-item" th:href="@{/admin/fetchOrdersForBreadDept}">All Orders of Bread Department</a>						  	
+						  	<a class="dropdown-item" th:href="@{/admin/addOrderForKitchenDepartment}">Add Order for Kitchen Department</a>
+						  	<a class="dropdown-item" th:href="@{/admin/fetchOrdersForKitchenDept}">All Orders of Kitchen Department</a>
+						  	<a class="dropdown-item" th:href="@{/admin/addOrderForRotiDepartment}">Add Order for Roti Department</a>
+						  	<a class="dropdown-item" th:href="@{/admin/fetchOrdersForRotiDept}">All Orders of Roti Department</a>
+						    <a class="dropdown-item" th:href="@{/admin/addSpecialItem}">Add Special Item</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllSpecialItem}">All Special Item</a>
+						    <a class="dropdown-item" th:href="@{/admin/addSpecialItems}">Add Special Items for a Date</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllSpecialItems}">All Special Items fo a Date</a>
+						  </div>
+						</div>
+					</li>
+					<li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+					   <div class="btn-group" >
+						  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    Order/User reporting
+						  </button>
+						  <div class="dropdown-menu">
+						  	
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllOrdersForADate}">Orders for a Date</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllPlacedOrdersForADate}">Placed Orders for a Date</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllCanceledOrdersForADate}">Cancelled Orders for a Date</a>
@@ -49,6 +71,7 @@
 						    <a class="dropdown-item" th:href="@{/admin/fetchFromDate2EndDateWithOrderStatusOrders}">Date range orders filtered by order status</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllJourneyFoodOrder}">All Orders</a>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllJourneyFoodOrdersNotDisabled}">All Placed Orders</a>
+						    <a class="dropdown-item" th:href="@{/admin/fetchAllPlacedOrdersForADateInASlot}">All Placed Orders for a date and a slot</a>
 						    <div class="dropdown-divider"></div>
 						    <a class="dropdown-item" th:href="@{/admin/fetchAllUsers}">All Users</a>
 						    <a class="dropdown-item" th:href="@{/admin/users/export/excel}">Export all Users</a>
@@ -77,7 +100,7 @@
 		   	<table  class="table table-striped">
 		   		<thead class="thead-dark">
 	                <tr>
-	                    <th>Edit Order</th>
+	                    <th style="color: orange;">Edit Order</th>
 	                    <!-- <th>Name of Guide</th> -->
 	                    <th>Head Count</th>
 	                    <th>Bread Quantity</th>
@@ -91,7 +114,7 @@
 	                    <th>Departure date(YYYY-MM-DD)</th>
 	                    <th>Meal retrieval Date(YYYY-MM-DD)</th>
 	                    <th>Order Status</th>
-	                    <th>Meal retrieval TIme</th>
+	                    <th>Food Pickup Slot</th>
 	                    <th>Cancel/Deliver Orders</th>
 	                </tr>
 	            </thead>
@@ -106,7 +129,7 @@
 	                    <td th:text="${order.puri}">Puri Quantity</td>
 	                    <td th:text="${order.puri}">Thepla Quantity</td>
 	                    <td th:text="${order.roti}">Roti Quantity</td>
-	                    <td th:text="${order.others}">Other Items</td>
+	                    <td th:text="${order.items}">Other Items</td>
 	                    <td th:text="${order.dateOfOrderPlaced}">Date at which Order placed</td>
 	                    <td th:text="${order.dateOfDeparture}">Date at which Order placed</td>
 	                    <td th:text="${order.mealRetrievalDate}">Departure date</td>

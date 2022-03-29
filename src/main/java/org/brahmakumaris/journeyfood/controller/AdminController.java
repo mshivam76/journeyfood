@@ -1,7 +1,6 @@
 package org.brahmakumaris.journeyfood.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,21 +9,35 @@ import javax.validation.Valid;
 
 import org.brahmakumaris.journeyfood.entity.AggregateJourneyFoodOrder;
 import org.brahmakumaris.journeyfood.entity.JourneyFoodOrder;
+import org.brahmakumaris.journeyfood.entity.OrderForBreadDepartment;
+import org.brahmakumaris.journeyfood.entity.OrderForKitchenDepartment;
+import org.brahmakumaris.journeyfood.entity.OrderForRotiDepartment;
+import org.brahmakumaris.journeyfood.entity.SpecialItem;
+import org.brahmakumaris.journeyfood.entity.SpecialItemForADate;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
+import org.brahmakumaris.journeyfood.order.web.AddSpecialItems;
 import org.brahmakumaris.journeyfood.order.web.CreateJourneyFoodOrderFormData;
+import org.brahmakumaris.journeyfood.order.web.CreateOrderForBreadDepartment;
+import org.brahmakumaris.journeyfood.order.web.CreateOrderForKitchenDepartment;
+import org.brahmakumaris.journeyfood.order.web.CreateOrderForRotiDepartment;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDate;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchOrdersFromDate2EndDateOrderStatus;
 import org.brahmakumaris.journeyfood.order.web.SubmitFetchTotalQuantityModelByDate;
+import org.brahmakumaris.journeyfood.order.web.SubmitFetchTotalQuantityModelByDateForASlot;
 import org.brahmakumaris.journeyfood.order.web.UserUpdateForm;
 import org.brahmakumaris.journeyfood.security.UserService;
 import org.brahmakumaris.journeyfood.security.exceptions.OrderNotFoundException;
 import org.brahmakumaris.journeyfood.security.exceptions.UserNotFoundException;
 import org.brahmakumaris.journeyfood.service.JourneyFoodService;
+import org.brahmakumaris.journeyfood.service.OrderBreadDeptService;
+import org.brahmakumaris.journeyfood.service.OrderKitchenDeptService;
+import org.brahmakumaris.journeyfood.service.OrderRotiDeptService;
+import org.brahmakumaris.journeyfood.service.SpecialItemForADateService;
+import org.brahmakumaris.journeyfood.service.SpecialItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +62,22 @@ public class AdminController {
 	private JourneyFoodService journeyFoodServiceImpl;
 	
 	@Autowired
+	private OrderKitchenDeptService orderKitchenDeptService;
+	
+	@Autowired
+	private OrderBreadDeptService orderBreadDeptService;
+	
+	@Autowired
+	private OrderRotiDeptService orderRotiDeptService;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private SpecialItemForADateService specialItemForADateService;
+	
+	@Autowired
+	private SpecialItemService specialItemService;
 	
 	@GetMapping("/error")
     public String error() {
@@ -78,8 +106,15 @@ public class AdminController {
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled")
     public String fetchAllJourneyFoodOrdersNotDisabled(Model model) {
-		LOGGER.info("AdminController fetchAllJourneyFoodOrder method - Enter");
-		return paginateAllPlacedOrder(1, model);
+		LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Enter");
+	 	List <JourneyFoodOrder> orders=journeyFoodServiceImpl.getAllPlacedOrders();
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("title", "Show All Placed Orders");
+	 	model.addAttribute("url","/admin/fetchAllJourneyFoodOrdersNotDisabled/");
+	 	System.out.println("User data in Journeyfood UserId :-> "+orders.get(0).getUser().getUserId());
+	 	LOGGER.info("AdminController fetchAllJourneyFoodOrdersNotDisabled method - Exit =>orders-isEmpty()->: "+orders.isEmpty());
+		return "fetchAllPlacedJourneyOrdersByAdmin";
+//		return paginateAllPlacedOrder(1, model);
     }
 	
 	@GetMapping("/fetchAllJourneyFoodOrdersNotDisabled/{pageNo}")
@@ -120,41 +155,6 @@ public class AdminController {
         return "showOrdersStartDate2EndDateWithStatus";
     }
 
-	
-//	@PostMapping("/fetchFromDate2EndDateWithOrderStatusOrders")
-//    public String fetchFromDate2EndDateWithOrderStatusOrders( 
-//    		@Valid  @ModelAttribute("submitFetchOrdersFromDate2EndDateOrderStatus")SubmitFetchOrdersFromDate2EndDateOrderStatus submitFetchOrdersFromDate2EndDateOrderStatus,
-//    		BindingResult result, Model model) {
-//		if (result.hasErrors()) {
-//	    	LOGGER.error("AdminController updateOrder method - Error occured");
-//            return "getOrderStartDate2EndDateWithOrderStatus";
-//	    }
-//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
-//	 	model.addAttribute("startDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate());
-//	 	model.addAttribute("endDate", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate());
-//	 	model.addAttribute("orderStatus", submitFetchOrdersFromDate2EndDateOrderStatus==null?null:submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus());
-//	 	return paginateFromDate2EndDateWithOrderStatusOrders(submitFetchOrdersFromDate2EndDateOrderStatus.getStartDate(), submitFetchOrdersFromDate2EndDateOrderStatus.getEndDate(), 
-//			 submitFetchOrdersFromDate2EndDateOrderStatus.getOrderStatus(),1,null);
-//    }
-////	@PathVariable("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-//	@GetMapping("/fetchFromDate2EndDateWithOrderStatusOrders/{startDate}/{endDate}/{orderStatus}/{pageNo}")
-//    public String paginateFromDate2EndDateWithOrderStatusOrders(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
-//    			@PathVariable("endDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate, @PathVariable("orderStatus") String orderStatus, @PathVariable("pageNo") int pageNo, Model model) {
-//		LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Enter");
-//		int pageSize =8;
-//		Page<JourneyFoodOrder> page=journeyFoodServiceImpl.getOrdersByDateRangeAndOrderStatus(startDate,endDate,orderStatus,pageNo, pageSize);
-//	 	model.addAttribute("startDate", startDate);
-//	 	model.addAttribute("endDate", endDate);
-//	 	model.addAttribute("orderStatus", orderStatus);
-//	 	model.addAttribute("orders", page.isEmpty()?null:page);
-//	 	model.addAttribute("totalPages", page.getTotalPages());
-//	 	model.addAttribute("title", "Orders reporting");
-//	 	model.addAttribute("currentPage", pageNo);
-//	 	model.addAttribute("url","/admin/fetchFromDate2EndDateWithOrderStatusOrders");
-//	 	LOGGER.info("AdminController fetchFromDate2EndDateWithOrderStatusOrders method - Exit =>page null?: "+page.isEmpty());
-//        return "showOrdersStartDate2EndDateWithStatus";
-//    }
-	
 	@GetMapping("/fetchFromDate2EndDateOrders")
 	public String fetchFromDate2EndDateOrders(SubmitFetchOrdersFromDate2EndDate submitFetchOrdersFromDate2EndDate) {
 		return "getOrdersStartDate2EndDate";
@@ -195,6 +195,26 @@ public class AdminController {
 	 	model.addAttribute("date", submitFetchTotalQuantityModelByDate==null?null:submitFetchTotalQuantityModelByDate.getMealRetrievalDate());
 	 	LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Exit =>orders: "+orders);
         return "showPlacedOrdersByDate";
+    }
+	
+	@GetMapping("/fetchAllPlacedOrdersForADateInASlot")
+	public String fetchAllPlacedOrdersForADateInASlot(SubmitFetchTotalQuantityModelByDateForASlot submitFetchTotalQuantityModelByDateForASlot) {
+		return "getAllPlacedOrderForADateAndSlot";
+	}
+	
+	@PostMapping("/fetchAllPlacedOrdersForADateInASlot")
+    public String fetchAllPlacedOrdersForADateInASlot( @Valid @ModelAttribute("submitFetchTotalQuantityModelByDateForASlot") SubmitFetchTotalQuantityModelByDateForASlot submitFetchTotalQuantityModelByDateForASlot
+    		, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateOrder method - Error occured");
+            return "getAllPlacedOrderForADateAndSlot";
+	    }
+		LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Enter");
+		List<JourneyFoodOrder> orders=journeyFoodServiceImpl.getOrdersByDateAndSlot(submitFetchTotalQuantityModelByDateForASlot.getMealRetrievalDate(), submitFetchTotalQuantityModelByDateForASlot.getMealRetrievalTime(), "PLACED");
+	 	model.addAttribute("orders", orders.isEmpty()?null:orders);
+	 	model.addAttribute("date", submitFetchTotalQuantityModelByDateForASlot==null?null:submitFetchTotalQuantityModelByDateForASlot.getMealRetrievalDate());
+	 	LOGGER.info("AdminController fetchAllPlacedOrdersForADate method - Exit =>orders: "+orders);
+        return "showPlacedOrdersByDateForASlot";
     }
 	
 	@GetMapping("/fetchAllCanceledOrdersForADate")
@@ -317,7 +337,7 @@ public class AdminController {
 	    try {
 	    	journeyFoodServiceImpl.orderCompleted(id);
 		    LOGGER.info("AdminController updateOrder method - Exit =>order(object/null): "+ order);
-		    redirectAttributes.addFlashAttribute("message", "Order : "+journeyFoodServiceImpl.findByOrderId(id)+" delivered successfully");
+		    redirectAttributes.addFlashAttribute("message", "Order : "+journeyFoodServiceImpl.findByOrderId(id).getOrderId()+" delivered successfully");
 	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    }
 		catch(IllegalArgumentException e) {
@@ -431,6 +451,356 @@ public class AdminController {
 	    redirectAttributes.addFlashAttribute("message", "User "+userService.getUser(id).getNameOfGuide()+" profile data updated successfully");
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 	    return "redirect:/admin/fetchAllUsers";
+	}
+	
+	@GetMapping("/addSpecialItem")
+	public String addSpecialItem(SpecialItem specialItem) {
+		return "addSpecialItem";
+	}
+	
+	@PostMapping("/addSpecialItem")
+	public String addSpecialItem(@Valid @ModelAttribute("specialItem") SpecialItem specialItem, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin addSpecialItem method - Start=====");
+	 if (result.hasErrors()) {
+		 	System.out.println("************************ERROR******************************");
+		 	System.out.println(specialItem.getItem());
+	    	LOGGER.error("AdminController addSpecialItem method - Error occured");
+            return "addSpecialItem";
+	    }
+	 	System.out.println("==================================================================");
+	 	System.out.println(specialItem.getItem());
+	 	model.addAttribute("specialItems",(specialItemService.addItem(specialItem)));
+        redirectAttributes.addFlashAttribute("message", "Special Items added successfully");
+	    LOGGER.info("AdminController addSpecialItem method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchAllSpecialItem";
+	}
+	
+	@GetMapping("/fetchAllSpecialItem")
+	public String fetchAllSpecialItem(Model model) {
+		LOGGER.info("======AdminController addSpecialItem method - Start=======");
+		model.addAttribute("items", specialItemService.getItems());
+		LOGGER.info("======AdminController addSpecialItem method - Exit=======");
+		return "fetchAllSpecialItem";
+	}
+
+	@GetMapping("/item/edit/{itemId}")
+	public String updateItem(@PathVariable("itemId")Integer itemId, Model model) {
+		LOGGER.info("AdminController updateItem method - Enter =>itemId :"+itemId);
+		SpecialItem item =null;
+	    try {
+	    	item = specialItemService.getItem(itemId);
+	    	model.addAttribute("specialItem", item);
+		    LOGGER.info("AdminController updateItem method - Exit =>item(object/null): "+ item);
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.info("AdminController updateItem method - Exit =>item: "+itemId+" ,Error - "+e.getMessage());
+			 return "redirect:/admin/error";
+		}
+	    return "update-item";
+	}
+	
+	@PostMapping("/item/update/{itemId}")
+	public String updateItem( @Valid @ModelAttribute("specialItem") SpecialItem specialItem, BindingResult result, RedirectAttributes redirectAttributes,
+			@PathVariable("itemId")Integer itemId) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
+		LOGGER.info("AdminController updateItem method - Enter");
+	    if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateItem method - Error occured");
+            return "update-item";
+	    }
+	    specialItemService.update(specialItem);
+	    LOGGER.info("AdminController updateItem method - Exit");
+	    redirectAttributes.addFlashAttribute("message", "Special item with ID: "+specialItem.getItemId()+" is updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+	    return "redirect:/admin/fetchAllSpecialItem";
+	}
+	
+	@GetMapping("/item/delete/{itemId}")
+	public String removeItem(@PathVariable("itemId") int id, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("AdminController removeItem method - Enter =>id :"+id);
+		try {
+			specialItemService.delete(id);
+		    LOGGER.info("AdminController removeItem method - Exit successful");
+		    redirectAttributes.addFlashAttribute("message", "Special Item with ID: "+id+" deleted successfully");
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.error("AdminController removeItem method - Exit"+ e.getMessage());
+		}
+	    return "redirect:/admin/fetchAllSpecialItem";
+	}
+	
+	@GetMapping("/addSpecialItems")
+	public String addSpecialItems(AddSpecialItems addSpecialItems) {
+		return "addSpecialItems";
+	}
+	
+	@PostMapping("/addSpecialItems")
+	public String addSpecialItems(@Valid @ModelAttribute("addSpecialItems") AddSpecialItems addSpecialItems, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin addSpecialItems method - Start=====");
+	 if (result.hasErrors()) {
+		 	System.out.println("************************ERROR******************************");
+		 	System.out.println(addSpecialItems.getSpecialItems());
+	    	LOGGER.error("AdminController addSpecialItems method - Error occured");
+            return "addSpecialItems";
+	    }
+	 	System.out.println("==================================================================");
+	 	System.out.println(addSpecialItems.getSpecialItems());
+	 	SpecialItemForADate specialItemForADate = specialItemForADateService.addItem(addSpecialItems);
+	 	model.addAttribute("specialItems", specialItemForADate);
+        redirectAttributes.addFlashAttribute("message", "Special Items added successfully");
+	    LOGGER.info("AdminController addSpecialItems method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchAllSpecialItems";
+	}
+	
+	@GetMapping("/fetchAllSpecialItems")
+	public String fetchAllSpecialItems(Model model) {
+		LOGGER.info("======AdminController addSpecialItems method - Start=======");
+		model.addAttribute("items", specialItemForADateService.getItems());
+		LOGGER.info("======AdminController addSpecialItems method - Exit=======");
+		return "fetchAllSpecialItems";
+	}
+	
+	@GetMapping("/specialItem/edit/{id}")
+	public String updateSpecialItem(@PathVariable("id") long id, Model model) {
+		LOGGER.info("AdminController updateSpecialItem method - Enter =>id :"+id);
+		SpecialItemForADate item =null;
+	    try {
+	    	item = specialItemForADateService.getItem(id);
+	    	model.addAttribute("item", item);
+		    LOGGER.info("AdminController updateSpecialItem method - Exit =>item(object/null): "+ item);
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.info("AdminController updateSpecialItem method - Exit =>item: "+id);
+			 return "redirect:/admin/error";
+		}
+	    return "update-specialItem";
+	}
+	
+	@PostMapping("/specialItem/edit/{id}")
+	public String updateSpecialItem( @Valid @ModelAttribute("item") AddSpecialItems items, BindingResult result, RedirectAttributes redirectAttributes,
+			@PathVariable("id") long id) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
+		LOGGER.info("AdminController updateSpecialItem method - Enter");
+	    if (result.hasErrors()) {
+	    	LOGGER.error("AdminController updateSpecialItem method - Error occured");
+            return "update-specialItem";
+	    }
+	    specialItemForADateService.update(items);
+	    LOGGER.info("AdminController updateSpecialItem method - Exit");
+	    redirectAttributes.addFlashAttribute("message", "Special item with ID: "+items.getId()+" is updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+	    return "redirect:/admin/fetchAllSpecialItems";
+	}
+	
+	@GetMapping("/specialItem/delete/{id}")
+	public String removeSpecialItem(@PathVariable("id") long id, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("AdminController removeSpecialItem method - Enter =>id :"+id);
+		try {
+			specialItemForADateService.delete(id);
+		    LOGGER.info("AdminController removeSpecialItem method - Exit successful");
+		    redirectAttributes.addFlashAttribute("message", "Special Item with ID: "+id+" deleted successfully");
+	        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.error("AdminController removeSpecialItem method - Exit"+ e.getMessage());
+		}
+	    return "redirect:/admin/fetchAllSpecialItems";
+	}
+	
+	@GetMapping("/addOrderForBreadDepartment")
+	public String addOrderForBreadDepartment(CreateOrderForBreadDepartment createOrderForBreadDepartment) {
+		return "order-breadDept";
+	}
+	
+	@PostMapping("/addOrderForBreadDepartment")
+	public String addOrderForBreadDepartment(@Valid @ModelAttribute("createOrderForBreadDepartment") CreateOrderForBreadDepartment createOrderForBreadDepartment, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin addOrderForBreadDepartment method - Start=====");
+	 if (result.hasErrors()) {
+		 	LOGGER.error("************************ERROR******************************");
+//		 	LOGGER.error(createOrderForBreadDepartment.getItem());
+	    	LOGGER.error("AdminController addOrderForBreadDepartment method - Error occured");
+            return "order-breadDept";
+	    }
+	 	System.out.println("==================================================================");
+	 	model.addAttribute("order",(orderBreadDeptService.createOrder(createOrderForBreadDepartment)));
+        redirectAttributes.addFlashAttribute("message", "Order for Bread Department added successfully");
+	    LOGGER.info("AdminController addOrderForBreadDepartment method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchOrdersForBreadDept";
+	}
+	
+	@GetMapping("/editOrderForBreadDepartment/{breadOrderId}")
+	public String editOrderForBreadDepartment(@PathVariable("breadOrderId") long id, Model model) {
+		LOGGER.info("AdminController editOrderForBreadDepartment method - Enter =>id :"+id);
+		OrderForBreadDepartment order = null;
+	    try {
+	    	order = orderBreadDeptService.getOrder(id);
+	    	CreateOrderForBreadDepartment createOrderForBreadDepartment = new CreateOrderForBreadDepartment();
+	    	createOrderForBreadDepartment.setBreadOrderId(order.getBreadOrderId());
+	    	createOrderForBreadDepartment.setBread(order.getBread());
+	    	createOrderForBreadDepartment.setOrderDate(order.getOrderDate());
+	    	createOrderForBreadDepartment.setOrderForDate(order.getOrderForDate());
+	    	createOrderForBreadDepartment.setSlicedBread(order.getSlicedBread());
+	    	createOrderForBreadDepartment.setSlot(order.getSlot());
+	    	model.addAttribute("order", createOrderForBreadDepartment);
+		    LOGGER.info("AdminController editOrderForBreadDepartment method - Exit =>order(object/null): "+ order);
+	    }
+		catch(IllegalArgumentException e) {
+			LOGGER.info("AdminController editOrderForBreadDepartment method - Exit =>Order Id: "+id);
+			 return "redirect:/admin/error";
+		}
+	    return "edit-order-breadDept";
+	}
+	
+	@PostMapping("/editOrderForBreadDepartment/{breadOrderId}")
+	public String editOrderForBreadDepartment( @Valid @ModelAttribute("order") CreateOrderForBreadDepartment order, BindingResult result
+			, RedirectAttributes redirectAttributes) throws IllegalArgumentException, UnsupportedEncodingException, MessagingException {
+		LOGGER.info("AdminController editOrderForBreadDepartment method - Enter");
+	    if (result.hasErrors()) {
+	    	LOGGER.error("AdminController editOrderForBreadDepartment method - Error occured");
+            return "edit-order-breadDept";
+	    }
+	    orderBreadDeptService.updateOrder(order);
+	    LOGGER.info("AdminController editOrderForBreadDepartment method - Exit");
+	    redirectAttributes.addFlashAttribute("message", "Order: "+order.getBreadOrderId()+"  updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+	    return "redirect:/admin/fetchOrdersForBreadDept";
+	}
+	
+	@GetMapping("/fetchOrdersForBreadDept")
+	public String fetchOrdersForBreadDept(Model model) {
+		model.addAttribute("orders", orderBreadDeptService.getAllOrder());
+		return "fetchOrdersForBreadDept";
+	}
+	
+	@GetMapping("/addOrderForKitchenDepartment")
+	public String addOrderForKitchenDepartment(CreateOrderForKitchenDepartment createOrderForKitchenDepartment) {
+		return "order-kitchenDept";
+	}
+	
+	@PostMapping("/addOrderForKitchenDepartment")
+	public String addOrderForKitchenDepartment(@Valid @ModelAttribute("createOrderForKitchenDepartment") CreateOrderForKitchenDepartment createOrderForKitchenDepartment, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin addOrderForKitchenDepartment method - Start=====");
+	 if (result.hasErrors()) {
+		 	LOGGER.error("************************ERROR******************************");
+		 	LOGGER.error(createOrderForKitchenDepartment.toString());
+	    	LOGGER.error("AdminController addOrderForKitchenDepartment method - Error occured");
+            return "order-kitchenDept";
+	    }
+	 	System.out.println("==================================================================");
+	 	model.addAttribute("order",(orderKitchenDeptService.createOrder(createOrderForKitchenDepartment)));
+        redirectAttributes.addFlashAttribute("message", "Order added successfully");
+	    LOGGER.info("AdminController addOrderForKitchenDepartment method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchOrdersForKitchenDept";
+	}
+	
+	@GetMapping("/editOrderForKitchenDepartment/{kitchenDeptId}")
+	public String editOrderForKitchenDepartment(@PathVariable("kitchenDeptId")Long kitchenDeptId, Model model) {
+		LOGGER.info("======Admin editOrderForKitchenDepartment GET method - Start=====");
+		OrderForKitchenDepartment order = orderKitchenDeptService.getOrder(kitchenDeptId);
+		CreateOrderForKitchenDepartment createOrderForKitchenDepartment = new CreateOrderForKitchenDepartment();
+		createOrderForKitchenDepartment.setChips(order.getChips());
+		createOrderForKitchenDepartment.setChutney(order.getChutney());
+		createOrderForKitchenDepartment.setCurdRice(order.getCurdRice());
+		createOrderForKitchenDepartment.setIdli(order.getIdli());
+		createOrderForKitchenDepartment.setKitchenOrderId(order.getKitchenDeptId());
+		createOrderForKitchenDepartment.setOrderForDate(order.getOrderForDate());
+		createOrderForKitchenDepartment.setSlot(order.getSlot());
+		createOrderForKitchenDepartment.setSoojiDhokla(order.getSoojiDhokla());
+		createOrderForKitchenDepartment.setTomatoRice(order.getTomatoRice());
+		model.addAttribute("order", createOrderForKitchenDepartment);
+		LOGGER.info("======Admin editOrderForKitchenDepartment GET method - End=====");
+		return "edit-order-kitchenDept";
+	}
+	
+	@PostMapping("/editOrderForKitchenDepartment")
+	public String editOrderForKitchenDepartment(@Valid @ModelAttribute("order") CreateOrderForKitchenDepartment order, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin editOrderForKitchenDepartment POST method - Start=====");
+	 if (result.hasErrors()) {
+		 	LOGGER.error("*********************************ERROR***********************************");
+		 	LOGGER.error(order.toString());
+	    	LOGGER.error("AdminController editOrderForKitchenDepartment POST method - Error occured");
+            return "edit-order-kitchenDept";
+	    }
+	 	System.out.println("==================================================================");
+	 	model.addAttribute("order",(orderKitchenDeptService.createOrder(order)));
+        redirectAttributes.addFlashAttribute("message", "Order added successfully");
+	    LOGGER.info("AdminController editOrderForKitchenDepartment POST method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchOrdersForKitchenDept";
+	}
+	
+	@GetMapping("/fetchOrdersForKitchenDept")
+	public String fetchOrdersForKitchenDept(Model model) {
+		model.addAttribute("orders", orderKitchenDeptService.getAllOrder());
+		return "fetchOrdersForKitchenDept";
+	}
+	
+	@GetMapping("/addOrderForRotiDepartment")
+	public String addOrderForRotiDepartment(CreateOrderForRotiDepartment createOrderForRotiDepartment) {
+		return "order-rotiDept";
+	}
+	
+	@PostMapping("/addOrderForRotiDepartment")
+	public String addOrderForRotiDepartment(@Valid @ModelAttribute("createOrderForRotiDepartment") CreateOrderForRotiDepartment createOrderForRotiDepartment, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin addOrderForRotiDepartment method - Start=====");
+	 if (result.hasErrors()) {
+		 	LOGGER.error("************************ERROR******************************");
+		 	LOGGER.error(createOrderForRotiDepartment.toString());
+	    	LOGGER.error("AdminController addOrderForRotiDepartment method - Error occured");
+            return "order-rotiDept";
+	    }
+	 	System.out.println("==================================================================");
+	 	model.addAttribute("order",(orderRotiDeptService.createOrder(createOrderForRotiDepartment)));
+        redirectAttributes.addFlashAttribute("message", "Order added successfully");
+	    LOGGER.info("AdminController addOrderForRotiDepartment method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchOrdersForRotiDept";
+	}
+	
+	@GetMapping("/editOrderForRotiDepartment/{rotiDeptId}")
+	public String editOrderForRotiDepartment(@PathVariable("rotiDeptId")Long rotiDeptId, Model model) {
+		LOGGER.info("======Admin editOrderForRotiDepartment GET method - Start=====");
+		OrderForRotiDepartment orderForRotiDepartment = orderRotiDeptService.getOrder(rotiDeptId);
+		CreateOrderForRotiDepartment createOrderForRotiDepartment = new CreateOrderForRotiDepartment();
+		LOGGER.info("Order for Roti Dept- "+orderForRotiDepartment);
+		createOrderForRotiDepartment.setRotiDeptId(orderForRotiDepartment.getRotiDeptId());
+		createOrderForRotiDepartment.setOrderDate(orderForRotiDepartment.getOrderDate());
+		createOrderForRotiDepartment.setOrderForDate(orderForRotiDepartment.getOrderForDate());
+		createOrderForRotiDepartment.setPuri(orderForRotiDepartment.getPuri());
+		createOrderForRotiDepartment.setRoti(orderForRotiDepartment.getRoti());
+		createOrderForRotiDepartment.setSandwich(orderForRotiDepartment.getSandwich());
+		createOrderForRotiDepartment.setSlot(orderForRotiDepartment.getSlot());
+		createOrderForRotiDepartment.setThepla(orderForRotiDepartment.getThepla());
+		LOGGER.info("Order Model for Roti Dept- "+createOrderForRotiDepartment);
+		model.addAttribute("order", createOrderForRotiDepartment);
+		LOGGER.info("======Admin editOrderForRotiDepartment GET method - End=====");
+		return "edit-order-rotiDept";
+	}
+	
+	@PostMapping("/editOrderForRotiDepartment")
+	public String editOrderForRotiDepartment(@Valid @ModelAttribute("order") CreateOrderForRotiDepartment order, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+		LOGGER.info("======Admin editOrderForRotiDepartment POST method - Start=====");
+	 if (result.hasErrors()) {
+		 	LOGGER.error("*********************************ERROR***********************************");
+		 	LOGGER.error(order.toString());
+	    	LOGGER.error("AdminController editOrderForRotiDepartment POST method - Error occured");
+            return "edit-order-rotiDept";
+	    }
+	 	System.out.println("==================================================================");
+	 	model.addAttribute("order",(orderRotiDeptService.updateOrder(order)));
+        redirectAttributes.addFlashAttribute("message", "Order added successfully");
+	    LOGGER.info("AdminController editOrderForRotiDepartment POST method - Exit");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/admin/fetchOrdersForRotiDept";
+	}
+	
+	@GetMapping("/fetchOrdersForRotiDept")
+	public String fetchOrdersForRotiDept(Model model) {
+		model.addAttribute("orders", orderRotiDeptService.getAllOrder());
+		return "fetchOrdersForRotiDept";
 	}
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)

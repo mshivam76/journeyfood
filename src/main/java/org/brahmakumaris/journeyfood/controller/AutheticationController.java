@@ -1,7 +1,5 @@
 package org.brahmakumaris.journeyfood.controller;
 
-import java.text.ParseException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -18,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.MailException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.WebAttributes;
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 /*
@@ -61,8 +61,14 @@ public class AutheticationController {
     	else {
     		try {
                 userService.register(user,DefaultUserService.getSiteURL(request));
-            }catch (Exception e){
-            	if(e instanceof UserAlreadyExistException)	mav.addObject("message", "An account with this email already exists. Please login.");
+            }catch (MailException e) {
+            	mav.addObject("message", "Email does not exists.");
+			}
+    		catch (UserAlreadyExistException e) {
+            	mav.addObject("message", "An account with this email already exists. Please login.");
+			}
+    		catch (Exception e){
+            	if(e instanceof UserAlreadyExistException)	
             	LOGGER.error(e.getMessage());
                 return mav;
             }
@@ -90,13 +96,14 @@ public class AutheticationController {
 	}
 	
    @GetMapping("/login")//to fetch form
-   public String login(Model model) {
-	   try {
-		model.addAttribute("user", new UserEntity());
-	} catch (ParseException e) {
-		e.printStackTrace();
-	}
-	   return "login";
+   public ModelAndView login( 
+           @RequestParam(name="logout", required = false)String logout, HttpServletRequest request) {
+	   ModelAndView mv = new ModelAndView("login");
+       if(logout!=null) {
+           mv.addObject("logout", "You have been successfully logged out!");
+       }
+       mv.addObject("title", "Journeyfood Login");
+       return mv;
    }
    
    @GetMapping("/login-error")
@@ -209,6 +216,17 @@ public class AutheticationController {
    @ExceptionHandler(UsernameNotFoundException.class)
    public ModelAndView userNameNotFound(Exception e) {
 		LOGGER.error("AuthenticationController userNameNotFound Exception - Enter");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("login");
+		mv.addObject("ex", e.getMessage());
+		LOGGER.error(e.getMessage());
+		return mv;
+   }
+   
+   @ResponseStatus(HttpStatus.BAD_REQUEST)
+   @ExceptionHandler(MailException.class)
+   public ModelAndView emailNotFound(Exception e) {
+		LOGGER.error("AuthenticationController email not found Exception - Enter");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("login");
 		mv.addObject("ex", e.getMessage());

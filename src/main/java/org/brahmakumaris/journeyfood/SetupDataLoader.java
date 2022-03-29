@@ -10,9 +10,11 @@ import java.util.Set;
 
 import org.brahmakumaris.journeyfood.entity.Privilege;
 import org.brahmakumaris.journeyfood.entity.Role;
+import org.brahmakumaris.journeyfood.entity.SpecialItem;
 import org.brahmakumaris.journeyfood.entity.UserEntity;
 import org.brahmakumaris.journeyfood.repository.PrivilegeRepository;
 import org.brahmakumaris.journeyfood.repository.RoleRepository;
+import org.brahmakumaris.journeyfood.repository.SpecialItemRepository;
 import org.brahmakumaris.journeyfood.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -34,6 +36,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private PrivilegeRepository privilegeRepository;
+    
+    @Autowired
+    private SpecialItemRepository specialItemRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -61,6 +66,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         // == create initial user
         createUserIfNotFound("admin@bkjourneyfood.org", "Admin", "ContactNoOfGuide", "nameOfCenter", "ShivBabakaBhandarahaiBharpoor", new HashSet<Role>(Arrays.asList(adminRole)));
         alreadySetup = true;
+        insertSpecialItems();
     }
 
     @Transactional
@@ -110,7 +116,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
     
     @Transactional
-    private void insertZeroQuantityforOrders() {
-//    	if()
+    private void insertSpecialItems() {
+    	List<SpecialItem> item = specialItemRepository.findAll();
+    	if(item.isEmpty()) {
+    		item.add(new SpecialItem("Idli"));
+    		item.add(new SpecialItem("Dhokla"));
+    		item.add(new SpecialItem("Tomato Chutni"));
+    		item.add(new SpecialItem("Potato Chips"));
+    		item.add(new SpecialItem("Curd Rice"));
+    		item.add(new SpecialItem("Fried Potato"));
+    		item.add(new SpecialItem("Lemon Rice"));
+    		item.add(new SpecialItem("Paratha"));
+    		item.add(new SpecialItem("Sandwich"));
+    	}
+    	for (SpecialItem specialItem : item) {
+			specialItemRepository.save(specialItem);
+		}
     }
 }

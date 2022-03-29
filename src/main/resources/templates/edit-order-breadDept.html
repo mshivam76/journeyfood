@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:replace="fragments :: html_head">
+    <body>
+    	<div th:replace="fragments :: menu"/></div>
+	   	<div class="container">
+		    <div class="row">
+		        <div class="col-md-12"> 
+		            <form th:action="@{/admin/editOrderForBreadDepartment/{breadOrderId}}" th:object="${order}" method="post">
+		            	<div>
+		            		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}"><h3>Mandatory field validation Errors:</h3>
+							    <ul>
+							        <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+							    </ul>
+							</div>
+		            	</div>
+			            <h2 class="mb-5">Order for Bread Department</h2>
+			            <div class=" form-group">
+			                <label for="OrderId">OrderId</label>
+						    <input type="number" th:field="*{breadOrderId}" class="form-control" readonly>
+		                </div> 
+		                <div class="form-group">
+						    <label for="orderForDate">Order for Date</label>
+						    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+		                        <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" th:field="*{orderForDate}" id="date" placeholder="click on Calender icon"/>
+		                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+		                            <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+		                        </div>
+		                    </div>
+		                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('orderForDate')}" th:errors="*{orderForDate}"></div>
+		                </div>
+						
+			            <div class="form-group">
+			            	<label for="slot">Choose Food pickup Slot:</label>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" selected type="radio" th:field="*{slot}" value="08:00 AM to 10:00 AM">
+								<label th:for="${#ids.prev('slot')}" class="form-check-label" for="slot">08:00 AM to 10:00 AM</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" th:field="*{slot}" value="01:00 PM to 02:00 PM">
+								<label th:for="${#ids.prev('slot')}" class="form-check-label" for="slot">01:00 PM to 02:00 PM</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" th:field="*{slot}" value="08:00 PM to 09:00 PM">
+								<label th:for="${#ids.prev('slot')}" class="form-check-label" for="slot">08:00 PM to 09:00 PM</label>
+							</div>
+							<div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('slot')}" th:errors="*{slot}"></div>
+			            </div>
+						
+						<div class="form-group">
+			                <label for="bread">Bread count</label>
+						    <input type="number" th:field="*{bread}" class="form-control" placeholder="Bread count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('bread')}" th:errors="*{bread}"></div>
+		                </div> 
+
+		                <div class="form-group">
+			                <label for="slicedBread">Sliced Bread count</label>
+						    <input type="number" th:field="*{slicedBread}" class="form-control" placeholder="Sliced Bread count">
+						    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('slicedBread')}" th:errors="*{slicedBread}"></div>
+		                </div> 
+
+		                <div class="form-group">
+							<div class="form-row align-items-center">
+								<div class="col-auto my-1">
+									<button class="btn btn-primary" type="submit">Edit Order</button>
+								</div>
+								<div class="col-auto my-1">
+				                	<button class="btn btn-danger" type="reset">Reset Order</button>
+				                </div>
+			                </div>
+		                </div>
+		            </form>
+		        </div>
+		    </div>
+
+		</div>
+		<div th:replace="fragments :: datePicker_menu"></div>
+    </body>
+</html>

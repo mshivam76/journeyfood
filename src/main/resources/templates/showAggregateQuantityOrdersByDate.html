@@ -11,7 +11,7 @@
 			        <table  class="table table-striped table-bordered">
 			            <thead class="thead-dark">
 			            	<tr>
-			                    <th>Edit Order</th>
+			                    <th>Order</th>
 			                    <th>Head Count</th>
 			                    <th>Bread Quantity</th>
 			                    <th>Achar Quantity</th>
@@ -22,7 +22,7 @@
 			                    <th>Other items</th>
 			                    <th>Meal retrieval Date</th>
 			                    <th>Order Status</th>
-			                    <!-- <th>Meal retrieval TIme</th> -->
+			                    <!-- <th>Food Pickup Slot</th> -->
 			                    <th>Cancel/Deliver Orders</th>
 			                </tr>
 			            </thead>
@@ -36,7 +36,7 @@
 			                    <td th:text="${order.puri}">Puri Quantity</td>
 			                    <td th:text="${order.thepla}">Thepla Quantity</td>
 			                    <td th:text="${order.roti}">Roti Quantity</td>
-			                    <td th:text="${order.others}">Other Items</td>
+			                    <td th:text="${order.items}">Other Items</td>
 			                    <td th:text="${order.mealRetrievalDate}">Meal retrieval date</td>
 			                    <td th:text="${order.orderStatus}"></td>
 			                    <td>
