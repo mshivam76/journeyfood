@@ -80,7 +80,7 @@ public class JourneyFoodServiceImpl implements JourneyFoodService {
 	   
     @Override
 	public JourneyFoodOrder findByOrderId(long id)  {
-    	if(repository.findById(id).isEmpty())
+    	if(repository.findById(id).isPresent())
     		throw new OrderNotFoundException("Order does not exists with id: "+id);
     	else return repository.findById(id).get();
 	}
